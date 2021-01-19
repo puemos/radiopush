@@ -1,4 +1,4 @@
-defmodule RadiopushWeb.PageLive do
+defmodule RadiopushWeb.HomeLive.Index do
   use RadiopushWeb, :live_view
 
   @impl true

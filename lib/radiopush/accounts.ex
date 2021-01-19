@@ -20,9 +20,21 @@ defmodule Radiopush.Accounts do
       iex> get_user_by_email("unknown@example.com")
       nil
 
+      iex> get_user_by_email(["foo@example.com", "foo2@example.com"])
+      [%User{}, %User{}]
+
+      iex> get_user_by_email(["unknown@example.com", "unknown2@example.com"])
+      [nil, nil]
+
   """
   def get_user_by_email(email) when is_binary(email) do
     Repo.get_by(User, email: email)
+  end
+
+  def get_user_by_email(emails) when is_list(emails) do
+    User
+    |> where([user], user.email in ^emails)
+    |> Repo.all()
   end
 
   @doc """
