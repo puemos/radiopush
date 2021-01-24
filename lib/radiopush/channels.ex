@@ -73,10 +73,22 @@ defmodule Radiopush.Channels do
       {:error, %Ecto.Changeset{}}
 
   """
+  @spec create_channel(any()) :: Channel.t()
   def create_channel(attrs \\ %{}) do
     %Channel{}
     |> Channel.changeset(attrs)
     |> Repo.insert()
+  end
+
+  @spec create_channel(any(), %{email: binary}) :: Channel.t()
+  def create_channel(attrs, user) do
+    with {:ok, channel} <- create_channel(attrs),
+         channel <- add_channel_member(channel, user.email) do
+      channel
+    else
+      _ ->
+        {:error, "error"}
+    end
   end
 
   @doc """
