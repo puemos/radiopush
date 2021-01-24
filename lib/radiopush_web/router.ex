@@ -37,7 +37,8 @@ defmodule RadiopushWeb.Router do
   scope "/", RadiopushWeb do
     pipe_through [:browser, :require_authenticated_user]
 
-    live "/channels", ChannelLive.Index
+    live "/channels", ChannelListLive.Index
+    live "/channel/:id", ChannelLive.Index
 
   end
 

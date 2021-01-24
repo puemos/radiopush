@@ -1,13 +1,13 @@
-<h1>Listing Channels</h1>
+<h1><%= @channel.name %></h1>
 
 <div>
-  <%=for channel <- @channels do %>
-      <%= channel.name %>
+  <%=for post <- @posts do %>
+      <%= post.body %>
   <% end %>
 </div>
 
 
-<form action="#" phx-submit="channel">
-  <%= text_input :channel, :name, placeholder: "Channel name" %>
+<form action="#" phx-submit="post">
+  <%= text_input :post, :body, placeholder: "Song" %>
   <%= submit "Create", phx_disable_with: "Creating..." %>
 </form>

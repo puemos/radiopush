@@ -237,11 +237,12 @@ defmodule Radiopush.Channels do
   @doc """
   Add a post to a channel.
   """
-  @spec add_post_to_channel(Channel.t(), User.t(), String.t()) ::
-          Channel.t() | {:error, binary()}
-  def add_post_to_channel(%Channel{} = channel, %User{} = user, body) do
+  @spec add_post_to_channel(Channel.t(), User.t(), map()) :: Channel.t() | {:error, binary()}
+  def add_post_to_channel(%Channel{} = channel, %User{} = user, attrs \\ %{}) do
+    attrs = Map.merge(%{"user_id" => user.id, "channel_id" => channel.id}, attrs)
+
     with true <- is_channel_member?(channel, user),
-         {:ok, _} <- create_post(%{user_id: user.id, channel_id: channel.id, body: body}) do
+         {:ok, _} <- create_post(attrs) do
       get_channel!(channel.id)
     else
       {:error, error} ->

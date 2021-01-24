@@ -91,7 +91,7 @@ defmodule Radiopush.ChannelsTest do
       body =
         channel
         |> Channels.add_channel_member(user.email)
-        |> Channels.add_post_to_channel(user, "some text")
+        |> Channels.add_post_to_channel(user, %{"body" => "some text"})
         |> Channels.get_channel_posts()
         |> List.first()
         |> Map.get(:body)
@@ -103,7 +103,7 @@ defmodule Radiopush.ChannelsTest do
       channel = channel_fixture()
       user = user_fixture()
 
-      {:error, error} = Channels.add_post_to_channel(channel, user, "some text")
+      {:error, error} = Channels.add_post_to_channel(channel, user, %{"body" => "some text"})
 
       assert "unauthorized" = error
     end
@@ -121,10 +121,10 @@ defmodule Radiopush.ChannelsTest do
 
       posts =
         channel
-        |> Channels.add_post_to_channel(user, "1")
-        |> Channels.add_post_to_channel(user, "2")
-        |> Channels.add_post_to_channel(user, "3")
-        |> Channels.add_post_to_channel(user, "4")
+        |> Channels.add_post_to_channel(user, %{"body" => "1"})
+        |> Channels.add_post_to_channel(user, %{"body" => "2"})
+        |> Channels.add_post_to_channel(user, %{"body" => "3"})
+        |> Channels.add_post_to_channel(user, %{"body" => "4"})
         |> Channels.get_channel_posts()
 
       assert 4 = Enum.count(Channels.get_channel_posts(channel))
