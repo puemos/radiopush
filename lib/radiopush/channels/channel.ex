@@ -3,7 +3,7 @@ defmodule Radiopush.Channels.Channel do
   import Ecto.Changeset
 
   alias Radiopush.Accounts.{User}
-  alias Radiopush.Channels.{Channel, Member}
+  alias Radiopush.Channels.{Member}
 
   schema "channels" do
     field :name, :string

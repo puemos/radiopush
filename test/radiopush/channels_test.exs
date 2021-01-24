@@ -72,5 +72,16 @@ defmodule Radiopush.ChannelsTest do
 
       assert !Enum.member?(channel.members, user)
     end
+
+    test "list_channels_by_user/1 adds members to a channel" do
+      channel = channel_fixture()
+      user = user_fixture()
+
+      channel = Channels.add_channel_member(channel, user.email)
+
+      user_channels = Channels.list_channels_by_user(user)
+
+      assert Enum.member?(user_channels, channel)
+    end
   end
 end

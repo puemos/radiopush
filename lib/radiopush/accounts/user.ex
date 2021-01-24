@@ -1,6 +1,7 @@
 defmodule Radiopush.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
+  alias Radiopush.Channels.{Channel, Member}
 
   @derive {Inspect, except: [:password]}
   schema "users" do
@@ -8,6 +9,7 @@ defmodule Radiopush.Accounts.User do
     field :password, :string, virtual: true
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
+    many_to_many(:channels, Channel, join_through: Member, on_replace: :delete)
 
     timestamps()
   end

@@ -24,6 +24,21 @@ defmodule Radiopush.Channels do
   end
 
   @doc """
+  Returns the list of channels for a user.
+
+  ## Examples
+
+      iex> list_channels_by_user(%User{})
+      [%Channel{}, ...]
+
+  """
+  def list_channels_by_user(user) do
+    user
+    |> Repo.preload(:channels)
+    |> Map.get(:channels)
+  end
+
+  @doc """
   Gets a single channel.
 
   Raises `Ecto.NoResultsError` if the Channel does not exist.
