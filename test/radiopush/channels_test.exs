@@ -61,7 +61,7 @@ defmodule Radiopush.ChannelsTest do
       assert Enum.member?(channel.members, user)
     end
 
-    test "remove_channel_member/2 adds members to a channel" do
+    test "remove_channel_member/2 remove members from a channel" do
       channel = channel_fixture()
       user = user_fixture()
 
@@ -73,7 +73,7 @@ defmodule Radiopush.ChannelsTest do
       assert !Enum.member?(channel.members, user)
     end
 
-    test "list_channels_by_user/1 adds members to a channel" do
+    test "list_channels_by_user/1 list users' channels" do
       channel = channel_fixture()
       user = user_fixture()
 
@@ -82,6 +82,52 @@ defmodule Radiopush.ChannelsTest do
       user_channels = Channels.list_channels_by_user(user)
 
       assert Enum.member?(user_channels, channel)
+    end
+
+    test "add_post_to_channel/3 post on a channel" do
+      channel = channel_fixture()
+      user = user_fixture()
+
+      body =
+        channel
+        |> Channels.add_channel_member(user.email)
+        |> Channels.add_post_to_channel(user, "some text")
+        |> Channels.get_channel_posts()
+        |> List.first()
+        |> Map.get(:body)
+
+      assert "some text" = body
+    end
+
+    test "add_post_to_channel/3 post on a channel by non-member" do
+      channel = channel_fixture()
+      user = user_fixture()
+
+      {:error, error} = Channels.add_post_to_channel(channel, user, "some text")
+
+      assert "unauthorized" = error
+    end
+
+    test "get_channel_posts/1 get channel's post history" do
+      channel = channel_fixture()
+      user = user_fixture()
+
+      posts =
+        channel
+        |> Channels.add_channel_member(user.email)
+        |> Channels.get_channel_posts()
+
+      assert 0 = Enum.count(posts)
+
+      posts =
+        channel
+        |> Channels.add_post_to_channel(user, "1")
+        |> Channels.add_post_to_channel(user, "2")
+        |> Channels.add_post_to_channel(user, "3")
+        |> Channels.add_post_to_channel(user, "4")
+        |> Channels.get_channel_posts()
+
+      assert 4 = Enum.count(Channels.get_channel_posts(channel))
     end
   end
 end

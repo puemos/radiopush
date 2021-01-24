@@ -6,7 +6,7 @@ defmodule Radiopush.Channels do
   import Ecto.Query, warn: false
   alias Radiopush.Repo
 
-  alias Radiopush.Channels.{Channel, Member}
+  alias Radiopush.Channels.{Channel, Member, Post}
   alias Radiopush.Accounts
   alias Radiopush.Accounts.{User}
 
@@ -53,6 +53,13 @@ defmodule Radiopush.Channels do
 
   """
   def get_channel!(id), do: Repo.get!(Channel, id)
+
+  @spec get_channel_posts(Channel.t()) :: list(Post.t())
+  def get_channel_posts(channel) do
+    channel
+    |> Repo.preload(:posts)
+    |> Map.get(:posts)
+  end
 
   @doc """
   Creates a channel.
@@ -189,5 +196,47 @@ defmodule Radiopush.Channels do
     %Member{}
     |> Member.changeset(attrs)
     |> Repo.insert()
+  end
+
+  @doc """
+  Creates a post.
+
+  ## Examples
+
+      iex> create_post(%{field: value})
+      {:ok, %Post{}}
+
+      iex> create_post(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_post(attrs \\ %{}) do
+    %Post{}
+    |> Post.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @spec is_channel_member?(Channel.t(), User.t()) :: boolean()
+  def is_channel_member?(channel, user) do
+    list_channels_by_user(user)
+    |> Enum.member?(channel)
+  end
+
+  @doc """
+  Add a post to a channel.
+  """
+  @spec add_post_to_channel(Channel.t(), User.t(), String.t()) ::
+          Channel.t() | {:error, binary()}
+  def add_post_to_channel(%Channel{} = channel, %User{} = user, body) do
+    with true <- is_channel_member?(channel, user),
+         {:ok, _} <- create_post(%{user_id: user.id, channel_id: channel.id, body: body}) do
+      get_channel!(channel.id)
+    else
+      {:error, error} ->
+        {:error, error}
+
+      false ->
+        {:error, "unauthorized"}
+    end
   end
 end
