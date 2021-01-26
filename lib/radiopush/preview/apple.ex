@@ -27,12 +27,12 @@ defmodule Radiopush.Preview.Apple do
     [musician_url] = Floki.attribute(document, "[property='music:musician']", "content")
     [album_url] = Floki.attribute(document, "[property='music:album']", "content")
 
-    with %{title: title, url: url, image: image} <- parse(:song, song_url),
+    with %{song: song, url: url, image: image} <- parse(:song, song_url),
          %{musician: musician} <- parse(:musician, musician_url),
          %{album: album} <- parse(:album, album_url) do
       %{
         type: "song",
-        title: title,
+        song: song,
         album: album,
         musician: musician,
         url: url,
@@ -52,7 +52,7 @@ defmodule Radiopush.Preview.Apple do
          %{album: album, album_url: url, album_image: image} <- parse(:album, album_url) do
       %{
         type: "album",
-        title: album,
+        album: album,
         musician: musician,
         url: url,
         image: image
@@ -66,10 +66,10 @@ defmodule Radiopush.Preview.Apple do
   def parse(:song, url) do
     case get_document(url) do
       {:ok, document} ->
-        [title] = Floki.attribute(document, "[name='apple:title']", "content")
+        [song] = Floki.attribute(document, "[name='apple:title']", "content")
         [image] = Floki.attribute(document, "[property='og:image']", "content")
         [url] = Floki.attribute(document, "[property='og:url']", "content")
-        %{title: title, image: image, url: url}
+        %{song: song, image: image, url: url}
 
       {:error, reason} ->
         {:error, reason}

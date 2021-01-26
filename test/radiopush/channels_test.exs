@@ -4,6 +4,7 @@ defmodule Radiopush.ChannelsTest do
   alias Radiopush.Channels
   import Radiopush.AccountsFixtures
   import Radiopush.ChannelsFixtures
+  alias Radiopush.PostsFixtures
 
   describe "channels" do
     alias Radiopush.Channels.Channel
@@ -88,22 +89,23 @@ defmodule Radiopush.ChannelsTest do
       channel = channel_fixture()
       user = user_fixture()
 
-      body =
+      song =
         channel
         |> Channels.add_channel_member(user.email)
-        |> Channels.add_post_to_channel(user, %{"body" => "some text"})
+        |> Channels.add_post_to_channel(user, Radiopush.PostsFixtures.valid_attrs())
         |> Channels.get_channel_posts()
         |> List.first()
-        |> Map.get(:body)
+        |> Map.get(:song)
 
-      assert "some text" = body
+      assert "some song" = song
     end
 
     test "add_post_to_channel/3 post on a channel by non-member" do
       channel = channel_fixture()
       user = user_fixture()
 
-      {:error, error} = Channels.add_post_to_channel(channel, user, %{"body" => "some text"})
+      {:error, error} =
+        Channels.add_post_to_channel(channel, user, Radiopush.PostsFixtures.valid_attrs())
 
       assert "unauthorized" = error
     end
@@ -121,10 +123,10 @@ defmodule Radiopush.ChannelsTest do
 
       posts =
         channel
-        |> Channels.add_post_to_channel(user, %{"body" => "1"})
-        |> Channels.add_post_to_channel(user, %{"body" => "2"})
-        |> Channels.add_post_to_channel(user, %{"body" => "3"})
-        |> Channels.add_post_to_channel(user, %{"body" => "4"})
+        |> Channels.add_post_to_channel(user, Radiopush.PostsFixtures.valid_attrs())
+        |> Channels.add_post_to_channel(user, Radiopush.PostsFixtures.valid_attrs())
+        |> Channels.add_post_to_channel(user, Radiopush.PostsFixtures.valid_attrs())
+        |> Channels.add_post_to_channel(user, Radiopush.PostsFixtures.valid_attrs())
         |> Channels.get_channel_posts()
 
       assert 4 = Enum.count(posts)

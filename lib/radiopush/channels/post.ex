@@ -3,9 +3,14 @@ defmodule Radiopush.Channels.Post do
   import Ecto.Changeset
 
   schema "posts" do
-    field :body, :string
     belongs_to :user, Radiopush.Accounts.User
     belongs_to :channel, Radiopush.Channels.Channel
+    field :type, :string
+    field :song, :string
+    field :album, :string
+    field :musician, :string
+    field :url, :string
+    field :image, :string
 
     timestamps()
   end
@@ -13,7 +18,7 @@ defmodule Radiopush.Channels.Post do
   @doc false
   def changeset(post, attrs) do
     post
-    |> cast(attrs, [:body, :user_id, :channel_id])
-    |> validate_required([:body, :user_id, :channel_id])
+    |> cast(attrs, [:type, :song, :album, :musician, :url, :image, :user_id, :channel_id])
+    |> validate_required([:type, :album, :musician, :url, :image, :user_id, :channel_id])
   end
 end
