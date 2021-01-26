@@ -237,7 +237,8 @@ defmodule Radiopush.Channels do
   @doc """
   Add a post to a channel.
   """
-  @spec add_post_to_channel(Channel.t(), User.t(), map()) :: Channel.t() | {:error, binary()}
+  @spec add_post_to_channel(Channel.t(), User.t(), Radiopush.Preview.url_metadata()) ::
+          Channel.t() | {:error, binary()}
   def add_post_to_channel(%Channel{} = channel, %User{} = user, attrs \\ %{}) do
     attrs = Map.merge(%{user_id: user.id, channel_id: channel.id}, attrs)
 

@@ -1,13 +1,16 @@
 <h1><%= @channel.name %></h1>
-
 <div>
   <%=for post <- @posts do %>
-      <%= post.body %>
+    <div>
+      <div><%= post.song %></div>
+      <div><%= post.album %></div>
+      <div><%= post.musician %></div>
+      <div><%= post.url %></div>
+      <div><%= post.image %></div>
+    </div>
   <% end %>
 </div>
-
-
 <form action="#" phx-submit="post">
-  <%= text_input :post, :body, placeholder: "Song" %>
+  <%= text_input :post, :url, placeholder: "Song" %>
   <%= submit "Create", phx_disable_with: "Creating..." %>
 </form>

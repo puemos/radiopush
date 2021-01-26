@@ -1,6 +1,7 @@
 defmodule RadiopushWeb.ChannelLive.Index do
   use RadiopushWeb, :live_view
   alias Radiopush.Channels
+  alias Radiopush.Preview
 
   @impl true
   def mount(%{"id" => id}, session, socket) do
@@ -27,10 +28,15 @@ defmodule RadiopushWeb.ChannelLive.Index do
 
   @impl true
   def handle_event("post", %{"post" => post_params}, socket) do
-    Radiopush.Channels.add_post_to_channel(
+    metadata =
+      post_params
+      |> Map.get("url")
+      |> Preview.get_metadata()
+
+    Channels.add_post_to_channel(
       socket.assigns.channel,
       socket.assigns.current_user,
-      post_params
+      metadata
     )
 
     {:noreply, assign_posts(socket)}
