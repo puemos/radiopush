@@ -66,7 +66,7 @@ defmodule Radiopush.Preview.Apple do
   def parse(:song, url) do
     case get_document(url) do
       {:ok, document} ->
-        [title] = Floki.attribute(document, "[property='og:title']", "content")
+        [title] = Floki.attribute(document, "[name='apple:title']", "content")
         [image] = Floki.attribute(document, "[property='og:image']", "content")
         [url] = Floki.attribute(document, "[property='og:url']", "content")
         %{title: title, image: image, url: url}
@@ -79,7 +79,7 @@ defmodule Radiopush.Preview.Apple do
   def parse(:album, url) do
     case get_document(url) do
       {:ok, document} ->
-        [album] = Floki.attribute(document, "[property='og:title']", "content")
+        [album] = Floki.attribute(document, "[name='apple:title']", "content")
         [album_image] = Floki.attribute(document, "[property='og:image']", "content")
         [album_url] = Floki.attribute(document, "[property='og:url']", "content")
         %{album: album, album_image: album_image, album_url: album_url}
@@ -92,7 +92,7 @@ defmodule Radiopush.Preview.Apple do
   def parse(:musician, url) do
     case get_document(url) do
       {:ok, document} ->
-        [musician] = Floki.attribute(document, "[property='og:title']", "content")
+        [musician] = Floki.attribute(document, "[name='apple:title']", "content")
         [musician_image] = Floki.attribute(document, "[property='og:image']", "content")
         [musician_url] = Floki.attribute(document, "[property='og:url']", "content")
         %{musician: musician, musician_image: musician_image, musician_url: musician_url}

@@ -127,7 +127,7 @@ defmodule Radiopush.ChannelsTest do
         |> Channels.add_post_to_channel(user, %{"body" => "4"})
         |> Channels.get_channel_posts()
 
-      assert 4 = Enum.count(Channels.get_channel_posts(channel))
+      assert 4 = Enum.count(posts)
     end
   end
 end

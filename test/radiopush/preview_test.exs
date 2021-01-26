@@ -30,16 +30,19 @@ defmodule Radiopush.PreviewTest do
     end
 
     test "get_metadata/1 apple song" do
-      metadata = Preview.get_metadata("https://music.apple.com/us/album/place-to-be/1440758653")
+      metadata =
+        Preview.get_metadata(
+          "https://music.apple.com/us/album/time-has-told-me/1440656068?i=1440656384"
+        )
 
       assert %{
                type: "song",
-               album: "Five Leaves Left",
+               album: "Five Leaves Left ((Remastered))",
                image:
-                 "https://is3-ssl.mzstatic.com/image/thumb/Music128/v4/56/08/f3/5608f39a-6efc-a799-d4b8-b0da30acf1da/00042284292320.rgb.jpg/1200x630wp.png",
+                 "https://is3-ssl.mzstatic.com/image/thumb/Music128/v4/98/8d/65/988d652e-f112-2354-4880-6fecc35b8fa8/00042284291521.rgb.jpg/1200x630wp.png",
                musician: "Nick Drake",
                title: "Time Has Told Me",
-               url: "https://music.apple.com/us/album/place-to-be/1440758653"
+               url: "https://music.apple.com/us/album/time-has-told-me/1440656068?i=1440656384"
              } = metadata
     end
   end
