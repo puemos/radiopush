@@ -6,7 +6,7 @@ defmodule Radiopush.PostsFixtures do
 
   def valid_attrs,
     do: %{
-      type: "some type",
+      type: :song,
       song: "some song",
       album: "some album",
       musician: "some musician",

@@ -5,7 +5,8 @@ defmodule Radiopush.Channels.Post do
   schema "posts" do
     belongs_to :user, Radiopush.Accounts.User
     belongs_to :channel, Radiopush.Channels.Channel
-    field :type, :string
+
+    field :type, Ecto.Enum, values: [:song, :album]
     field :song, :string
     field :album, :string
     field :musician, :string

@@ -154,7 +154,7 @@ defmodule Radiopush.Channels do
   def add_channel_member(%Channel{} = channel, email) do
     user = Accounts.get_user_by_email(email)
 
-    with {:ok, _} <- create_member(%{user_id: user.id, channel_id: channel.id}) do
+    with {:ok, _} <- create_member(%{user_id: user.id, channel_id: channel.id, role: :member}) do
       get_channel!(channel.id)
     else
       {:error, error} ->
@@ -211,6 +211,24 @@ defmodule Radiopush.Channels do
   end
 
   @doc """
+  Updates a member.
+
+  ## Examples
+
+      iex> update_member(member, %{field: new_value})
+      {:ok, %Member{}}
+
+      iex> update_member(member, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_member(%Member{} = member, attrs) do
+    member
+    |> Member.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
   Creates a post.
 
   ## Examples
@@ -228,29 +246,104 @@ defmodule Radiopush.Channels do
     |> Repo.insert()
   end
 
-  @spec is_channel_member?(Channel.t(), User.t()) :: boolean()
-  def is_channel_member?(channel, user) do
-    list_channels_by_user(user)
-    |> Enum.member?(channel)
+  @spec belong_to_channel?(atom(), Channel.t(), User.t()) :: boolean()
+  def belong_to_channel?(role, channel, user) do
+    query =
+      from m in Member,
+        where:
+          m.user_id == ^user.id and
+            m.channel_id == ^channel.id and
+            m.role == ^role
+
+    case Repo.one(query) do
+      nil -> false
+      _ -> true
+    end
   end
+
+  @spec is_channel_owner?(Channel.t(), User.t()) :: boolean()
+  def is_channel_owner?(channel, user), do: belong_to_channel?(:owner, channel, user)
+  @spec is_channel_member?(Channel.t(), User.t()) :: boolean()
+  def is_channel_member?(channel, user), do: belong_to_channel?(:member, channel, user)
+  @spec is_channel_pending?(Channel.t(), User.t()) :: boolean()
+  def is_channel_pending?(channel, user), do: belong_to_channel?(:pending, channel, user)
+  @spec is_channel_rejected?(Channel.t(), User.t()) :: boolean()
+  def is_channel_rejected?(channel, user), do: belong_to_channel?(:rejected, channel, user)
 
   @doc """
   Add a post to a channel.
   """
-  @spec add_post_to_channel(Channel.t(), User.t(), Radiopush.Preview.url_metadata()) ::
+  @spec add_post_to_channel(Channel.t(), User.t(), map()) ::
           Channel.t() | {:error, binary()}
   def add_post_to_channel(%Channel{} = channel, %User{} = user, attrs \\ %{}) do
     attrs = Map.merge(%{user_id: user.id, channel_id: channel.id}, attrs)
 
-    with true <- is_channel_member?(channel, user),
+    with {:member_check, true} <- {:member_check, is_channel_member?(channel, user)},
          {:ok, _} <- create_post(attrs) do
       get_channel!(channel.id)
     else
       {:error, error} ->
         {:error, error}
 
-      false ->
+      {:member_check, false} ->
         {:error, "unauthorized"}
+    end
+  end
+
+  def join_channel(%Channel{} = channel, %User{} = user) do
+    with {:member_check, false} <- {:member_check, is_channel_member?(channel, user)},
+         {:ok, _} <- create_member(%{user_id: user.id, channel_id: channel.id, role: :pending}) do
+      get_channel!(channel.id)
+    else
+      {:error, error} ->
+        {:error, error}
+
+      {:member_check, true} ->
+        {:error, "already a member"}
+    end
+  end
+
+  def accept_pending_member_channel(%Channel{} = channel, %User{} = user, email) do
+    with {:owner_check, true} <- {:owner_check, is_channel_owner?(channel, user)},
+         {:user_exists, user} <- {:user_exists, Accounts.get_user_by_email(email)},
+         {:user_pending, true} <- {:user_pending, is_channel_pending?(channel, user)},
+         {:ok, _} <-
+           update_member(user, %{user_id: user.id, channel_id: channel.id, role: :member}) do
+      get_channel!(channel.id)
+    else
+      {:error, error} ->
+        {:error, error}
+
+      {:owner_check, false} ->
+        {:error, "not the owner"}
+
+      {:user_exists, nil} ->
+        {:error, "user doen't exists"}
+
+      {:user_pending, false} ->
+        {:error, "user is not pending"}
+    end
+  end
+
+  def reject_pending_member_channel(%Channel{} = channel, %User{} = user, email) do
+    with {:owner_check, true} <- {:owner_check, is_channel_owner?(channel, user)},
+         {:user_exists, user} <- {:user_exists, Accounts.get_user_by_email(email)},
+         {:user_pending, true} <- {:user_pending, is_channel_pending?(channel, user)},
+         {:ok, _} <-
+           update_member(user, %{user_id: user.id, channel_id: channel.id, role: :rejected}) do
+      get_channel!(channel.id)
+    else
+      {:error, error} ->
+        {:error, error}
+
+      {:owner_check, false} ->
+        {:error, "not the owner"}
+
+      {:user_exists, nil} ->
+        {:error, "user doen't exists"}
+
+      {:user_pending, false} ->
+        {:error, "user is not pending"}
     end
   end
 end
