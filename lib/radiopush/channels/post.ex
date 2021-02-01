@@ -19,7 +19,19 @@ defmodule Radiopush.Channels.Post do
   @doc false
   def changeset(post, attrs) do
     post
-    |> cast(attrs, [:type, :song, :album, :musician, :url, :image, :user_id, :channel_id])
-    |> validate_required([:type, :album, :musician, :url, :image, :user_id, :channel_id])
+    |> changeset_assoc(attrs)
+    |> changeset_data(attrs)
+  end
+
+  def changeset_assoc(post, attrs) do
+    post
+    |> cast(attrs, [:user_id, :channel_id])
+    |> validate_required([:user_id, :channel_id])
+  end
+
+  def changeset_data(post, attrs) do
+    post
+    |> cast(attrs, [:type, :song, :album, :musician, :url, :image])
+    |> validate_required([:type, :album, :musician, :url, :image])
   end
 end

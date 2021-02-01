@@ -6,8 +6,8 @@ defmodule Radiopush.Channels.Member do
 
   @primary_key false
   schema "members" do
-    belongs_to :user, Radiopush.Accounts.User
-    belongs_to :channel, Radiopush.Channels.Channel
+    belongs_to :user, Radiopush.Accounts.User, primary_key: true
+    belongs_to :channel, Radiopush.Channels.Channel, primary_key: true
     field :role, Ecto.Enum, values: @roles
 
     timestamps()
