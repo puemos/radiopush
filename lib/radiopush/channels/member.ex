@@ -19,4 +19,10 @@ defmodule Radiopush.Channels.Member do
     |> cast(attrs, [:user_id, :channel_id, :role])
     |> validate_required([:user_id, :channel_id, :role])
   end
+
+  def changeset_role(member, attrs) do
+    member
+    |> cast(attrs, [:role])
+    |> validate_required([:role])
+  end
 end

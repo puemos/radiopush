@@ -7,6 +7,7 @@ defmodule Radiopush.Channels.Channel do
 
   schema "channels" do
     field :name, :string
+    field :private, :boolean
 
     many_to_many(:members, User, join_through: Member, on_replace: :delete)
     has_many(:posts, Post)
@@ -15,11 +16,17 @@ defmodule Radiopush.Channels.Channel do
   end
 
   @required_fields [:name]
-  @optional_fields []
+  @optional_fields [:private]
 
   def changeset(channel, attrs) do
     channel
-    |> cast(attrs, @required_fields, @optional_fields)
+    |> cast(attrs, @required_fields ++ @optional_fields)
     |> validate_required(@required_fields)
+  end
+
+  def changeset_private(channel, attrs) do
+    channel
+    |> cast(attrs, [:private])
+    |> validate_required([:private])
   end
 end

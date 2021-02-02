@@ -46,11 +46,6 @@ defmodule Radiopush.ChannelsTest do
       assert_raise Ecto.NoResultsError, fn -> Channels.get_channel!(channel.id) end
     end
 
-    test "change_channel/1 returns a channel changeset" do
-      channel = channel_fixture()
-      assert %Ecto.Changeset{} = Channels.change_channel(channel)
-    end
-
     test "add_channel_member/2 adds members to a channel" do
       channel = channel_fixture()
       user = user_fixture()

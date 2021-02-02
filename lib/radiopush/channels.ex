@@ -7,7 +7,6 @@ defmodule Radiopush.Channels do
   alias Radiopush.Repo
 
   alias Radiopush.Channels.{Channel, Member, Post}
-  alias Radiopush.Accounts
   alias Radiopush.Accounts.{User}
 
   def list_channels do
@@ -53,12 +52,14 @@ defmodule Radiopush.Channels do
     |> Repo.update()
   end
 
-  def delete_channel(%Channel{} = channel) do
-    Repo.delete(channel)
+  def update_channel_private(%Channel{} = channel, attrs) do
+    channel
+    |> Channel.changeset_private(attrs)
+    |> Repo.update()
   end
 
-  def change_channel(%Channel{} = channel, attrs \\ %{}) do
-    Channel.changeset(channel, attrs)
+  def delete_channel(%Channel{} = channel) do
+    Repo.delete(channel)
   end
 
   def get_member!(channel_id, user_id),
@@ -73,6 +74,12 @@ defmodule Radiopush.Channels do
   def update_member(%Member{} = member, attrs) do
     member
     |> Member.changeset(attrs)
+    |> Repo.update()
+  end
+
+  def update_member_role(%Member{} = member, attrs) do
+    member
+    |> Member.changeset_role(attrs)
     |> Repo.update()
   end
 
@@ -207,8 +214,7 @@ defmodule Radiopush.Channels do
     with {:owner_check, true} <- {:owner_check, is_channel_owner?(channel, owner)},
          {:user_pending, true} <- {:user_pending, is_channel_pending?(channel, user)},
          {:member, member} <- {:member, get_member!(channel.id, user.id)},
-         {:ok, _} <-
-           update_member(member, %{user_id: user.id, channel_id: channel.id, role: :member}) do
+         {:ok, _} <- update_member_role(member, %{role: :member}) do
       get_channel!(channel.id)
     else
       {:error, error} ->
@@ -227,8 +233,7 @@ defmodule Radiopush.Channels do
     with {:owner_check, true} <- {:owner_check, is_channel_owner?(channel, owner)},
          {:user_pending, true} <- {:user_pending, is_channel_pending?(channel, user)},
          {:member, member} <- {:member, get_member!(channel.id, user.id)},
-         {:ok, _} <-
-           update_member(member, %{user_id: user.id, channel_id: channel.id, role: :rejected}) do
+         {:ok, _} <- update_member_role(member, %{role: :rejected}) do
       get_channel!(channel.id)
     else
       {:error, error} ->
