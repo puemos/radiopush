@@ -34,6 +34,12 @@ defmodule Radiopush.ChannelsTest do
       assert channel.name == "some updated name"
     end
 
+    test "update_channel_private/2 with valid data updates the channel private" do
+      channel = channel_fixture()
+      assert {:ok, %Channel{} = channel} = Channels.update_channel_private(channel, %{private: true})
+      assert channel.private == true
+    end
+
     test "update_channel/2 with invalid data returns error changeset" do
       channel = channel_fixture()
       assert {:error, %Ecto.Changeset{}} = Channels.update_channel(channel, invalid_attrs())
