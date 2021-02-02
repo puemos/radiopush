@@ -16,7 +16,7 @@ config :radiopush, Radiopush.Repo,
   pool: Ecto.Adapters.SQL.Sandbox
 
 if System.get_env("GITHUB_ACTIONS") do
-  config :my_app, Radiopush.Repo,
+  config :radiopush, Radiopush.Repo,
     username: "postgres",
     password: "postgres"
 end
