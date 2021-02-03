@@ -8,7 +8,8 @@
 use Mix.Config
 
 config :radiopush,
-  ecto_repos: [Radiopush.Repo]
+  ecto_repos: [Radiopush.Repo],
+  http_client: HTTPoison
 
 # Configures the endpoint
 config :radiopush, RadiopushWeb.Endpoint,

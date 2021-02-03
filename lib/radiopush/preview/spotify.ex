@@ -1,8 +1,8 @@
 defmodule Radiopush.Preview.Spotify do
-  import Radiopush.Preview.Utils
+  alias Radiopush.Preview.{Utils}
 
   def parse(url) do
-    case get_document(url) do
+    case Utils.get_document(url) do
       {:ok, document} ->
         [type] = Floki.attribute(document, "[property='og:type']", "content")
 
@@ -64,7 +64,7 @@ defmodule Radiopush.Preview.Spotify do
   end
 
   def parse(:song, url) do
-    case get_document(url) do
+    case Utils.get_document(url) do
       {:ok, document} ->
         [song] = Floki.attribute(document, "[property='og:title']", "content")
         [image] = Floki.attribute(document, "[property='og:image']", "content")
@@ -77,7 +77,7 @@ defmodule Radiopush.Preview.Spotify do
   end
 
   def parse(:album, url) do
-    case get_document(url) do
+    case Utils.get_document(url) do
       {:ok, document} ->
         [album] = Floki.attribute(document, "[property='og:title']", "content")
         [album_image] = Floki.attribute(document, "[property='og:image']", "content")
@@ -90,7 +90,7 @@ defmodule Radiopush.Preview.Spotify do
   end
 
   def parse(:musician, url) do
-    case get_document(url) do
+    case Utils.get_document(url) do
       {:ok, document} ->
         [musician] = Floki.attribute(document, "[property='og:title']", "content")
         [musician_image] = Floki.attribute(document, "[property='og:image']", "content")
