@@ -8,11 +8,9 @@ defmodule Radiopush.ChannelsFixtures do
   def update_attrs, do: %{name: "some updated name"}
   def invalid_attrs, do: %{name: nil}
 
-  def channel_fixture(attrs \\ %{}) do
-    {:ok, channel} =
-      attrs
-      |> Enum.into(valid_attrs())
-      |> Radiopush.Channels.create_channel()
+  def channel_fixture(owner, attrs \\ %{}) do
+    attrs = Enum.into(attrs, valid_attrs())
+    {:ok, channel} = Radiopush.Channels.create_channel(owner, attrs)
 
     channel
   end

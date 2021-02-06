@@ -13,16 +13,14 @@ defmodule RadiopushWeb.ChannelListLive.Index do
   end
 
   defp assign_channels(socket) do
-    channels =
-      socket.assigns.current_user
-      |> Channels.list_channels_by_user()
+    channels = Channels.list_channels()
 
     assign(socket, channels: channels)
   end
 
   @impl true
   def handle_event("channel", %{"channel" => channel_params}, socket) do
-    Radiopush.Channels.create_channel(channel_params, socket.assigns.current_user)
+    Radiopush.Channels.create_channel(channel_params)
 
     {:noreply, assign_channels(socket)}
   end

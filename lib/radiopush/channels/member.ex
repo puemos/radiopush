@@ -18,6 +18,7 @@ defmodule Radiopush.Channels.Member do
     member
     |> cast(attrs, [:user_id, :channel_id, :role])
     |> validate_required([:user_id, :channel_id, :role])
+    |> unique_constraint([:user_id, :channel_id, :role], name: :members_pkey)
   end
 
   def changeset_role(member, attrs) do

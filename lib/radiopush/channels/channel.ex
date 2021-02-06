@@ -2,14 +2,13 @@ defmodule Radiopush.Channels.Channel do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Radiopush.Accounts.{User}
   alias Radiopush.Channels.{Member, Post}
 
   schema "channels" do
     field :name, :string
     field :private, :boolean
 
-    many_to_many(:members, User, join_through: Member, on_replace: :delete)
+    has_many(:members, Member)
     has_many(:posts, Post)
 
     timestamps()
@@ -24,7 +23,7 @@ defmodule Radiopush.Channels.Channel do
     |> validate_required(@required_fields)
   end
 
-  def changeset_private(channel, attrs) do
+  def private_changeset(channel, attrs) do
     channel
     |> cast(attrs, [:private])
     |> validate_required([:private])

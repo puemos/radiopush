@@ -5,7 +5,7 @@ defmodule Radiopush.MixProject do
     [
       app: :radiopush,
       version: "0.1.0",
-      elixir: "~> 1.7",
+      elixir: "~> 1.10.1",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -38,7 +38,7 @@ defmodule Radiopush.MixProject do
       {:phoenix_ecto, "~> 4.1"},
       {:ecto_sql, "~> 3.4"},
       {:postgrex, ">= 0.0.0"},
-      {:phoenix_live_view, "~> 0.15.0"},
+      {:phoenix_live_view, "~> 0.15.4"},
       {:floki, ">= 0.27.0"},
       {:phoenix_html, "~> 2.11"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
@@ -50,7 +50,8 @@ defmodule Radiopush.MixProject do
       {:plug_cowboy, "~> 2.0"},
       {:phx_gen_auth, "~> 0.6"},
       {:httpoison, "~> 1.8"},
-      {:mox, "~> 1.0", only: :test}
+      {:mox, "~> 1.0", only: :test},
+      {:faker, "~> 0.16", only: [:test, :dev]}
     ]
   end
 
