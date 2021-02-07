@@ -1,26 +1,50 @@
-<h1>Register</h1>
-
-<%= form_for @changeset, Routes.user_registration_path(@conn, :create), fn f -> %>
-  <%= if @changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
+<div class="flex items-center justify-center w-full px-4 py-12 sm:px-6 lg:px-8">
+  <div class="w-full max-w-md space-y-8">
+    <div>
+      <%# <img class="w-auto h-12 mx-auto" src="https://tailwindui.com/img/logos/workflow-mark-lime-300.svg" alt="Workflow"> %>
+      <h2 class="mt-6 text-3xl font-extrabold text-center ">
+        Register
+      </h2>
+      <p class="mt-2 text-sm text-center text-gray-200">
+        Or
+        <%= link "Sign in to your account", to: Routes.user_session_path(@conn, :new), class: "font-medium text-lime-300 hover:text-lime-300" %>
+      </p>
+    </div>
+    <%= form_for @changeset, Routes.user_registration_path(@conn, :create), [class: "mt-8 space-y-6" ], fn f -> %>
+    <%= if @changeset.action do %>
+      <div class="alert alert-danger">
+        <p>Oops, something went wrong! Please check the errors below.</p>
+        <ul class="mt-2 list-inside">
+          <li> <%= error_tag f, :email %></li>
+          <li> <%= error_tag f, :password %></li>
+        </ul>
+      </div>
+    <% end %>
+    <div class="-space-y-px rounded-md shadow-sm">
+      <div>
+        <%= label f, :email, class: "sr-only" %>
+        <%= email_input f, :email, required: true, placeholder: "Email", class: "input rounded-t-md" %>
+      </div>
+      <div>
+        <%= label f, :password, class: "sr-only" %>
+        <%= password_input f, :password, required: true, placeholder: "Password", class: "input rounded-b-md" %>
+      </div>
+    </div>
+    <div>
+      <button type="submit"
+            class="relative flex justify-center w-full button">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+          <!-- Heroicon name: solid/lock-closed -->
+          <svg class="w-5 h-5 text-lime-300 group-hover:text-lime-300" xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+            <path fill-rule="evenodd"
+                  d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
+                  clip-rule="evenodd" />
+          </svg>
+        </span>
+        Register
+      </button>
     </div>
   <% end %>
-
-  <%= label f, :email %>
-  <%= email_input f, :email, required: true %>
-  <%= error_tag f, :email %>
-
-  <%= label f, :password %>
-  <%= password_input f, :password, required: true %>
-  <%= error_tag f, :password %>
-
-  <div>
-    <%= submit "Register" %>
-  </div>
-<% end %>
-
-<p>
-  <%= link "Log in", to: Routes.user_session_path(@conn, :new) %> |
-  <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new) %>
-</p>
+</div>
+</div>

@@ -1,13 +1,13 @@
-<div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-  <div class="max-w-md w-full space-y-8">
+<div class="flex items-center justify-center w-full px-4 py-12 sm:px-6 lg:px-8">
+  <div class="w-full max-w-md space-y-8">
     <div>
-      <img class="mx-auto h-12 w-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow">
-      <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+      <%# <img class="w-auto h-12 mx-auto" src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg" alt="Workflow"> %>
+      <h2 class="mt-6 text-3xl font-extrabold text-center ">
         Sign in to your account
       </h2>
-      <p class="mt-2 text-center text-sm text-gray-600">
+      <p class="mt-2 text-sm text-center text-gray-200">
         Or
-        <%= link "Register", to: Routes.user_registration_path(@conn, :new), class: "font-medium text-indigo-600 hover:text-indigo-500" %>
+        <%= link "register for free", to: Routes.user_registration_path(@conn, :new), class: "font-medium text-lime-300 hover:text-lime-300" %>
       </p>
     </div>
     <%= form_for @conn, Routes.user_session_path(@conn, :create), [as: :user, class: "mt-8 space-y-6" ], fn f -> %>
@@ -18,31 +18,31 @@
         </p>
       </div>
     <% end %>
-    <div class="rounded-md shadow-sm -space-y-px">
+    <div class="-space-y-px rounded-md shadow-sm">
       <div>
         <%= label f, :email, class: "sr-only" %>
-        <%= email_input f, :email, required: true, placeholder: "Email", class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" %>
+        <%= email_input f, :email, required: true, placeholder: "Email", class: "input rounded-t-md" %>
       </div>
       <div>
         <%= label f, :password, class: "sr-only" %>
-        <%= password_input f, :password, required: true, placeholder: "Password", class: "appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm" %>
+        <%= password_input f, :password, required: true, placeholder: "Password", class: "input rounded-b-md" %>
       </div>
     </div>
     <div class="flex items-center justify-between">
       <div class="flex items-center">
-        <%= checkbox f, :remember_me, class: "h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded" %>
-        <%= label f, :remember_me, "Keep me logged in for 60 days", class: "ml-2 block text-sm text-gray-900" %>
+        <%= checkbox f, :remember_me, class: "h-4 w-4 text-lime-300 focus:ring-lime-300 border-gray-300 rounded" %>
+        <%= label f, :remember_me, "Keep me logged in for 60 days", class: "ml-2 block text-sm " %>
       </div>
       <div class="text-sm">
-        <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new), class: "font-medium text-indigo-600 hover:text-indigo-500" %>
+        <%= link "Forgot your password?", to: Routes.user_reset_password_path(@conn, :new), class: "font-medium text-lime-300 hover:text-lime-300" %>
       </div>
     </div>
     <div>
       <button type="submit"
-            class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-        <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+            class="relative flex justify-center w-full button">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-3">
           <!-- Heroicon name: solid/lock-closed -->
-          <svg class="h-5 w-5 text-indigo-500 group-hover:text-indigo-400" xmlns="http://www.w3.org/2000/svg"
+          <svg class="w-5 h-5 text-lime-300 group-hover:text-indigo-400" xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
             <path fill-rule="evenodd"
                   d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z"
