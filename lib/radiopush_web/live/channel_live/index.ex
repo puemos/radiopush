@@ -51,10 +51,12 @@ defmodule RadiopushWeb.ChannelLive.Index do
   end
 
   @impl true
-  def handle_info(%{event: "presence_diff"}, socket = %{assigns: %{id: id}}) do
+  def handle_info(%{event: "presence_diff"}, socket) do
+    channel_id = socket.assigns.channel.id
+
     {:noreply,
      assign(socket,
-       users: Presence.list_presences(topic(id))
+       users: Presence.list_presences(topic(channel_id))
      )}
   end
 
@@ -76,7 +78,7 @@ defmodule RadiopushWeb.ChannelLive.Index do
       metadata
     )
 
-    channel_id = socket.assigns.channel
+    channel_id = socket.assigns.channel.id
 
     RadiopushWeb.Endpoint.broadcast_from(self(), topic(channel_id), "message", %{
       id: channel_id

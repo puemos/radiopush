@@ -14,7 +14,9 @@ defmodule Radiopush.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Radiopush.PubSub},
       # Start the Endpoint (http/https)
-      RadiopushWeb.Endpoint
+      RadiopushWeb.Endpoint,
+      # Start the Presence
+      RadiopushWeb.Presence
       # Start a worker by calling: Radiopush.Worker.start_link(arg)
       # {Radiopush.Worker, arg}
     ]
