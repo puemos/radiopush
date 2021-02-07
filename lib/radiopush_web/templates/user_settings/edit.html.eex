@@ -1,53 +1,101 @@
-<h1>Settings</h1>
+<div class="flex items-center justify-center w-full px-4 py-12 sm:px-6 lg:px-8">
+  <div class="w-full max-w-md space-y-8">
+    <div>
+      <%# <img class="w-auto h-12 mx-auto" src="https://tailwindui.com/img/logos/workflow-mark-lime-300.svg" alt="Workflow"> %>
+      <h2 class="mt-6 text-3xl font-extrabold text-center ">
+        Settings
+      </h2>
+    </div>
+    <div>
+      <h3>Change email</h3>
+      <%= form_for @email_changeset, Routes.user_settings_path(@conn, :update), [class: "mt-8 space-y-6" ], fn f -> %>
+      <%= if @email_changeset.action do %>
+        <div class="alert alert-danger">
+          <p>Oops, something went wrong! Please check the errors below.</p>
+          <ul class="mt-2 list-inside">
+            <li> <%= error_tag f, :email %></li>
+            <li> <%= error_tag f, :current_password %></li>
+          </ul>
+        </div>
+      <% end %>
+      <div class="-space-y-px rounded-md shadow-sm">
+        <%= hidden_input f, :action, name: "action", value: "update_email" %>
+        <div>
+          <%= label f, :email, class: "sr-only" %>
+          <%= email_input f, :email, required: true, placeholder: "Email", class: "input rounded-t-md" %>
+        </div>
+        <div>
+          <%= label f, :current_password, for: "current_password_for_email", class: "sr-only" %>
+          <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_email", placeholder: "Password", class: "input rounded-b-md" %>
+        </div>
+      </div>
+      <div>
+        <button type="submit"
+            class="relative flex justify-center w-full button">
+          Change email
+        </button>
+      </div>
+    <% end %>
+  </div>
+  <div>
+    <h3>Change password</h3>
+    <%= form_for @password_changeset, Routes.user_settings_path(@conn, :update), [class: "mt-8 space-y-6" ], fn f -> %>
+    <%= if @password_changeset.action do %>
+      <div class="alert alert-danger">
+        <p>Oops, something went wrong! Please check the errors below.</p>
+        <ul class="mt-2 list-inside">
+          <li> <%= error_tag f, :password %></li>
+          <li> <%= error_tag f, :password_confirmation %></li>
+          <li> <%= error_tag f, :current_password %></li>
+        </ul>
+      </div>
+    <% end %>
 
-<h3>Change email</h3>
-
-<%= form_for @email_changeset, Routes.user_settings_path(@conn, :update), fn f -> %>
-  <%= if @email_changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
+    <div class="-space-y-px rounded-md shadow-sm">
+      <%= hidden_input f, :action, name: "action", value: "update_password" %>
+      <div>
+        <%= label f, :password, class: "sr-only" %>
+        <%= password_input f, :password, required: true, placeholder: "New password", class: "input rounded-t-md" %>
+      </div>
+      <div>
+        <%= label f, :password_confirmation, class: "sr-only" %>
+        <%= password_input f, :password_confirmation, required: true, placeholder: "Confirm new password", class: "input" %>
+      </div>
+      <div>
+        <%= label f, :current_password, for: "current_password_for_password", class: "sr-only" %>
+        <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_password", placeholder: "Current password", class: "input rounded-b-md" %>
+      </div>
+    </div>
+    <div>
+      <button type="submit"
+            class="relative flex justify-center w-full button">
+        Change email
+      </button>
     </div>
   <% end %>
-
-  <%= hidden_input f, :action, name: "action", value: "update_email" %>
-
-  <%= label f, :email %>
-  <%= email_input f, :email, required: true %>
-  <%= error_tag f, :email %>
-
-  <%= label f, :current_password, for: "current_password_for_email" %>
-  <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_email" %>
-  <%= error_tag f, :current_password %>
-
-  <div>
-    <%= submit "Change email" %>
-  </div>
-<% end %>
-
+</div>
+</div>
+</div>
+<!--
 <h3>Change password</h3>
-
 <%= form_for @password_changeset, Routes.user_settings_path(@conn, :update), fn f -> %>
-  <%= if @password_changeset.action do %>
-    <div class="alert alert-danger">
-      <p>Oops, something went wrong! Please check the errors below.</p>
-    </div>
-  <% end %>
-
-  <%= hidden_input f, :action, name: "action", value: "update_password" %>
-
-  <%= label f, :password, "New password" %>
-  <%= password_input f, :password, required: true %>
-  <%= error_tag f, :password %>
-
-  <%= label f, :password_confirmation, "Confirm new password" %>
-  <%= password_input f, :password_confirmation, required: true %>
-  <%= error_tag f, :password_confirmation %>
-
-  <%= label f, :current_password, for: "current_password_for_password" %>
-  <%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_password" %>
-  <%= error_tag f, :current_password %>
-
-  <div>
-    <%= submit "Change password" %>
+<%= if @password_changeset.action do %>
+  <div class="alert alert-danger">
+    <p>Oops, something went wrong! Please check the errors below.</p>
   </div>
 <% end %>
+<%= hidden_input f, :action, name: "action", value: "update_password" %>
+<%= label f, :password, "New password" %>
+<%= password_input f, :password, required: true %>
+<%= error_tag f, :password %>
+<%= label f, :password_confirmation, "Confirm new password" %>
+<%= password_input f, :password_confirmation, required: true %>
+<%= error_tag f, :password_confirmation %>
+<%= label f, :current_password, for: "current_password_for_password" %>
+<%= password_input f, :current_password, required: true, name: "current_password", id: "current_password_for_password" %>
+<%= error_tag f, :current_password %>
+<div>
+  <%= submit "Change password" %>
+</div>
+<% end %>
+-->

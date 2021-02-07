@@ -7,7 +7,7 @@
       </h2>
       <p class="mt-2 text-sm text-center text-gray-200">
         Or
-        <%= link "Sign in to your account", to: Routes.user_session_path(@conn, :new), class: "font-medium text-lime-300 hover:text-lime-300" %>
+        <%= link "sign in to your account", to: Routes.user_session_path(@conn, :new), class: "font-medium text-lime-300 hover:text-lime-300" %>
       </p>
     </div>
     <%= form_for @changeset, Routes.user_registration_path(@conn, :create), [class: "mt-8 space-y-6" ], fn f -> %>

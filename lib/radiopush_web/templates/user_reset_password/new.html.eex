@@ -1,15 +1,28 @@
-<h1>Forgot your password?</h1>
-
-<%= form_for :user, Routes.user_reset_password_path(@conn, :create), fn f -> %>
-  <%= label f, :email %>
-  <%= email_input f, :email, required: true %>
-
-  <div>
-    <%= submit "Send instructions to reset password" %>
-  </div>
-<% end %>
-
-<p>
-  <%= link "Register", to: Routes.user_registration_path(@conn, :new) %> |
-  <%= link "Log in", to: Routes.user_session_path(@conn, :new) %>
-</p>
+<div class="flex items-center justify-center w-full px-4 py-12 sm:px-6 lg:px-8">
+  <div class="w-full max-w-md space-y-8">
+    <div>
+      <%# <img class="w-auto h-12 mx-auto" src="https://tailwindui.com/img/logos/workflow-mark-lime-300.svg" alt="Workflow"> %>
+      <h2 class="mt-6 text-3xl font-extrabold text-center ">
+        Forgot your password?
+      </h2>
+      <p class="mt-2 text-sm text-center text-gray-200">
+        Or
+        <%= link "register for free", to: Routes.user_registration_path(@conn, :new), class: "font-medium text-lime-300 hover:text-lime-300" %>
+      </p>
+    </div>
+    <%= form_for :user, Routes.user_reset_password_path(@conn, :create), [class: "mt-8 space-y-6" ], fn f -> %>
+    <div class="-space-y-px rounded-md shadow-sm">
+      <div>
+        <%= label f, :email, class: "sr-only" %>
+        <%= email_input f, :email, required: true, placeholder: "Email", class: "input rounded-md" %>
+      </div>
+    </div>
+    <div>
+      <button type="submit"
+            class="relative flex justify-center w-full button">
+        Send instructions to reset password
+      </button>
+    </div>
+  <% end %>
+</div>
+</div>

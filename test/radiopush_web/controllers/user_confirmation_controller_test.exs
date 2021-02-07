@@ -13,7 +13,7 @@ defmodule RadiopushWeb.UserConfirmationControllerTest do
     test "renders the confirmation page", %{conn: conn} do
       conn = get(conn, Routes.user_confirmation_path(conn, :new))
       response = html_response(conn, 200)
-      assert response =~ "<h1>Resend confirmation instructions</h1>"
+      assert response =~ "Resend confirmation instructions"
     end
   end
 
