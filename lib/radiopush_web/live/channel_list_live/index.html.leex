@@ -10,7 +10,9 @@
     </div>
   </div>
 <% end %>
-<h3 class="text-xl mt-6">Your channels</h3>
+<div class="h-12"></div>
+
+<h3 class="text-3xl">Your channels</h3>
 <div class="flex gap-4 pb-4 mt-6 scrollbar scrollbar scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-800 overflow-x-scroll">
   <div phx-click="open-create-channel" class="cursor-pointer flex-initial bg-gray-700 p-4 rounded-3xl h-52 w-52">
     <div class="text-4xl font-bold w-60 text-gray-200">
@@ -28,7 +30,7 @@
         </div>
         <div>
           <%= if channel.private do %>
-            private
+            Private
           <% end %>
         </div>
       </div>
@@ -36,21 +38,21 @@
   <% end %>
 </div>
 <div class="h-12"></div>
-<h3 class="text-xl">Explore</h3>
+<h3 class="text-3xl">Explore</h3>
 <div class="h-6"></div>
-<div class="flex flex-wrap gap-4">
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
   <%=for channel <- @channels do %>
-    <a href="/channel/<%= channel.id %>">
-      <div class="flex flex-col justify-between flex-initial bg-gray-700 p-4 rounded-3xl h-52 w-52 ">
+    <div class="flex flex-col justify-between flex-initial bg-gray-700 p-4 rounded-3xl h-52">
+      <a href="/channel/<%= channel.id %>">
         <div class="text-4xl font-bold w-40 overflow-ellipsis overflow-hidden text-red-300" title="<%= channel.name %>">
           <%= channel.name %>
         </div>
         <div>
           <%= if channel.private do %>
-            private
+            Private
           <% end %>
         </div>
-      </div>
-    </a>
+      </a>
+    </div>
   <% end %>
 </div>

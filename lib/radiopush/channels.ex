@@ -30,7 +30,7 @@ defmodule Radiopush.Channels do
   @spec get_channel_posts(Channel.t()) :: list(Post.t())
   def get_channel_posts(channel) do
     channel
-    |> Repo.preload(:posts)
+    |> Repo.preload(posts: [:user])
     |> Map.get(:posts)
   end
 
