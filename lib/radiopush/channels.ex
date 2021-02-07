@@ -12,7 +12,11 @@ defmodule Radiopush.Channels do
   # Channels
 
   def list_channels do
-    Repo.all(Channel)
+    query =
+      from c in Channel,
+        where: c.private == false
+
+    Repo.all(query)
   end
 
   def list_channels_by_user(user) do

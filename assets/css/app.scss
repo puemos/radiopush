@@ -13,7 +13,7 @@
     @apply text-sm text-red-800;
   }
   .button {
-    @apply px-4 py-3 text-sm font-medium text-white bg-gray-600 rounded-md group hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-lime-300;
+    @apply px-4 py-3 text-sm font-medium text-white bg-gray-600 rounded-md group hover:bg-gray-700 focus:outline-none focus:ring-0;
   }
   .input {
     @apply text-black appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 focus:outline-none focus:ring-lime-300 focus:border-lime-300 focus:z-10 sm:text-sm;

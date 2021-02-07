@@ -1,10 +1,14 @@
-<ul>
-  <%= if @current_user do %>
-    <li><%= @current_user.email %></li>
-    <li><%= link "Settings", to: Routes.user_settings_path(@conn, :edit) %></li>
-    <li><%= link "Log out", to: Routes.user_session_path(@conn, :delete), method: :delete %></li>
-  <% else %>
-    <li><%= link "Register", to: Routes.user_registration_path(@conn, :new) %></li>
-    <li><%= link "Log in", to: Routes.user_session_path(@conn, :new) %></li>
-  <% end %>
-</ul>
+<nav class="flex flex-row justify-between">
+  <div class="flex space-x-4">
+    <span class="px-3 py-2 text-sm font-medium text-gray-300 rounded-md">Radiopush</span>
+  </div>
+  <div class="flex space-x-4">
+    <%= if @current_user do %>
+      <%= link "Settings", to: Routes.user_settings_path(@conn, :edit), class: "text-gray-300 hover:text-gray-100 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
+      <%= link "Log out", to: Routes.user_session_path(@conn, :delete), class: "text-gray-300 hover:text-gray-100 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
+    <% else %>
+      <%= link "Register", to: Routes.user_registration_path(@conn, :new), class: "text-gray-300 hover:text-gray-100 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
+      <%= link "Log in", to: Routes.user_session_path(@conn, :new), class: "text-gray-300 hover:text-gray-100 hover:text-white px-3 py-2 rounded-md text-sm font-medium" %>
+    <% end %>
+  </div>
+</nav>

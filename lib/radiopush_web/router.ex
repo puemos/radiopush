@@ -29,7 +29,7 @@ defmodule RadiopushWeb.Router do
   ## Routes
 
   scope "/", RadiopushWeb do
-    pipe_through :browser
+    pipe_through [:browser, :redirect_if_user_is_authenticated]
 
     live "/", HomeLive.Index
   end

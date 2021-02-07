@@ -1,17 +1,56 @@
-<h1>Listing Channels</h1>
-<div>
-  <%=for channel <- @channels do %>
+<%= if @open_create_channel do %>
+  <div class="fixed w-full h-full top-0 left-0 flex items-center justify-center">
+    <div phx-click="close-create-channel" class="absolute w-full h-full bg-gray-900 opacity-50"></div>
+    <div class="w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
+      <form action="#" phx-submit="channel" class="flex flex-row">
+        <%= text_input :channel, :name, placeholder: "Channel name", class: "flex-1 px-4 py-3 border-none text-sm font-medium placeholder-gray-400 text-white bg-gray-600 rounded-md group outline-none focus:outline-none focus:ring-0 w-full" %>
+        <div class="w-1"></div>
+        <%= submit "Create", phx_disable_with: "Creating...", class: "button" %>
+      </form>
+    </div>
+  </div>
+<% end %>
+<h3 class="text-xl mt-6">Your channels</h3>
+<div class="flex gap-4 pb-4 mt-6 scrollbar scrollbar scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-800 overflow-x-scroll">
+  <div phx-click="open-create-channel" class="cursor-pointer flex-initial bg-gray-700 p-4 rounded-3xl h-52 w-52">
+    <div class="text-4xl font-bold w-60 text-gray-200">
+      + New
+    </div>
+    <div class="text-4xl font-bold w-40 text-gray-200">
+      channel
+    </div>
+  </div>
+  <%=for channel <- @user_channels do %>
     <a href="/channel/<%= channel.id %>">
-      <div>
-        Name <%= channel.name %>
-      </div>
-      <div>
-        ID <%= channel.id %>
+      <div class="flex flex-col justify-between flex-initial bg-gray-700 p-4 rounded-3xl h-52 w-52 overflow-hidden">
+        <div class="text-4xl font-bold w-40 text-lime-300" title="<%= channel.name %>">
+          <%= channel.name %>
+        </div>
+        <div>
+          <%= if channel.private do %>
+            private
+          <% end %>
+        </div>
       </div>
     </a>
   <% end %>
 </div>
-<form action="#" phx-submit="channel">
-  <%= text_input :channel, :name, placeholder: "Channel name" %>
-  <%= submit "Create", phx_disable_with: "Creating..." %>
-</form>
+<div class="h-12"></div>
+<h3 class="text-xl">Explore</h3>
+<div class="h-6"></div>
+<div class="flex flex-wrap gap-4">
+  <%=for channel <- @channels do %>
+    <a href="/channel/<%= channel.id %>">
+      <div class="flex flex-col justify-between flex-initial bg-gray-700 p-4 rounded-3xl h-52 w-52 ">
+        <div class="text-4xl font-bold w-40 overflow-ellipsis overflow-hidden text-red-300" title="<%= channel.name %>">
+          <%= channel.name %>
+        </div>
+        <div>
+          <%= if channel.private do %>
+            private
+          <% end %>
+        </div>
+      </div>
+    </a>
+  <% end %>
+</div>

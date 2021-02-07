@@ -7,7 +7,6 @@
     "watch": "webpack --mode development --watch"
   },
   "dependencies": {
-    "@tailwindcss/forms": "^0.2.1",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
     "phoenix_live_view": "file:../deps/phoenix_live_view",
@@ -16,6 +15,7 @@
   "devDependencies": {
     "@babel/core": "^7.x",
     "@babel/preset-env": "^7.x",
+    "@tailwindcss/forms": "^0.2.1",
     "autoprefixer": "^10.2.4",
     "babel-loader": "^8.x",
     "copy-webpack-plugin": "^7.x",
@@ -27,6 +27,7 @@
     "postcss-loader": "4.2",
     "sass": "^1.x",
     "sass-loader": "^10.x",
+    "tailwind-scrollbar": "^1.2.3",
     "tailwindcss": "^2.0.2",
     "webpack": "^5.x",
     "webpack-cli": "^4.x"

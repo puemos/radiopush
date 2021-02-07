@@ -62,6 +62,8 @@ defmodule RadiopushWeb.ChannelLive.Index do
         <%= render_rejected(assigns) %>
       <% true -> %>
         <%= render_join(assigns) %>
+      <% nil -> %>
+        <%= render_join(assigns) %>
     <% end %>
     """
   end
@@ -91,13 +93,14 @@ defmodule RadiopushWeb.ChannelLive.Index do
   end
 
   defp assign_member_role(socket) do
-    role =
+    member =
       socket.assigns.channel
-      |> Channels.get_channel_members()
-      |> Enum.find(fn m -> m.user_id == socket.assigns.current_user.id end)
-      |> Map.get(:role)
+      |> Channels.get_member(socket.assigns.current_user)
 
-    assign(socket, role: role)
+    case member do
+      nil -> assign(socket, role: nil)
+      member -> assign(socket, role: member.role)
+    end
   end
 
   @impl true
