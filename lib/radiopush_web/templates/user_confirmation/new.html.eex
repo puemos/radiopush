@@ -1,4 +1,4 @@
-<h1>Resend confirmation instructions</h1>
+<h2>Resend confirmation instructions</h2>
 
 <%= form_for :user, Routes.user_confirmation_path(@conn, :create), fn f -> %>
   <%= label f, :email %>

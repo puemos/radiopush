@@ -3,10 +3,11 @@
   "description": " ",
   "license": "MIT",
   "scripts": {
-    "deploy": "webpack --mode production",
+    "deploy": "NODE_ENV=production webpack --mode production",
     "watch": "webpack --mode development --watch"
   },
   "dependencies": {
+    "@tailwindcss/forms": "^0.2.1",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
     "phoenix_live_view": "file:../deps/phoenix_live_view",
@@ -15,14 +16,18 @@
   "devDependencies": {
     "@babel/core": "^7.x",
     "@babel/preset-env": "^7.x",
+    "autoprefixer": "^10.2.4",
     "babel-loader": "^8.x",
     "copy-webpack-plugin": "^7.x",
     "css-loader": "^5.x",
     "css-minimizer-webpack-plugin": "^1.x",
     "hard-source-webpack-plugin": "^0.13.1",
     "mini-css-extract-plugin": "^1.x",
+    "postcss": "^8.2.5",
+    "postcss-loader": "4.2",
     "sass": "^1.x",
     "sass-loader": "^10.x",
+    "tailwindcss": "^2.0.2",
     "webpack": "^5.x",
     "webpack-cli": "^4.x"
   }
