@@ -6,7 +6,7 @@ defmodule Radiopush.Channels.Channel do
 
   schema "channels" do
     field :name, :string
-    field :private, :boolean
+    field :private, :boolean, default: true
 
     has_many(:members, Member)
     has_many(:posts, Post)

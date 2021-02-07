@@ -11,14 +11,14 @@ defmodule Radiopush.ChannelsTest do
 
     test "list_channels/0 returns all channels" do
       owner = user_fixture()
-      channel = channel_fixture(owner)
+      channel = channel_fixture(owner, %{private: false})
 
       assert Channels.list_channels() == [channel]
     end
 
     test "get_channel!/1 returns the channel with given id" do
       owner = user_fixture()
-      channel = channel_fixture(owner)
+      channel = channel_fixture(owner, %{private: false})
 
       assert Channels.get_channel!(channel.id) == channel
     end
@@ -34,7 +34,7 @@ defmodule Radiopush.ChannelsTest do
 
     test "update_channel/2 with valid data updates the channel" do
       owner = user_fixture()
-      channel = channel_fixture(owner)
+      channel = channel_fixture(owner, %{private: false})
 
       assert {:ok, %Channel{} = channel} = Channels.update_channel(channel, update_attrs())
       assert channel.name == "some updated name"
@@ -42,7 +42,7 @@ defmodule Radiopush.ChannelsTest do
 
     test "update_channel_private/2 with valid data updates the channel private" do
       owner = user_fixture()
-      channel = channel_fixture(owner)
+      channel = channel_fixture(owner, %{private: false})
 
       assert {:ok, %Channel{} = channel} =
                Channels.update_channel_private(channel, %{private: true})
@@ -52,7 +52,7 @@ defmodule Radiopush.ChannelsTest do
 
     test "update_channel/2 with invalid data returns error changeset" do
       owner = user_fixture()
-      channel = channel_fixture(owner)
+      channel = channel_fixture(owner, %{private: false})
 
       assert {:error, %Ecto.Changeset{}} = Channels.update_channel(channel, invalid_attrs())
       assert channel == Channels.get_channel!(channel.id)
@@ -60,24 +60,24 @@ defmodule Radiopush.ChannelsTest do
 
     test "delete_channel/1 deletes the channel" do
       owner = user_fixture()
-      channel = channel_fixture(owner)
+      channel = channel_fixture(owner, %{private: false})
       assert {:ok, %Channel{}} = Channels.delete_channel(channel)
       assert_raise Ecto.NoResultsError, fn -> Channels.get_channel!(channel.id) end
     end
 
     test "add_member/2 adds members to a channel" do
       owner = user_fixture()
-      channel = channel_fixture(owner)
+      channel = channel_fixture(owner, %{private: false})
       user = user_fixture()
 
       channel = Channels.add_member(channel, owner, user)
 
-      assert Channels.get_member(channel, user)
+      assert Channels.get_member(channel, user).role == :member
     end
 
     test "join/2 join a public channel" do
       owner = user_fixture()
-      channel = channel_fixture(owner)
+      channel = channel_fixture(owner, %{private: false})
       user = user_fixture()
 
       member =
@@ -104,14 +104,14 @@ defmodule Radiopush.ChannelsTest do
     test "join/2 already a member" do
       owner = user_fixture()
       user = user_fixture()
-      channel = channel_fixture(owner)
+      channel = channel_fixture(owner, %{private: false})
 
       channel = Channels.join(channel, user)
 
-      assert {:error, "already a member"} = Channels.join(channel, user)
+      assert {:error, "already a member"} == Channels.join(channel, user)
     end
 
-    test "accept_pending_member/2 accept join channel request" do
+    test "accept_user/2 accept join channel request" do
       owner = user_fixture()
       channel = channel_fixture(owner, %{private: true})
       user = user_fixture()
@@ -119,145 +119,137 @@ defmodule Radiopush.ChannelsTest do
       channel =
         channel
         |> Channels.join(user)
-        |> Channels.accept_pending_member(owner, user)
+        |> Channels.accept_user(owner, user)
 
       assert Channels.get_member(channel, user).role == :member
     end
 
-    # test "accept_pending_member/2 not the owner" do
-    #   owner = user_fixture()
-    #   user = user_fixture()
-    #   channel = channel_fixture(owner)
+    test "accept_user/2 not the owner" do
+      owner = user_fixture()
+      user = user_fixture()
+      channel = channel_fixture(owner, %{private: false})
 
-    #   Channels.add_member(channel, owner, user, :pending)
+      channel = Channels.add_member(channel, owner, user)
 
-    #   assert {:error, "not the owner"} = Channels.accept_pending_member(channel, user, user)
-    # end
+      assert {:error, "not allowed to manage members"} ==
+               Channels.accept_user(channel, user, user)
+    end
 
-    # test "accept_pending_member/2 user is not pending" do
-    #   owner = user_fixture()
-    #   channel = channel_fixture(owner)
-    #   user = user_fixture()
+    test "accept_user/2 user is not pending" do
+      owner = user_fixture()
+      channel = channel_fixture(owner, %{private: false})
+      user = user_fixture()
 
-    #   assert {:error, "user is not pending"} =
-    #            Channels.accept_pending_member(channel, owner, user)
-    # end
+      channel = Channels.join(channel, user)
 
-    # test "reject_pending_member/2 reject join channel request" do
-    #   owner = user_fixture()
-    #   channel = channel_fixture(owner)
-    #   user = user_fixture()
+      assert {:error, "user is not pending"} == Channels.accept_user(channel, owner, user)
+    end
 
-    #   channel =
-    #     channel
-    #     |> Channels.join(owner, user)
-    #     |> Channels.reject_pending_member(owner, user)
+    test "reject_user/2 reject join channel request" do
+      owner = user_fixture()
+      channel = channel_fixture(owner, %{private: true})
+      user = user_fixture()
 
-    #   assert !Channels.get_member(channel, user)
-    #   assert Channels.is_channel_rejected?(channel, user)
-    # end
+      channel =
+        channel
+        |> Channels.join(user)
+        |> Channels.reject_user(owner, user)
 
-    # test "reject_pending_member/2 not the owner" do
-    #   owner = user_fixture()
-    #   channel = channel_fixture(owner)
-    #   user = user_fixture()
-    #   user2 = user_fixture()
+      assert Channels.get_member(channel, user).role == :rejected
+    end
 
-    #   channel =
-    #     channel
-    #     |> Channels.join(user)
+    test "reject_user/2 not the owner" do
+      owner = user_fixture()
+      channel = channel_fixture(owner, %{private: true})
+      user = user_fixture()
+      user2 = user_fixture()
 
-    #   assert {:error, "not the owner"} = Channels.reject_pending_member(channel, user, user2)
-    # end
+      channel = Channels.join(channel, user)
 
-    # test "reject_pending_member/2 user is not pending" do
-    #   owner = user_fixture()
-    #   channel = channel_fixture(owner)
-    #   owner = user_fixture()
-    #   user = user_fixture()
+      assert {:error, "not allowed to manage members"} ==
+               Channels.reject_user(channel, user, user2)
+    end
 
-    #   channel =
-    #     channel
-    #     |> Channels.add_channel_owner(owner)
+    test "reject_user/2 user is not pending" do
+      owner = user_fixture()
+      channel = channel_fixture(owner, %{private: true})
+      user = user_fixture()
 
-    #   assert {:error, "user is not pending"} =
-    #            Channels.reject_pending_member(channel, owner, user)
-    # end
+      channel = Channels.add_member(channel, owner, user)
 
-    # test "remove_member/2 remove members from a channel" do
-    #   owner = user_fixture()
-    #   channel = channel_fixture(owner)
-    #   user = user_fixture()
+      assert {:error, "user is not pending"} = Channels.reject_user(channel, owner, user)
+    end
 
-    #   channel = Channels.add_member(channel, user)
-    #   assert Channels.get_member(channel, user)
+    test "remove_user/2 remove members from a channel" do
+      owner = user_fixture()
+      channel = channel_fixture(owner, %{private: false})
+      user = user_fixture()
 
-    #   Channels.remove_member(channel, user)
-    #   assert !Channels.get_member(channel, user)
-    # end
+      channel =
+        channel
+        |> Channels.join(user)
+        |> Channels.remove_user(owner, user)
 
-    # test "list_channels_by_user/1 list users' channels" do
-    #   owner = user_fixture()
-    #   channel = channel_fixture(owner)
-    #   user = user_fixture()
+      assert Channels.get_member(channel, user) == nil
+    end
 
-    #   channel = Channels.add_member(channel, user)
+    test "list_channels_by_user/1 list users' channels" do
+      owner = user_fixture()
+      channel = channel_fixture(owner, %{private: false})
+      user = user_fixture()
 
-    #   user_channels = Channels.list_channels_by_user(user)
+      channel = Channels.join(channel, user)
 
-    #   assert Enum.member?(user_channels, channel)
-    # end
+      user_channels = Channels.list_channels_by_user(user)
 
-    # test "add_post_to_channel/3 post on a channel" do
-    #   owner = user_fixture()
-    #   channel = channel_fixture(owner)
-    #   user = user_fixture()
-    #   post_attrs = PostsFixtures.valid_attrs()
+      assert user_channels == [channel]
+    end
 
-    #   song =
-    #     channel
-    #     |> Channels.add_member(user)
-    #     |> Channels.add_post_to_channel(user, post_attrs)
-    #     |> Channels.get_channel_posts()
-    #     |> List.first()
-    #     |> Map.get(:song)
+    test "new_post/3 post on a channel" do
+      owner = user_fixture()
+      channel = channel_fixture(owner, %{private: false})
+      user = user_fixture()
+      post_attrs = PostsFixtures.valid_attrs()
 
-    #   assert "some song" = song
-    # end
+      posts =
+        channel
+        |> Channels.join(user)
+        |> Channels.new_post(user, post_attrs)
+        |> Channels.get_channel_posts()
 
-    # test "add_post_to_channel/3 post on a channel by non-member" do
-    #   owner = user_fixture()
-    #   channel = channel_fixture(owner)
-    #   user = user_fixture()
-    #   post_attrs = PostsFixtures.valid_attrs()
+      assert [post] = posts
+      assert post.song == "some song"
+    end
 
-    #   {:error, error} = Channels.add_post_to_channel(channel, user, post_attrs)
+    test "new_post/3 post on a channel by non-member" do
+      owner = user_fixture()
+      channel = channel_fixture(owner, %{private: false})
+      user = user_fixture()
+      post_attrs = PostsFixtures.valid_attrs()
 
-    #   assert "unauthorized" = error
-    # end
+      posts = Channels.get_channel_posts(channel)
 
-    # test "get_channel_posts/1 get channel's post history" do
-    #   owner = user_fixture()
-    #   channel = channel_fixture(owner)
-    #   user = user_fixture()
-    #   post_attrs = PostsFixtures.valid_attrs()
+      assert {:error, "not a member"} = Channels.new_post(channel, user, post_attrs)
+      assert posts == []
+    end
 
-    #   posts =
-    #     channel
-    #     |> Channels.add_member(user)
-    #     |> Channels.get_channel_posts()
+    test "get_channel_posts/1 get channel's post history" do
+      owner = user_fixture()
+      channel = channel_fixture(owner, %{private: false})
+      user = user_fixture()
+      post_attrs = PostsFixtures.valid_attrs()
 
-    #   assert 0 = Enum.count(posts)
+      posts =
+        channel
+        |> Channels.join(user)
+        |> Channels.new_post(user, post_attrs)
+        |> Channels.new_post(user, post_attrs)
+        |> Channels.new_post(user, post_attrs)
+        |> Channels.new_post(user, post_attrs)
+        |> Channels.get_channel_posts()
 
-    #   posts =
-    #     channel
-    #     |> Channels.add_post_to_channel(user, post_attrs)
-    #     |> Channels.add_post_to_channel(user, post_attrs)
-    #     |> Channels.add_post_to_channel(user, post_attrs)
-    #     |> Channels.add_post_to_channel(user, post_attrs)
-    #     |> Channels.get_channel_posts()
-
-    #   assert 4 = Enum.count(posts)
-    # end
+      assert [post, _, _, _] = posts
+      assert post.song == "some song"
+    end
   end
 end

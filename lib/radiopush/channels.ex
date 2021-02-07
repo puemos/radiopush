@@ -101,32 +101,37 @@ defmodule Radiopush.Channels do
     Repo.delete(member)
   end
 
+  @doc """
+  Check if a member have permission to manage channel members.
+  """
   @spec can_manage_members?(Member.t()) :: boolean()
   def can_manage_members?(member), do: member.role == :owner
 
+  @doc """
+  Check if a member have permission to post on a channel.
+  """
   @spec can_publish?(Member.t()) :: boolean()
   def can_publish?(member), do: Enum.member?([:owner, :member], member.role)
 
-  @doc """
-  Adds a user to a channel.
-  """
   @spec add_user(Channel.t(), User.t(), User.t(), atom()) :: Channel.t()
-  def add_user(channel, owner, user, role) do
-    with {:get_owner, owner} <-
-           {:get_owner, get_member(channel, owner)},
+  defp add_user(channel, u_owner, u_member, role) do
+    with {:get_owner, owner} when not is_nil(owner) <- {:get_owner, get_member(channel, u_owner)},
          {:can_manage_members?, true} <-
            {:can_manage_members?, can_manage_members?(owner)},
          {:add, {:ok, _member}} <-
            {:add,
             create_member(%{
-              user_id: user.id,
+              user_id: u_member.id,
               channel_id: channel.id,
               role: role
             })} do
       get_channel!(channel.id)
     else
       {:get_owner, nil} ->
-        {:error, "user doen't exits"}
+        {:error, "not an owner"}
+
+      {:get_member, nil} ->
+        {:error, "not a member"}
 
       {:can_manage_members?, false} ->
         {:error, "not allowed to manage members"}
@@ -136,25 +141,36 @@ defmodule Radiopush.Channels do
     end
   end
 
+  @doc """
+  Adds a user as owner to a channel.
+  """
   @spec add_owner(Channel.t(), User.t(), User.t()) :: Channel.t()
   def add_owner(channel, owner, user), do: add_user(channel, owner, user, :owner)
+
+  @doc """
+  Adds a user as member to a channel.
+  """
   @spec add_member(Channel.t(), User.t(), User.t()) :: Channel.t()
   def add_member(channel, owner, user), do: add_user(channel, owner, user, :member)
 
   @doc """
-  Remove members from a channel.
+  Remove a user from a channel.
   """
-  @spec remove_member(Channel.t(), User.t(), Member.t()) :: Channel.t()
-  def remove_member(channel, owner, member) do
-    with {:get_owner, owner} <-
-           {:get_owner, get_member(channel, owner)},
+  @spec remove_user(Channel.t(), User.t(), User.t()) :: Channel.t()
+  def remove_user(channel, u_owner, u_member) do
+    with {:get_owner, owner} when not is_nil(owner) <- {:get_owner, get_member(channel, u_owner)},
          {:can_manage_members?, true} <-
            {:can_manage_members?, can_manage_members?(owner)},
-         {:delete, {:ok, 1}} <- {:delete, delete_member(member)} do
+         {:get_member, member} when not is_nil(member) <-
+           {:get_member, get_member(channel, u_member)},
+         {:delete, {:ok, _member}} <- {:delete, delete_member(member)} do
       get_channel!(channel.id)
     else
       {:get_owner, nil} ->
-        {:error, "user doen't exits"}
+        {:error, "not an owner"}
+
+      {:get_member, nil} ->
+        {:error, "not a member"}
 
       {:can_manage_members?, false} ->
         {:error, "not allowed to manage members"}
@@ -164,6 +180,9 @@ defmodule Radiopush.Channels do
     end
   end
 
+  @doc """
+  Ask to join a channel
+  """
   @spec join(Channel.t(), User.t()) :: Channel.t()
   def join(channel, user) do
     role = if channel.private, do: :pending, else: :member
@@ -186,12 +205,15 @@ defmodule Radiopush.Channels do
     end
   end
 
-  @spec accept_pending_member(Channel.t(), User.t(), User.t()) :: Channel.t()
-  def accept_pending_member(channel, owner, member) do
-    with {:get_owner, owner} <-
-           {:get_owner, get_member(channel, owner)},
+  @doc """
+  Accept a pending user to a channel.
+  """
+  @spec accept_user(Channel.t(), User.t(), User.t()) :: Channel.t()
+  def accept_user(channel, u_owner, u_member) do
+    with {:get_owner, owner} when not is_nil(owner) <- {:get_owner, get_member(channel, u_owner)},
          {:can_manage_members?, true} <- {:can_manage_members?, can_manage_members?(owner)},
-         {:get_member, member} <- {:get_member, get_member(channel, member)},
+         {:get_member, member} when not is_nil(member) <-
+           {:get_member, get_member(channel, u_member)},
          {:user_pending, true} <- {:user_pending, member.role == :pending},
          {:ok, _} <- update_member_role(member, %{role: :member}) do
       get_channel!(channel.id)
@@ -213,11 +235,15 @@ defmodule Radiopush.Channels do
     end
   end
 
-  @spec reject_pending_member(Channel.t(), Member.t(), Member.t()) :: Channel.t()
-  def reject_pending_member(channel, owner, member) do
-    with {:get_owner, owner} <-
-           {:get_owner, get_member(channel, owner)},
+  @doc """
+  Reject a pending user to a channel.
+  """
+  @spec reject_user(Channel.t(), User.t(), User.t()) :: Channel.t()
+  def reject_user(channel, u_owner, u_member) do
+    with {:get_owner, owner} when not is_nil(owner) <- {:get_owner, get_member(channel, u_owner)},
          {:can_manage_members?, true} <- {:can_manage_members?, can_manage_members?(owner)},
+         {:get_member, member} when not is_nil(member) <-
+           {:get_member, get_member(channel, u_member)},
          {:user_pending, true} <- {:user_pending, member.role == :pending},
          {:ok, _} <- update_member_role(member, %{role: :rejected}) do
       get_channel!(channel.id)
@@ -226,7 +252,10 @@ defmodule Radiopush.Channels do
         {:error, error}
 
       {:get_owner, nil} ->
-        {:error, "user doen't exits"}
+        {:error, "not an owner"}
+
+      {:get_member, nil} ->
+        {:error, "not a member"}
 
       {:can_manage_members?, false} ->
         {:error, "not allowed to manage members"}
@@ -244,20 +273,28 @@ defmodule Radiopush.Channels do
     |> Repo.insert()
   end
 
-  @spec new_post(Channel.t(), Member.t(), map()) ::
+  @doc """
+  Add a new post to a channel.
+  """
+  @spec new_post(Channel.t(), User.t(), map()) ::
           Channel.t() | {:error, binary()}
-  def new_post(channel, member, post_attrs \\ %{}) do
+  def new_post(channel, u_member, post_attrs \\ %{}) do
     post =
       %Post{}
       |> Post.changeset_data(post_attrs)
-      |> Post.changeset_assoc(%{user_id: member.user_id, channel_id: channel.id})
+      |> Post.changeset_assoc(%{user_id: u_member.id, channel_id: channel.id})
 
-    with {:can_publish?, true} <- {:can_publish?, can_publish?(member)},
+    with {:get_member, member} when not is_nil(member) <-
+           {:get_member, get_member(channel, u_member)},
+         {:can_publish?, true} <- {:can_publish?, can_publish?(member)},
          {:ok, _} <- Repo.insert(post) do
       get_channel!(channel.id)
     else
       {:error, error} ->
         {:error, error}
+
+      {:get_member, nil} ->
+        {:error, "not a member"}
 
       {:can_publish?, false} ->
         {:error, "unauthorized"}
