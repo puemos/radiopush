@@ -32,7 +32,7 @@ jobs:
             ${{ runner.os }}-mix-
       - uses: actions/setup-node@v1
         with:
-          node-version: "10.x"
+          node-version: "12.x"
       # - uses: nanasess/setup-chromedriver@master
       #   with:
       #     chromedriver-version: "79.0.3945.36"
