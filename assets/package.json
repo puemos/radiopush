@@ -24,7 +24,7 @@
     "hard-source-webpack-plugin": "^0.13.1",
     "mini-css-extract-plugin": "^1.x",
     "postcss": "^8.2.5",
-    "postcss-loader": "4.2",
+    "postcss-loader": "^5.0.0",
     "sass": "^1.x",
     "sass-loader": "^10.x",
     "tailwind-scrollbar": "^1.2.3",
