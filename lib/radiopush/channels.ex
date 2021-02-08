@@ -29,9 +29,13 @@ defmodule Radiopush.Channels do
 
   @spec get_channel_posts(Channel.t()) :: list(Post.t())
   def get_channel_posts(channel) do
-    channel
-    |> Repo.preload(posts: [:user])
-    |> Map.get(:posts)
+    query =
+      from p in Post,
+        where: p.channel_id == ^channel.id,
+        preload: :user,
+        order_by: [asc: p.inserted_at]
+
+    Repo.all(query)
   end
 
   @spec get_channel_members(Channel.t()) :: list(Member.t())

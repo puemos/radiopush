@@ -133,10 +133,10 @@ defmodule RadiopushWeb.ChannelLive.Index do
   def render_channel(assigns) do
     ~L"""
     <div class="h-3/5">
-    <div class="bg-gray-700 scrollbar scrollbar scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-700 overflow-y-scroll h-full">
+    <div id="Chat" phx-hook="Chat" data-page="<%= Enum.count(@posts) %>" class="bg-gray-700 scrollbar scrollbar scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-700 overflow-y-scroll h-full">
       <%=for post <- @posts do %>
-        <div class="p-4 rounded-3xl" style="width: 400px">
-          <iframe src="<%= iframe_src(post.url) %>" width="300" height="120" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+        <div class="p-4 rounded-xl" style="width: 400px">
+          <iframe class="rounded-xl" src="<%= iframe_src(post.url) %>" width="300" height="120" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
           <div class="flex flex-row text-gray-300 text-xs pl-1 pt-1">
             <div><%= post.user.email %></div>
             <div>&nbsp;•&nbsp;</div>
