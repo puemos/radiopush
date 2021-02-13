@@ -33,7 +33,7 @@ defmodule Radiopush.Channels do
       from p in Post,
         where: p.channel_id == ^channel.id,
         preload: :user,
-        order_by: [asc: p.inserted_at]
+        order_by: [desc: p.inserted_at]
 
     Repo.all(query)
   end

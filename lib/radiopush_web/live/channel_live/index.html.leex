@@ -1,0 +1,35 @@
+<h1 class="text-4xl font-bold overflow-ellipsis overflow-hidden text-white-300">
+  <%= @channel.name %>
+</h1>
+<div class="h-12"></div>
+<%= if (@role == :owner or @role == :member) do %>
+  <div class="h-3/5">
+    <form action="#" phx-submit="post" class="flex flex-row">
+      <%= text_input :post, :url, placeholder: "Song", class: "flex-1 px-4 py-3 border-none text-sm font-medium placeholder-gray-400 text-white bg-gray-600 rounded-none group outline-none focus:outline-none focus:ring-0 w-full" %>
+      <%= submit "Post", phx_disable_with: "Posting...", class: "button rounded-none" %>
+    </form>
+    <div id="Chat" phx-hook="Chat" data-page="<%= Enum.count(@posts) %>" phx-update="prepend" class="bg-gray-700">
+      <%=for post <- @posts do %>
+        <div id="<%= post.id %>" class="p-4 rounded-xl" style="width: 400px">
+          <iframe class="rounded-xl" src="<%= iframe_src(post.url) %>" width="300" height="120" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
+          <div class="flex flex-row text-gray-300 text-xs pl-1 pt-1">
+            <div><%= post.user.email %></div>
+            <div>&nbsp;•&nbsp;</div>
+            <div><%= post.inserted_at %></div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+<%= if (@role == true or @role == nil) do %>
+  <form action="#" phx-submit="join">
+    <%= submit "This channel is public, to join just click here", phx_disable_with: "Joining...", class: "button" %>
+  </form>
+<% end %>
+<%= if (@role == :pending) do %>
+  <div>Please wait for the owner of the channel to approve your join request</div>
+<% end %>
+<%= if (@role == :rejected) do %>
+  <div>The channel owner rejected your request to join</div>
+<% end %>

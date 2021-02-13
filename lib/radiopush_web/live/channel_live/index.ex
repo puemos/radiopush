@@ -14,7 +14,7 @@ defmodule RadiopushWeb.ChannelLive.Index do
       socket
       |> assign_defaults(session)
       |> assign_channel(id)
-      |> assign_posts()
+      |> assign_init_posts()
       |> assign_member_role()
 
     Presence.track_presence(
@@ -27,7 +27,15 @@ defmodule RadiopushWeb.ChannelLive.Index do
     {:ok, socket}
   end
 
+  defp assign_init_posts(socket) do
+    with posts <- Channels.get_channel_posts(socket.assigns.channel) do
+      assign(socket, posts: posts, temporary_assigns: [posts: []])
+    end
+  end
+
   defp assign_posts(socket) do
+    IO.inspect(socket.assigns.posts)
+
     with posts <- Channels.get_channel_posts(socket.assigns.channel) do
       assign(socket, posts: posts)
     end
@@ -96,7 +104,7 @@ defmodule RadiopushWeb.ChannelLive.Index do
 
     socket =
       socket
-      |> assign_posts()
+      |> assign_init_posts()
       |> assign_member_role()
 
     {:noreply, socket}
@@ -108,73 +116,6 @@ defmodule RadiopushWeb.ChannelLive.Index do
       email: user.email,
       user_id: user.id
     }
-  end
-
-  def render_rejected(assigns) do
-    ~L"""
-    <div>The channel owner rejected your request to join</div>
-    """
-  end
-
-  def render_pending(assigns) do
-    ~L"""
-    <div>Please wait for the owner of the channel to approve your join request</div>
-    """
-  end
-
-  def render_join(assigns) do
-    ~L"""
-    <form action="#" phx-submit="join">
-    <%= submit "This channel is public, to join just click here", phx_disable_with: "Joining...", class: "button" %>
-    </form>
-    """
-  end
-
-  def render_channel(assigns) do
-    ~L"""
-    <div class="h-3/5">
-    <div id="Chat" phx-hook="Chat" data-page="<%= Enum.count(@posts) %>" class="bg-gray-700 scrollbar scrollbar scrollbar-thin scrollbar-thumb-gray-900 scrollbar-track-gray-700 overflow-y-scroll h-full">
-      <%=for post <- @posts do %>
-        <div class="p-4 rounded-xl" style="width: 400px">
-          <iframe class="rounded-xl" src="<%= iframe_src(post.url) %>" width="300" height="120" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-          <div class="flex flex-row text-gray-300 text-xs pl-1 pt-1">
-            <div><%= post.user.email %></div>
-            <div>&nbsp;•&nbsp;</div>
-            <div><%= post.inserted_at %></div>
-          </div>
-          </div>
-      <% end %>
-    </div>
-    <form action="#" phx-submit="post" class="flex flex-row">
-    <%= text_input :post, :url, placeholder: "Song", class: "flex-1 px-4 py-3 border-none text-sm font-medium placeholder-gray-400 text-white bg-gray-600 rounded-none group outline-none focus:outline-none focus:ring-0 w-full" %>
-    <%= submit "Post", phx_disable_with: "Posting...", class: "button rounded-none" %>
-    </form>
-    </div>
-    """
-  end
-
-  @impl true
-  def render(assigns) do
-    ~L"""
-    <h1 class="text-4xl font-bold overflow-ellipsis overflow-hidden text-white-300">
-    <%= @channel.name %>
-    </h1>
-    <div class="h-12"></div>
-    <%= case @role do %>
-      <% :owner -> %>
-        <%= render_channel(assigns) %>
-      <% :member -> %>
-        <%= render_channel(assigns) %>
-      <% :pending -> %>
-        <%= render_pending(assigns) %>
-      <% :rejected -> %>
-        <%= render_rejected(assigns) %>
-      <% true -> %>
-        <%= render_join(assigns) %>
-      <% nil -> %>
-        <%= render_join(assigns) %>
-    <% end %>
-    """
   end
 
   def iframe_src(url) do
