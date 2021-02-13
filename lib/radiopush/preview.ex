@@ -20,4 +20,15 @@ defmodule Radiopush.Preview do
         Apple.parse(url)
     end
   end
+
+  @spec get_embed(String.t()) :: String.t()
+  def get_embed(url) do
+    cond do
+      String.contains?(url, "spotify.com") ->
+        String.replace(url, "https://open.spotify.com", "https://open.spotify.com/embed")
+
+      String.contains?(url, "apple.com") ->
+        String.replace(url, "https://music.apple.com/", "https://embed.music.apple.com/")
+    end
+  end
 end

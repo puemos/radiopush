@@ -24,20 +24,22 @@ defmodule RadiopushWeb.ChannelLive.Index do
       default_user_presence_payload(socket.assigns.current_user)
     )
 
-    {:ok, socket}
+    {:ok, socket, temporary_assigns: [posts: []]}
   end
 
   defp assign_init_posts(socket) do
     with posts <- Channels.get_channel_posts(socket.assigns.channel) do
-      assign(socket, posts: posts, temporary_assigns: [posts: []])
+      assign(socket, posts: posts, last_inserted_at: get_last_inserted_at(posts))
     end
   end
 
   defp assign_posts(socket) do
-    IO.inspect(socket.assigns.posts)
-
-    with posts <- Channels.get_channel_posts(socket.assigns.channel) do
-      assign(socket, posts: posts)
+    with posts <-
+           Channels.get_channel_posts(
+             socket.assigns.channel,
+             socket.assigns.last_inserted_at
+           ) do
+      assign(socket, posts: posts, last_inserted_at: get_last_inserted_at(posts))
     end
   end
 
@@ -119,12 +121,12 @@ defmodule RadiopushWeb.ChannelLive.Index do
   end
 
   def iframe_src(url) do
-    cond do
-      String.contains?(url, "spotify.com") ->
-        String.replace(url, "https://open.spotify.com", "https://open.spotify.com/embed")
+    Preview.get_embed(url)
+  end
 
-      String.contains?(url, "apple.com") ->
-        String.replace(url, "https://music.apple.com/", "https://embed.music.apple.com/")
-    end
+  defp get_last_inserted_at(posts) do
+    posts
+    |> List.first()
+    |> Map.get(:inserted_at)
   end
 end

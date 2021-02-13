@@ -38,6 +38,19 @@ defmodule Radiopush.Channels do
     Repo.all(query)
   end
 
+  @spec get_channel_posts(Channel.t(), NaiveDateTime.t()) :: list(Post.t())
+  def get_channel_posts(channel, last) do
+    query =
+      from p in Post,
+        where:
+          p.channel_id == ^channel.id and
+            p.inserted_at > ^last,
+        preload: :user,
+        order_by: [desc: p.inserted_at]
+
+    Repo.all(query)
+  end
+
   @spec get_channel_members(Channel.t()) :: list(Member.t())
   def get_channel_members(channel) do
     channel
