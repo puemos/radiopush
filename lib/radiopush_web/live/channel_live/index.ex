@@ -14,6 +14,7 @@ defmodule RadiopushWeb.ChannelLive.Index do
       socket
       |> assign_defaults(session)
       |> assign_channel(id)
+      |> assign_members()
       |> assign_init_posts()
       |> assign_member_role()
 
@@ -46,6 +47,13 @@ defmodule RadiopushWeb.ChannelLive.Index do
   defp assign_channel(socket, channel_id) do
     with channel <- Channels.get_channel!(channel_id) do
       assign(socket, channel: channel)
+    end
+  end
+
+
+  defp assign_members(socket) do
+    with members <- Channels.get_channel_members(socket.assigns.channel) do
+      assign(socket, members: members)
     end
   end
 
@@ -125,8 +133,9 @@ defmodule RadiopushWeb.ChannelLive.Index do
   end
 
   defp get_last_inserted_at(posts) do
-    posts
-    |> List.first()
-    |> Map.get(:inserted_at)
+    case List.last(posts) do
+      nil -> nil
+      post -> Map.get(post, :inserted_at)
+    end
   end
 end

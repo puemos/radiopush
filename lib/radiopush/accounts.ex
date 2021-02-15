@@ -119,6 +119,10 @@ defmodule Radiopush.Accounts do
     User.email_changeset(user, attrs)
   end
 
+  def change_user_nickname(user, attrs \\ %{}) do
+    User.nickname_changeset(user, attrs)
+  end
+
   @doc """
   Emulates that the email will change without actually changing
   it in the database.
@@ -137,6 +141,12 @@ defmodule Radiopush.Accounts do
     |> User.email_changeset(attrs)
     |> User.validate_current_password(password)
     |> Ecto.Changeset.apply_action(:update)
+  end
+
+  def update_user_nickname(user, attrs) do
+    user
+    |> User.nickname_changeset(attrs)
+    |> Repo.update()
   end
 
   @doc """

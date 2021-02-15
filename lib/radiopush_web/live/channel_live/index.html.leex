@@ -1,35 +1,81 @@
-<h1 class="text-4xl font-bold overflow-ellipsis overflow-hidden text-white-300">
-  <%= @channel.name %>
-</h1>
-<div class="h-12"></div>
-<%= if (@role == :owner or @role == :member) do %>
-  <div class="h-3/5">
-    <form action="#" phx-submit="post" class="flex flex-row">
-      <%= text_input :post, :url, placeholder: "Song", class: "flex-1 px-4 py-3 border-none text-sm font-medium placeholder-gray-400 text-white bg-gray-600 rounded-none group outline-none focus:outline-none focus:ring-0 w-full" %>
-      <%= submit "Post", phx_disable_with: "Posting...", class: "button rounded-none" %>
-    </form>
-    <div id="Chat" phx-hook="Chat" data-page="<%= Enum.count(@posts) %>" phx-update="prepend" class="bg-gray-700">
-      <%=for post <- @posts do %>
-        <div id="<%= post.id %>" class="p-4 rounded-xl" style="width: 400px">
-          <iframe class="rounded-xl" src="<%= iframe_src(post.url) %>" width="300" height="120" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
-          <div class="flex flex-row text-gray-300 text-xs pl-1 pt-1">
-            <div><%= post.user.email %></div>
-            <div>&nbsp;•&nbsp;</div>
-            <div><%= post.inserted_at %></div>
+<div class="w-full flex flex-row">
+  <div class="w-full lg:w-9/12 flex-1">
+    <h1 class="text-4xl font-bold overflow-ellipsis overflow-hidden text-white-300">
+      <%= @channel.name %>
+    </h1>
+    <div class="h-12"></div>
+    <%= if (@role == :owner or @role == :member) do %>
+      <form action="#" phx-submit="post" class="flex flex-row">
+        <%= text_input :post, :url, placeholder: "Song", class: "flex-1 px-4 py-3 border-none text-sm font-medium placeholder-gray-400 text-white bg-gray-600 rounded-none group outline-none focus:outline-none focus:ring-0 w-full" %>
+        <%= submit "Post", phx_disable_with: "Posting...", class: "button rounded-none" %>
+      </form>
+      <div class="h-6"></div>
+      <div id="Chat" phx-hook="Chat" phx-update="prepend" class="grid grid-cols-1 gap-4 w-full">
+        <%=for post <- @posts do %>
+          <div id="<%= post.id %>" class="p-1 bg-gray-700 relative rounded-xl flex flex-col items-start">
+            <div class="absolute top-2 right-2 h-6 w-6 text-gray-400 hover:text-gray-500">
+              <a href="<%= post.url %>" target="_blank">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+              </a>
+            </div>
+            <div class="flex flex-row h-full w-full">
+              <div class="overflow-hidden rounded-xl w-28 sm:w-40">
+                <picture>
+                  <img src="<%= post.image %>" alt="<%= post.song %>">
+                </picture>
+              </div>
+              <div class="w-4"></div>
+              <div class="flex flex-col justify-between">
+                <div class="">
+                  <%= if post.type == :album do %>
+                    <div class=""><%= post.album %></div>
+                    <div class="text-gray-300 text-sm truncate"><%= post.musician %></div>
+                  <% end %>
+                  <%= if post.type == :song do %>
+                    <div class=""><%= post.song %></div>
+                    <div class="text-gray-300 text-sm truncate"><%= post.album %></div>
+                    <div class="text-gray-300 text-sm truncate"><%= post.musician %></div>
+                  <% end %>
+                </div>
+                <div class="flex flex-row text-gray-400 text-xs">
+                  <div><%= post.user.nickname %></div>
+                  <div>&nbsp;•&nbsp;</div>
+                  <div><%= post.inserted_at %></div>
+                </div>
+              </div>
+            </div>
+            <!-- <iframe class="rounded-xl w-full" src="<%= iframe_src(post.url) %>" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe> -->
           </div>
-        </div>
-      <% end %>
-    </div>
+        <% end %>
+      </div>
+    <% end %>
+    <%= if (@role == true or @role == nil) do %>
+      <form action="#" phx-submit="join">
+        <%= submit "This channel is public, to join just click here", phx_disable_with: "Joining...", class: "button" %>
+      </form>
+    <% end %>
+    <%= if (@role == :pending) do %>
+      <div>Please wait for the owner of the channel to approve your join request</div>
+    <% end %>
+    <%= if (@role == :rejected) do %>
+      <div>The channel owner rejected your request to join</div>
+    <% end %>
   </div>
-<% end %>
-<%= if (@role == true or @role == nil) do %>
-  <form action="#" phx-submit="join">
-    <%= submit "This channel is public, to join just click here", phx_disable_with: "Joining...", class: "button" %>
-  </form>
-<% end %>
-<%= if (@role == :pending) do %>
-  <div>Please wait for the owner of the channel to approve your join request</div>
-<% end %>
-<%= if (@role == :rejected) do %>
-  <div>The channel owner rejected your request to join</div>
-<% end %>
+  <%= if (@role == :owner or @role == :member) do %>
+    <div class="w-6"></div>
+    <div class="w-60">
+      <h2>Details</h2>
+      <div class="h-2"></div>
+      <div class=" bg-gray-700 rounded-xl p-2">
+        <div class="grid grid-cols-2 gap-x-2">
+          <%=for member <- @members do %>
+            <span><%= member.user.nickname %></span>
+            <span class="text-gray-400 capitalize"><%= member.role %></span>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  <% end %>
+</div>

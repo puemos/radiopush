@@ -34,6 +34,21 @@ defmodule RadiopushWeb.UserSettingsController do
     end
   end
 
+  def update(conn, %{"action" => "update_nickname"} = params) do
+    %{"user" => user_params} = params
+    user = conn.assigns.current_user
+
+    case Accounts.update_user_nickname(user, user_params) do
+      {:ok, _applied_user} ->
+        conn
+        |> put_flash(:info, "Nickname changed successfully.")
+        |> redirect(to: Routes.user_settings_path(conn, :edit))
+
+      {:error, changeset} ->
+        render(conn, "edit.html", nickname_changeset: changeset)
+    end
+  end
+
   def update(conn, %{"action" => "update_password"} = params) do
     %{"current_password" => password, "user" => user_params} = params
     user = conn.assigns.current_user
@@ -68,6 +83,7 @@ defmodule RadiopushWeb.UserSettingsController do
     user = conn.assigns.current_user
 
     conn
+    |> assign(:nickname_changeset, Accounts.change_user_nickname(user))
     |> assign(:email_changeset, Accounts.change_user_email(user))
     |> assign(:password_changeset, Accounts.change_user_password(user))
   end

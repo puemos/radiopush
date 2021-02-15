@@ -25,6 +25,11 @@
         <%= label f, :email, class: "sr-only" %>
         <%= email_input f, :email, required: true, placeholder: "Email", class: "input rounded-t-md" %>
       </div>
+
+      <div>
+        <%= label f, :nickname, class: "sr-only" %>
+        <%= text_input f, :nickname, required: true, placeholder: "Nickname", class: "input" %>
+      </div>
       <div>
         <%= label f, :password, class: "sr-only" %>
         <%= password_input f, :password, required: true, placeholder: "Password", class: "input rounded-b-md" %>

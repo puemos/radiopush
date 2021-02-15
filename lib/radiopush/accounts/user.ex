@@ -6,6 +6,7 @@ defmodule Radiopush.Accounts.User do
   @derive {Inspect, except: [:password]}
   schema "users" do
     field :email, :string
+    field :nickname, :string
     field :password, :string, virtual: true
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
@@ -33,9 +34,18 @@ defmodule Radiopush.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password])
+    |> cast(attrs, [:email, :password, :nickname])
     |> validate_email()
+    |> validate_nickname()
     |> validate_password(opts)
+  end
+
+  defp validate_nickname(changeset) do
+    changeset
+    |> validate_required([:nickname])
+    |> validate_length(:nickname, max: 20)
+    |> unsafe_validate_unique(:nickname, Radiopush.Repo)
+    |> unique_constraint(:nickname)
   end
 
   defp validate_email(changeset) do
@@ -82,6 +92,21 @@ defmodule Radiopush.Accounts.User do
     |> case do
       %{changes: %{email: _}} = changeset -> changeset
       %{} = changeset -> add_error(changeset, :email, "did not change")
+    end
+  end
+
+  @doc """
+  A user changeset for changing the nickname.
+
+  It requires the nickname to change otherwise an error is added.
+  """
+  def nickname_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:nickname])
+    |> validate_nickname()
+    |> case do
+      %{changes: %{nickname: _}} = changeset -> changeset
+      %{} = changeset -> add_error(changeset, :nickname, "did not change")
     end
   end
 
