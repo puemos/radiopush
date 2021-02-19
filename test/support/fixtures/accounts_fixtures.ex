@@ -11,6 +11,7 @@ defmodule Radiopush.AccountsFixtures do
     {:ok, user} =
       attrs
       |> Enum.into(%{
+        nickname: Faker.Person.first_name(),
         email: unique_user_email(),
         password: valid_user_password()
       })
