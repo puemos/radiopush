@@ -20,10 +20,10 @@ jobs:
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v2
-      - uses: actions/setup-elixir@v1.0.0
+      - uses: erlef/setup-elixir@v1
         with:
-          otp-version: 22.2.6
-          elixir-version: 1.11.2
+          otp-version: '22.2.x'
+          elixir-version: '1.11.x'
       - uses: actions/cache@v1
         with:
           path: deps

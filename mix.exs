@@ -5,7 +5,7 @@ defmodule Radiopush.MixProject do
     [
       app: :radiopush,
       version: "0.1.0",
-      elixir: "~> 1.11.2",
+      elixir: "~> 1.11",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
