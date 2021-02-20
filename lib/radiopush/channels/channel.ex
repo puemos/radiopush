@@ -7,6 +7,7 @@ defmodule Radiopush.Channels.Channel do
   schema "channels" do
     field :name, :string
     field :private, :boolean, default: true
+    field :description, :string
 
     has_many(:members, Member)
     has_many(:posts, Post)
@@ -15,7 +16,7 @@ defmodule Radiopush.Channels.Channel do
   end
 
   @required_fields [:name]
-  @optional_fields [:private]
+  @optional_fields [:private, :description]
 
   def changeset(channel, attrs) do
     channel

@@ -50,10 +50,10 @@ defmodule RadiopushWeb.ChannelLive.Index do
     end
   end
 
-
   defp assign_members(socket) do
     with members <- Channels.get_channel_members(socket.assigns.channel) do
-      assign(socket, members: members)
+      grouped_members = Enum.group_by(members, fn m -> m.role end)
+      assign(socket, members: grouped_members)
     end
   end
 
@@ -115,7 +115,42 @@ defmodule RadiopushWeb.ChannelLive.Index do
     socket =
       socket
       |> assign_init_posts()
+      |> assign_members()
       |> assign_member_role()
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("accept", %{"user_id" => user_id}, socket) do
+    user = Radiopush.Accounts.get_user!(user_id)
+
+    Channels.accept_user(
+      socket.assigns.channel,
+      socket.assigns.current_user,
+      user
+    )
+
+    socket =
+      socket
+      |> assign_members()
+
+    {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("reject", %{"user_id" => user_id}, socket) do
+    user = Radiopush.Accounts.get_user!(user_id)
+
+    Channels.reject_user(
+      socket.assigns.channel,
+      socket.assigns.current_user,
+      user
+    )
+
+    socket =
+      socket
+      |> assign_members()
 
     {:noreply, socket}
   end
