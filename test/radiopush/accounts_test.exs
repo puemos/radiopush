@@ -90,7 +90,8 @@ defmodule Radiopush.AccountsTest do
         Accounts.register_user(%{
           nickname: "testy",
           email: email,
-          password: valid_user_password()
+          password: valid_user_password(),
+          accept_tac: true
         })
 
       assert user.email == email
@@ -103,7 +104,7 @@ defmodule Radiopush.AccountsTest do
   describe "change_user_registration/2" do
     test "returns a changeset" do
       assert %Ecto.Changeset{} = changeset = Accounts.change_user_registration(%User{})
-      assert changeset.required == [:password, :nickname, :email]
+      assert changeset.required == [:password, :accept_tac, :nickname, :email]
     end
 
     test "allows fields to be set" do
@@ -114,7 +115,8 @@ defmodule Radiopush.AccountsTest do
         Accounts.change_user_registration(%User{}, %{
           "nickname" => "testy",
           "email" => email,
-          "password" => password
+          "password" => password,
+          "accept_tac" => "true"
         })
 
       assert changeset.valid?

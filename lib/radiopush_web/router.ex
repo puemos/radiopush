@@ -29,6 +29,13 @@ defmodule RadiopushWeb.Router do
   ## Routes
 
   scope "/", RadiopushWeb do
+    pipe_through [:browser]
+
+    get "/privacy", PrivacyPolicyController, :new
+    get "/terms", TermsAndConditionsController, :new
+  end
+
+  scope "/", RadiopushWeb do
     pipe_through [:browser, :redirect_if_user_is_authenticated]
 
     live "/", HomeLive.Index
@@ -39,7 +46,6 @@ defmodule RadiopushWeb.Router do
 
     live "/channels", ChannelListLive.Index
     live "/channel/:id", ChannelLive.Index
-
   end
 
   ## Authentication routes

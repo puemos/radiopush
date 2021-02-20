@@ -20,12 +20,11 @@
         </ul>
       </div>
     <% end %>
-    <div class="-space-y-px rounded-md shadow-sm">
+    <div class="rounded-md">
       <div>
         <%= label f, :email, class: "sr-only" %>
         <%= email_input f, :email, required: true, placeholder: "Email", class: "input rounded-t-md" %>
       </div>
-
       <div>
         <%= label f, :nickname, class: "sr-only" %>
         <%= text_input f, :nickname, required: true, placeholder: "Nickname", class: "input" %>
@@ -33,6 +32,10 @@
       <div>
         <%= label f, :password, class: "sr-only" %>
         <%= password_input f, :password, required: true, placeholder: "Password", class: "input rounded-b-md" %>
+      </div>
+      <div class="flex gap-2 mt-3">
+        <%= checkbox f, :accept_tac, required: "true", class: "h-4 w-4 text-lime-300 focus:ring-lime-300 border-gray-300 rounded" %>
+        <span class="text-sm">I have read and agree to the <a href="/terms" target="_blank">Terms and Conditions</a> and <a href="/policy" target="_blank">Privacy Policy</a></span>
       </div>
     </div>
     <div>

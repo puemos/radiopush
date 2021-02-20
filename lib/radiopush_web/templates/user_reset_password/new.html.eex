@@ -11,7 +11,7 @@
       </p>
     </div>
     <%= form_for :user, Routes.user_reset_password_path(@conn, :create), [class: "mt-8 space-y-6" ], fn f -> %>
-    <div class="-space-y-px rounded-md shadow-sm">
+    <div class="rounded-md">
       <div>
         <%= label f, :email, class: "sr-only" %>
         <%= email_input f, :email, required: true, placeholder: "Email", class: "input rounded-md" %>

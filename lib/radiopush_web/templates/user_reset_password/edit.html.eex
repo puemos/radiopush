@@ -20,7 +20,7 @@
         </ul>
       </div>
     <% end %>
-    <div class="-space-y-px rounded-md shadow-sm">
+    <div class="rounded-md">
       <div>
         <%= label f, :password, class: "sr-only" %>
         <%= password_input f, :password, required: true, placeholder: "New password", class: "input rounded-t-md" %>

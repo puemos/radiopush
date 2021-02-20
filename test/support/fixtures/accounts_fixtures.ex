@@ -13,7 +13,8 @@ defmodule Radiopush.AccountsFixtures do
       |> Enum.into(%{
         nickname: Faker.Person.first_name(),
         email: unique_user_email(),
-        password: valid_user_password()
+        password: valid_user_password(),
+        accept_tac: true
       })
       |> Radiopush.Accounts.register_user()
 

@@ -18,7 +18,7 @@
         </p>
       </div>
     <% end %>
-    <div class="-space-y-px rounded-md shadow-sm">
+    <div class="rounded-md">
       <div>
         <%= label f, :email, class: "sr-only" %>
         <%= email_input f, :email, required: true, placeholder: "Email", class: "input rounded-t-md" %>

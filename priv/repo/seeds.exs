@@ -26,7 +26,8 @@ defmodule Radiopush.Seeds do
       %{
         email: "#{name_lowercase}@mail.com",
         nickname: name,
-        password: "123123123123"
+        password: "123123123123",
+        accept_tac: true
       }
       |> Accounts.register_user()
 

@@ -26,7 +26,8 @@ defmodule RadiopushWeb.UserRegistrationControllerTest do
           "user" => %{
             "nickname" => "testy",
             "email" => email,
-            "password" => valid_user_password()
+            "password" => valid_user_password(),
+            "accept_tac" => "true"
           }
         })
 

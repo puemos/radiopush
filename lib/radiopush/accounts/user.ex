@@ -10,6 +10,7 @@ defmodule Radiopush.Accounts.User do
     field :password, :string, virtual: true
     field :hashed_password, :string
     field :confirmed_at, :naive_datetime
+    field :accept_tac, :boolean
     many_to_many(:channels, Channel, join_through: Member, on_replace: :delete)
 
     timestamps()
@@ -34,10 +35,17 @@ defmodule Radiopush.Accounts.User do
   """
   def registration_changeset(user, attrs, opts \\ []) do
     user
-    |> cast(attrs, [:email, :password, :nickname])
+    |> cast(attrs, [:email, :password, :nickname, :accept_tac])
     |> validate_email()
     |> validate_nickname()
+    |> validate_accept_tac()
     |> validate_password(opts)
+  end
+
+  defp validate_accept_tac(changeset) do
+    changeset
+    |> validate_required([:accept_tac])
+    |> validate_inclusion(:accept_tac, [true])
   end
 
   defp validate_nickname(changeset) do

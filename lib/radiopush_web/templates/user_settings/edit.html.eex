@@ -18,7 +18,7 @@
           </ul>
         </div>
       <% end %>
-      <div class="-space-y-px rounded-md shadow-sm">
+      <div class="rounded-md">
         <%= hidden_input f, :action, name: "action", value: "update_email" %>
         <div>
           <%= label f, :email, class: "sr-only" %>
@@ -49,11 +49,11 @@
           </ul>
         </div>
       <% end %>
-      <div class="-space-y-px rounded-md shadow-sm">
+      <div class="rounded-md">
         <%= hidden_input f, :action, name: "action", value: "update_nickname" %>
         <div>
           <%= label f, :nickname, class: "sr-only" %>
-          <%= text_input f, :nickname, required: true, placeholder: "Nickname", class: "input rounded-t-md" %>
+          <%= text_input f, :nickname, required: true, placeholder: "Nickname", class: "input rounded-md" %>
         </div>
       </div>
       <div>
@@ -77,7 +77,7 @@
         </ul>
       </div>
     <% end %>
-    <div class="-space-y-px rounded-md shadow-sm">
+    <div class="rounded-md">
       <%= hidden_input f, :action, name: "action", value: "update_password" %>
       <div>
         <%= label f, :password, class: "sr-only" %>
