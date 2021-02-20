@@ -217,7 +217,7 @@ defmodule Radiopush.ChannelsTest do
         |> Channels.new_post(user, post_attrs)
         |> Channels.get_channel_posts()
 
-      assert [post] = posts
+      assert [post] = posts.entries
       assert post.song == "some song"
     end
 
@@ -230,7 +230,7 @@ defmodule Radiopush.ChannelsTest do
       posts = Channels.get_channel_posts(channel)
 
       assert {:error, "not a member"} = Channels.new_post(channel, user, post_attrs)
-      assert posts == []
+      assert posts.entries == []
     end
 
     test "get_channel_posts/1 get channel's post history" do
@@ -248,7 +248,7 @@ defmodule Radiopush.ChannelsTest do
         |> Channels.new_post(user, post_attrs)
         |> Channels.get_channel_posts()
 
-      assert [post, _, _, _] = posts
+      assert [post, _, _, _] = posts.entries
       assert post.song == "some song"
     end
   end

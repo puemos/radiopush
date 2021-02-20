@@ -27,39 +27,68 @@ defmodule Radiopush.Channels do
 
   def get_channel!(id), do: Repo.get!(Channel, id)
 
-  @spec get_channel_posts(Channel.t()) :: list(Post.t())
+  @spec get_channel_posts(Channel.t()) :: %{
+          entries: [Post.t()] | [],
+          metadata: Paginator.Page.Metadata.t()
+        }
   def get_channel_posts(channel) do
     query =
       from p in Post,
         where: p.channel_id == ^channel.id,
         preload: :user,
+        order_by: [desc: p.inserted_at, desc: p.id]
+
+    %{entries: entries, metadata: metadata} =
+      Repo.paginate(query, sort_direction: :desc, cursor_fields: [:inserted_at, :id], limit: 5)
+
+    %{entries: entries, metadata: metadata}
+  end
+
+  @spec get_channel_posts(Channel.t(), %{after: Paginator.Page.Metadata.opaque_cursor()}) :: %{
+          entries: [Post.t()] | [],
+          metadata: Paginator.Page.Metadata.t()
+        }
+  def get_channel_posts(channel, %{after: cursor_after}) do
+    query =
+      from p in Post,
+        where: p.channel_id == ^channel.id,
+        preload: :user,
+        order_by: [desc: p.inserted_at, desc: p.id]
+
+    %{entries: entries, metadata: metadata} =
+      Repo.paginate(query,
+        sort_direction: :desc,
+        after: cursor_after,
+        cursor_fields: [:inserted_at, :id],
+        limit: 5
+      )
+
+    %{entries: entries, metadata: metadata}
+  end
+
+  @spec get_channel_posts(Channel.t(), %{before: NaiveDateTime.t()}) :: list(Post.t())
+  def get_channel_posts(channel, %{before: before}) do
+    query =
+      from p in Post,
+        where:
+          p.channel_id == ^channel.id and
+            p.inserted_at > ^before,
+        preload: :user,
         order_by: [desc: p.inserted_at]
 
     Repo.all(query)
   end
+
 
   @spec get_channel_posts(Channel.t(), nil) :: list(Post.t())
   def get_channel_posts(channel, nil) do
     get_channel_posts(channel)
   end
 
-  @spec get_channel_posts(Channel.t(), NaiveDateTime.t()) :: list(Post.t())
-  def get_channel_posts(channel, last) do
-    query =
-      from p in Post,
-        where:
-          p.channel_id == ^channel.id and
-            p.inserted_at > ^last,
-        preload: :user,
-        order_by: [desc: p.inserted_at]
-
-    Repo.all(query)
-  end
-
   @spec get_channel_members(Channel.t()) :: list(Member.t())
   def get_channel_members(channel) do
     channel
-    |> Repo.preload([members: [:user]])
+    |> Repo.preload(members: [:user])
     |> Map.get(:members)
   end
 

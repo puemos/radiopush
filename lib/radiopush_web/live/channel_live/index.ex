@@ -15,7 +15,7 @@ defmodule RadiopushWeb.ChannelLive.Index do
       |> assign_defaults(session)
       |> assign_channel(id)
       |> assign_members()
-      |> assign_init_posts()
+      |> assign_posts()
       |> assign_member_role()
 
     Presence.track_presence(
@@ -25,22 +25,45 @@ defmodule RadiopushWeb.ChannelLive.Index do
       default_user_presence_payload(socket.assigns.current_user)
     )
 
-    {:ok, socket, temporary_assigns: [posts: []]}
-  end
-
-  defp assign_init_posts(socket) do
-    with posts <- Channels.get_channel_posts(socket.assigns.channel) do
-      assign(socket, posts: posts, last_inserted_at: get_last_inserted_at(posts))
-    end
+    {:ok, socket, temporary_assigns: [posts: [], new_posts: []]}
   end
 
   defp assign_posts(socket) do
+    with %{entries: posts, metadata: metadata} <-
+           Channels.get_channel_posts(socket.assigns.channel) do
+      cursor_after = metadata.after
+
+      assign(socket, posts: posts, cursor_after: cursor_after, last_fetch: NaiveDateTime.utc_now())
+    end
+  end
+
+  defp assign_new_posts(socket) do
     with posts <-
            Channels.get_channel_posts(
              socket.assigns.channel,
-             socket.assigns.last_inserted_at
+             %{before: socket.assigns.last_fetch}
            ) do
-      assign(socket, posts: posts, last_inserted_at: get_last_inserted_at(posts))
+      assign(socket,
+        new_posts: posts,
+        last_fetch: NaiveDateTime.utc_now()
+      )
+    end
+  end
+
+  defp assign_prev_posts(socket) do
+    cursor_after = Map.get(socket.assigns, :cursor_after)
+
+    if cursor_after == nil do
+      socket
+    else
+      with %{entries: posts, metadata: metadata} <-
+             Channels.get_channel_posts(
+               socket.assigns.channel,
+               %{after: cursor_after}
+             ) do
+        cursor_after = metadata.after
+        assign(socket, posts: posts, cursor_after: cursor_after)
+      end
     end
   end
 
@@ -80,7 +103,15 @@ defmodule RadiopushWeb.ChannelLive.Index do
 
   @impl true
   def handle_info(%{event: "message"}, socket) do
-    {:noreply, assign_posts(socket)}
+    {:noreply, assign_new_posts(socket)}
+  end
+
+  def handle_event("load-more", _params, socket) do
+    socket =
+      socket
+      |> assign_prev_posts()
+
+    {:noreply, socket}
   end
 
   @impl true
@@ -102,7 +133,9 @@ defmodule RadiopushWeb.ChannelLive.Index do
       id: channel_id
     })
 
-    {:noreply, assign_posts(socket)}
+    send(self(), %{event: "message"})
+
+    {:noreply, socket}
   end
 
   @impl true
@@ -114,7 +147,7 @@ defmodule RadiopushWeb.ChannelLive.Index do
 
     socket =
       socket
-      |> assign_init_posts()
+      |> assign_posts()
       |> assign_members()
       |> assign_member_role()
 
@@ -165,12 +198,5 @@ defmodule RadiopushWeb.ChannelLive.Index do
 
   def iframe_src(url) do
     Preview.get_embed(url)
-  end
-
-  defp get_last_inserted_at(posts) do
-    case List.last(posts) do
-      nil -> nil
-      post -> Map.get(post, :inserted_at)
-    end
   end
 end

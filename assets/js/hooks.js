@@ -1,11 +1,17 @@
-export const Chat = {
-    // mounted() {
-    //     setTimeout(() => {
+let scrollAt = () => {
+    let scrollTop = document.documentElement.scrollTop || document.body.scrollTop
+    let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight
+    let clientHeight = document.documentElement.clientHeight
 
-    //         this.el.scrollTop = this.el.scrollHeight
-    //     }, 500)
-    // },
-    // updated() {
-    //     this.el.scrollTop = this.el.scrollHeight
-    // }
+    return scrollTop / (scrollHeight - clientHeight) * 100
+}
+
+export const InfiniteScroll = {
+    mounted() {
+        window.addEventListener("scroll", e => {
+            if (scrollAt() > 90) {
+                this.pushEvent("load-more", {})
+            }
+        })
+    }
 }

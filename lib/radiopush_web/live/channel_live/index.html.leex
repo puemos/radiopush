@@ -1,4 +1,4 @@
-<div class="w-full flex flex-row justify-center">
+<div class="w-full flex flex-row justify-center" phx-hook="InfiniteScroll">
   <div class="w-full max-w-2xl lg:w-9/12 flex-1">
     <h1 class="text-4xl font-bold overflow-ellipsis overflow-hidden text-white-300">
       <%= @channel.name %>
@@ -10,7 +10,50 @@
         <%= submit "Post", phx_disable_with: "Posting...", class: "button rounded-none" %>
       </form>
       <div class="h-6"></div>
-      <div id="Chat" phx-hook="Chat" phx-update="prepend" class="grid grid-cols-1 gap-4 w-full">
+      <%= if !Enum.empty?(@new_posts) do %>
+        <div id="NewPosts" phx-update="prepend" class="grid grid-cols-1 gap-4 w-full">
+          <%=for post <- @new_posts do %>
+            <div id="<%= post.id %>" class="p-1 bg-gray-700 relative rounded-xl flex flex-col items-start">
+              <div class="absolute top-2 right-2 h-6 w-6 text-gray-400 hover:text-gray-500">
+                <a href="<%= post.url %>" target="_blank">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                  </svg>
+                </a>
+              </div>
+              <div class="flex flex-row h-full w-full">
+                <div class="overflow-hidden rounded-xl w-28 sm:w-40">
+                  <picture>
+                    <img src="<%= post.image %>" alt="<%= post.song %>">
+                  </picture>
+                </div>
+                <div class="w-4"></div>
+                <div class="flex flex-col justify-between">
+                  <div class="">
+                    <%= if post.type == :album do %>
+                      <div class=""><%= post.album %></div>
+                      <div class="text-gray-300 text-sm truncate"><%= post.musician %></div>
+                    <% end %>
+                    <%= if post.type == :song do %>
+                      <div class=""><%= post.song %></div>
+                      <div class="text-gray-300 text-sm truncate"><%= post.album %></div>
+                      <div class="text-gray-300 text-sm truncate"><%= post.musician %></div>
+                    <% end %>
+                  </div>
+                  <div class="flex flex-row text-gray-400 text-xs">
+                    <div><%= post.user.nickname %></div>
+                    <div>&nbsp;•&nbsp;</div>
+                    <div><%= post.inserted_at %></div>
+                  </div>
+                </div>
+              </div>
+              <!-- <iframe class="rounded-xl w-full" src="<%= iframe_src(post.url) %>" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe> -->
+            </div>
+          <% end %>
+        </div>
+        <div class="h-4"></div>
+      <% end %>
+      <div id="Chat" phx-update="append" class="grid grid-cols-1 gap-4 w-full">
         <%=for post <- @posts do %>
           <div id="<%= post.id %>" class="p-1 bg-gray-700 relative rounded-xl flex flex-col items-start">
             <div class="absolute top-2 right-2 h-6 w-6 text-gray-400 hover:text-gray-500">
@@ -50,6 +93,7 @@
           </div>
         <% end %>
       </div>
+      <div class="h-20"></div>
     <% end %>
     <%= if (@role == true or @role == nil) and !@channel.private do %>
       <form action="#" phx-submit="join">
