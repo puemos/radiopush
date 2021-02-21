@@ -11,12 +11,41 @@ defmodule Radiopush.Channels do
 
   # Channels
 
+  @spec list_channels() :: %{
+          entries: [Channel.t()] | [],
+          metadata: Paginator.Page.Metadata.t()
+        }
   def list_channels do
     query =
       from c in Channel,
-        where: c.private == false
+        where: c.private == false,
+        order_by: [desc: c.inserted_at, desc: c.id]
 
-    Repo.all(query)
+    %{entries: entries, metadata: metadata} =
+      Repo.paginate(query, sort_direction: :desc, cursor_fields: [:inserted_at, :id], limit: 5)
+
+    %{entries: entries, metadata: metadata}
+  end
+
+  @spec list_channels(%{after: Paginator.Page.Metadata.opaque_cursor()}) :: %{
+          entries: [Channel.t()] | [],
+          metadata: Paginator.Page.Metadata.t()
+        }
+  def list_channels(%{after: cursor_after}) do
+    query =
+      from c in Channel,
+        where: c.private == false,
+        order_by: [desc: c.inserted_at, desc: c.id]
+
+    %{entries: entries, metadata: metadata} =
+      Repo.paginate(query,
+        sort_direction: :desc,
+        after: cursor_after,
+        cursor_fields: [:inserted_at, :id],
+        limit: 5
+      )
+
+    %{entries: entries, metadata: metadata}
   end
 
   def list_channels_by_user(user) do
@@ -78,7 +107,6 @@ defmodule Radiopush.Channels do
 
     Repo.all(query)
   end
-
 
   @spec get_channel_posts(Channel.t(), nil) :: list(Post.t())
   def get_channel_posts(channel, nil) do

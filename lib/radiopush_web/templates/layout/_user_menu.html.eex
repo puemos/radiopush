@@ -1,6 +1,10 @@
-<nav class="flex flex-row justify-between w-full bg-gray-800 top-0 left-0 z-50 py-3">
-  <div class="flex space-x-4">
-    <%= link "Radiopush", to: "/", class: "text-gray-300 hover:text-gray-100 hover:text-white py-2 rounded-md text-sm font-medium" %>
+<nav class="flex flex-row justify-between items-baseline w-full bg-gray-800 top-0 left-0 z-50 py-3">
+  <div class="flex space-x-4 items-baseline">
+    <%= link "Radiopush", to: "/", class: "text-gray-300 hover:text-gray-100 hover:text-white py-2 rounded-md text font-medium" %>
+    <div class="space-x-4 items-baseline hidden md:flex">
+      <%= link "Privacy", to: Routes.privacy_policy_path(@conn, :new), class: "text-gray-300 hover:text-gray-100 py-2 rounded-md text-sm font-medium" %>
+      <%= link "Terms", to: Routes.terms_and_conditions_path(@conn, :new), class: "text-gray-300 hover:text-gray-100 py-2 rounded-md text-sm font-medium" %>
+    </div>
   </div>
   <div class="flex space-x-4">
     <%= if @current_user do %>
