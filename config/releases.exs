@@ -14,7 +14,7 @@ database_url =
 config :radiopush, Radiopush.Repo,
   # ssl: true,
   url: database_url,
-  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10")
+  pool_size: String.to_integer(System.get_env("POOL_SIZE") || "2")
 
 secret_key_base =
   System.get_env("SECRET_KEY_BASE") ||
@@ -28,6 +28,7 @@ config :radiopush, RadiopushWeb.Endpoint,
     port: String.to_integer(System.get_env("PORT") || "4000"),
     transport_options: [socket_opts: [:inet6]]
   ],
+  url: [host: System.get_env("APP_NAME") <> ".gigalixirapp.com", port: 443]
   secret_key_base: secret_key_base
 
 config :radiopush, RadiopushWeb.Endpoint, server: true
