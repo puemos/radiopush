@@ -9,6 +9,10 @@ module.exports = {
   ],
   darkMode: false, // or 'media' or 'class'
   theme: {
+    backdropFilter: { // defaults to {}
+      'none': 'none',
+      'blur': 'blur(20px)',
+    },
     colors: {
       gray: colors.trueGray,
       indigo: colors.indigo,
@@ -19,6 +23,10 @@ module.exports = {
   },
   plugins: [
     require("@tailwindcss/forms"),
-    require("tailwind-scrollbar")
+    require("tailwind-scrollbar"),
+    require('tailwindcss-filters'),
+
   ],
+
+
 }

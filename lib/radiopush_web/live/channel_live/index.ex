@@ -17,6 +17,7 @@ defmodule RadiopushWeb.ChannelLive.Index do
       |> assign_members()
       |> assign_posts()
       |> assign_member_role()
+      |> assign_open_settings(false)
 
     Presence.track_presence(
       self(),
@@ -26,6 +27,10 @@ defmodule RadiopushWeb.ChannelLive.Index do
     )
 
     {:ok, socket, temporary_assigns: [posts: [], new_posts: []]}
+  end
+
+  defp assign_open_settings(socket, flag) do
+    assign(socket, open_settings: flag)
   end
 
   defp assign_posts(socket) do
@@ -186,6 +191,16 @@ defmodule RadiopushWeb.ChannelLive.Index do
       |> assign_members()
 
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_event("open-settings", _, socket) do
+    {:noreply, assign_open_settings(socket, true)}
+  end
+
+  @impl true
+  def handle_event("close-settings", _, socket) do
+    {:noreply, assign_open_settings(socket, false)}
   end
 
   defp default_user_presence_payload(user) do

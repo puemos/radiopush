@@ -1,8 +1,31 @@
 <div class="w-full flex flex-col md:flex-row justify-center" phx-hook="InfiniteScroll">
   <div class="w-full max-w-2xl lg:w-9/12 flex-1 order-2 md:order-1">
-    <h1 class="text-4xl font-bold overflow-ellipsis overflow-hidden text-white-300">
-      <%= @channel.name %>
-    </h1>
+    <div class="flex flex-row justify-between items-baseline">
+      <div class="flex flex-col justify-between items-baseline">
+        <h1 class="text-2xl lg:text-4xl font-bold overflow-ellipsis overflow-hidden text-white-300">
+          <%= @channel.name %>
+        </h1>
+        <div class="sm:hidden">
+          <%= if @channel.private do %>
+            <div class="flex flex-row items-center text-sm text-gray-200">
+              <div class="w-3 h-3">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd" />
+                </svg>
+              </div>
+              <div class="w-1"></div>
+              <span class="">Private channel</span>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <div phx-click="open-settings" class="sm:hidden w-6 h-6 text-gray-100 hover:text-gray-300">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+      </div>
+    </div>
     <div class="h-12"></div>
     <%= if (@role == :owner or @role == :member) do %>
       <form action="#" phx-submit="post" class="flex flex-row">
@@ -93,7 +116,6 @@
           </div>
         <% end %>
       </div>
-
       <div class="h-20"></div>
     <% end %>
     <%= if (@role == true or @role == nil) and !@channel.private do %>
@@ -114,7 +136,10 @@
     <% end %>
   </div>
   <%= if (@role == :owner or @role == :member) do %>
-    <div class="hidden md:block w-full h-full md:w-72 md:ml-4 order-1 md:order-2">
+    <div class="<%= if (@role == :owner or @role == :member) and @open_settings do "block fixed w-screen h-screen backdrop-blur top-0 left-0 p-2" else "hidden" end %> md:backdrop-none md:static md:block md:w-72 md:ml-4 md:top-auto md:left-auto  order-1 md:order-2">
+      <div class="<%= if (@role == :owner or @role == :member) and @open_settings do "block" else "hidden" end %> md:hidden absolute bottom-0 left-0 w-full p-2">
+        <button  phx-click="close-settings" class="button w-full bg-gray-500">Close</button>
+      </div>
       <div class="bg-gray-700 rounded-xl p-3">
         <div class="flex flex-row items-center justify-between">
           <h2>Details</h2>
@@ -126,7 +151,7 @@
                 </svg>
               </div>
               <div class="w-1"></div>
-              <span class="">Private channel</span>
+              <span class="hidden sm:block">Private channel</span>
             </div>
           <% end %>
         </div>

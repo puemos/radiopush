@@ -17,11 +17,11 @@
     + New channel
   </div>
 </div>
-<div class="flex gap-4 pb-4 mt-6 scrollbar scrollbar scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-800 overflow-x-scroll">
+<div class="flex flex-row gap-4 pb-4 mt-6 scrollbar scrollbar scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-800 overflow-x-scroll">
   <%=for channel <- @user_channels do %>
     <a href="/channel/<%= channel.id %>">
-      <div class="flex flex-col justify-between flex-initial bg-gray-700 p-4 rounded-3xl w-36 h-36 md:w-54 md:h-54 overflow-hidden">
-        <div class="w-full pr-1 text-xl md:text-2xl lg:text-4xl font-bold text-lime-300 overflow-ellipsis overflow-hidden" title="<%= channel.name %>">
+      <div class="flex flex-col justify-between flex-initial bg-gray-700 p-4 rounded-3xl w-36 h-36 md:w-52 md:h-52 overflow-hidden">
+        <div class="w-full pr-1 text-xl md:text-2xl font-bold overflow-ellipsis overflow-hidden text-lime-300" title="<%= channel.name %>">
           <%= channel.name %>
         </div>
         <div>
