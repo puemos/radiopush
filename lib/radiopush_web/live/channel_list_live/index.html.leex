@@ -1,6 +1,6 @@
 <%= if @open_create_channel do %>
   <div class="fixed w-full h-full top-0 left-0 flex items-center justify-center">
-    <div phx-click="close-create-channel" class="absolute w-full h-full bg-gray-900 opacity-50"></div>
+    <div phx-click="close-create-channel" class="absolute w-full h-full backdrop-blur"></div>
     <div class="w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto">
       <form action="#" phx-submit="channel" class="flex flex-row">
         <%= text_input :channel, :name, placeholder: "Channel name", autofocus: "true" ,class: "flex-1 px-4 py-3 border-none text-sm font-medium placeholder-gray-400 text-white bg-gray-600 rounded-md group outline-none focus:outline-none focus:ring-0 w-full" %>
