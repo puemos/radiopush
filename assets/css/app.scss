@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+
+iframe {
+  &[hidden] {
+    height: 0px;
+    width: 0px;
+  }
+}
+
+.sp-underline {
+  text-underline-position: from-font;
+  text-decoration-thickness: 2px !important;
+  text-decoration: underline;
+  &.primary {
+    text-decoration-color: rgb(124, 58, 237) !important;
+  }
+  &.red {
+    text-decoration-color: rgb(219, 39, 119) !important;
+  }
+  &.bold {
+    text-decoration-thickness: 3px !important;
+  }
+}
+
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+@layer components {
+  .input {
+    @apply rounded-md bg-gray-700 border-none focus:outline-none focus:ring-2 focus:ring-primary-300;
+  }
+}
