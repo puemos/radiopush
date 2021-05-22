@@ -14,7 +14,7 @@ defmodule RadiopushWeb.Components.Header do
   @impl true
   def render(assigns) do
     ~H"""
-    <nav class="flex flex-row justify-between items-center w-full bg-gray-900 top-0 left-0 z-50 py-3">
+    <nav class="flex flex-row justify-between items-center w-full top-0 left-0 z-50 py-3">
       <div class="flex space-x-4 items-baseline">
         <Link to={{"/"}} class="py-2 rounded-md ">
           <div class="flex flex-row items-center space-x-2">

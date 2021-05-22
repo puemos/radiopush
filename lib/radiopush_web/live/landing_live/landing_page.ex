@@ -39,14 +39,24 @@ defmodule RadiopushWeb.Pages.Landing do
                     Create private or public channels, share them with anyone
                   </p>
                   <div class="mt-5 sm:mt-8 flex flex-col items-center justify-center lg:items-baseline lg:justify-start space-y-4">
-                    <a href={{Routes.user_authorization_path(@socket, :authorize, "spotify")}}>
-                      <Button class="px-6 bg-spotify-600">
-                        <div class="flex flex-row items-center">
-                          <img class="w-4 mr-2" src="{{Routes.static_path(@socket, "/images/Spotify_Icon_CMYK_White.png")}}"/>
-                          <span>Continue with Spotify</span>
-                        </div>
-                      </Button>
-                    </a>
+                    <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+                      <a href={{Routes.user_authorization_path(@socket, :authorize, "spotify")}}>
+                        <Button class="px-6 bg-spotify-600">
+                          <div class="flex flex-row items-center">
+                            <img class="w-4 mr-2" src="{{Routes.static_path(@socket, "/images/Spotify_Icon_CMYK_White.png")}}"/>
+                            <span>Continue with Spotify</span>
+                          </div>
+                        </Button>
+                      </a>
+                      <a target="_blank" rel="noopener" href={{"https://github.com/puemos/radiopush"}}>
+                        <Button class="px-6 bg-gray-600">
+                          <div class="flex flex-row items-center">
+                            <img class="w-4 mr-2" src="{{Routes.static_path(@socket, "/images/GitHub-Mark-Light-120px-plus.png")}}"/>
+                            <span>It's open source!</span>
+                          </div>
+                        </Button>
+                      </a>
+                    </div>
                     <p>By continuing, you agree to Radiopush.app's <a class="underline hover:text-blue-400" href="/legal">Terms & Conditions</a> and <a class="underline hover:text-blue-400" href="/legal">Privacy Policy</a></p>
                   </div>
                 </div>
@@ -110,7 +120,6 @@ defmodule RadiopushWeb.Pages.Landing do
           %{emoji: "+1"},
           %{emoji: "+1"},
           %{emoji: "+1"},
-          %{emoji: "apple"},
           %{emoji: "boom"},
           %{emoji: "boom"},
           %{emoji: "clap"},
@@ -144,7 +153,6 @@ defmodule RadiopushWeb.Pages.Landing do
         reactions: [
           %{emoji: "fire"},
           %{emoji: "fire"},
-          %{emoji: "+1"},
           %{emoji: "heart"},
           %{emoji: "joy"}
         ],
