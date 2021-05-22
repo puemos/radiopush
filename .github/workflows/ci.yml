@@ -48,6 +48,7 @@ jobs:
       - run: npm run deploy --prefix assets
       - run: mix test
   deploy:
+    environment: production
     needs: test # Will only run if the test job succeeds
     if: github.ref == 'refs/heads/main' # Only run this job if it is on the main branch
 
