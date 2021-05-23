@@ -61,7 +61,7 @@ defmodule RadiopushWeb.Pages.Landing do
                         <Button class="px-6 bg-gray-600">
                           <div class="flex flex-row items-center">
                             <img class="w-4 mr-2" src="{{Routes.static_path(@socket, "/images/GitHub-Mark-Light-120px-plus.png")}}"/>
-                            <span>It's open source!</span>
+                            <span>It's open-source!</span>
                           </div>
                         </Button>
                       </a>
