@@ -3,8 +3,7 @@
 ![ci](https://github.com/puemos/radiopush/workflows/CI/badge.svg)
 
 
-Share and discover songs, with friends colleagues and family  
-Create private or public channels, share them with anyone
+Radiopush is a new way of music discovery. It helps you find new songs by sharing with your friends, colleagues and family. Whether it's a jam you are just vibing to or an obscure track from your favorite artist, share it with the community of Radiopush and help others
 
 [https://radiopush.app](https://radiopush.app)
 
