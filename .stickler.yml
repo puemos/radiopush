@@ -1,4 +1,8 @@
+---
+linters:
+    credo:
+    
 files:
   ignore:
-    - 'bower_components/*'
-    - 'node_modules/*'
+    - 'assets/*'
+    - 'deps/*'

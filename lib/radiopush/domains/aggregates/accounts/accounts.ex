@@ -3,7 +3,7 @@ defmodule Radiopush.Accounts do
   The Accounts context.
   """
 
-  @impl_module Application.get_env(
+  @impl_module Application.compile_env(
                  :radiopush,
                  :accounts_aggregate_repository,
                  Radiopush.Accounts.PostgresImpl

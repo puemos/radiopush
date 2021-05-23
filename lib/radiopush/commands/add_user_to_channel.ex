@@ -22,9 +22,8 @@ defmodule Radiopush.Cmd.AddUserToChannel do
   end
 
   defp add_user_to_channel(%Context{} = _ctx, %Cmd{} = cmd) do
-    with {:ok} <- Channels.add_user_to_channel(cmd.channel_id, cmd.user_id) do
-      {:ok}
-    else
+    case Channels.add_user_to_channel(cmd.channel_id, cmd.user_id) do
+      {:ok} -> {:ok}
       {:ok, false} -> {:error, "Unauthorized"}
       {:error, error} -> {:error, error}
     end

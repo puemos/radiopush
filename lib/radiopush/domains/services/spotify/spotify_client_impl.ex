@@ -7,35 +7,36 @@ defmodule Radiopush.Spotify.SpotifyClientImpl do
 
   @impl true
   def list_user_playlists(%Credentials{} = credentials) do
-    with {:ok, %{items: playlists}} <- Client.list_user_playlists(credentials) do
-      {:ok, playlists}
-    else
+    case Client.list_user_playlists(credentials) do
+      {:ok, %{items: playlists}} -> {:ok, playlists}
       {:error, error} -> {:error, error}
     end
   end
 
   @impl true
   def get_profile(%Credentials{} = credentials) do
-    with {:ok, details} <- Client.get_profile(credentials) do
-      %{
-        email: email,
-        display_name: nickname,
-        id: id
-      } = details
-
-      %{"url" => image} = Enum.at(details.images, 0, %{"url" => ""})
-
-      profile =
-        Profile.new(%{
+    case Client.get_profile(credentials) do
+      {:ok, details} ->
+        %{
           email: email,
-          nickname: nickname,
-          image: image,
+          display_name: nickname,
           id: id
-        })
+        } = details
 
-      {:ok, profile}
-    else
-      {:error, error} -> {:error, error}
+        %{"url" => image} = Enum.at(details.images, 0, %{"url" => ""})
+
+        profile =
+          Profile.new(%{
+            email: email,
+            nickname: nickname,
+            image: image,
+            id: id
+          })
+
+        {:ok, profile}
+
+      {:error, error} ->
+        {:error, error}
     end
   end
 
@@ -50,63 +51,67 @@ defmodule Radiopush.Spotify.SpotifyClientImpl do
   # Albums
 
   defp get_album(credentials, album_id) do
-    with {:ok, details} <- Client.get_album(credentials, album_id) do
-      %{
-        artists: [%{"name" => musician} | _],
-        external_urls: %{"spotify" => url},
-        images: [%{"url" => image} | _],
-        name: name,
-        tracks: %{items: [%{preview_url: audio_preview} | _]}
-      } = details
+    case Client.get_album(credentials, album_id) do
+      {:ok, details} ->
+        %{
+          artists: [%{"name" => musician} | _],
+          external_urls: %{"spotify" => url},
+          images: [%{"url" => image} | _],
+          name: name,
+          tracks: %{items: [%{preview_url: audio_preview} | _]}
+        } = details
 
-      album =
-        Album.new(%{
-          type: :album,
-          album: name,
-          musician: musician,
-          url: url,
-          image: image,
-          audio_preview: audio_preview
-        })
+        album =
+          Album.new(%{
+            type: :album,
+            album: name,
+            musician: musician,
+            url: url,
+            image: image,
+            audio_preview: audio_preview
+          })
 
-      {:ok, album}
-    else
-      {:error, error} -> {:error, error}
+        {:ok, album}
+
+      {:error, error} ->
+        {:error, error}
     end
   end
 
   # Songs
 
   defp get_song(credentials, song_id) do
-    with {:ok, details} <- Client.get_song(credentials, song_id) do
-      %{
-        album: %{
-          "name" => album,
-          "images" => [
-            %{"url" => image}
-            | _
-          ]
-        },
-        artists: [%{"name" => musician} | _],
-        id: id,
-        name: name,
-        preview_url: audio_preview
-      } = details
+    case Client.get_song(credentials, song_id) do
+      {:ok, details} ->
+        %{
+          album: %{
+            "name" => album,
+            "images" => [
+              %{"url" => image}
+              | _
+            ]
+          },
+          artists: [%{"name" => musician} | _],
+          id: id,
+          name: name,
+          preview_url: audio_preview
+        } = details
 
-      song =
-        Song.new(%{
-          type: :song,
-          song: name,
-          album: album,
-          musician: musician,
-          url: "https://open.spotify.com/track/#{id}",
-          image: image,
-          audio_preview: audio_preview
-        })
+        song =
+          Song.new(%{
+            type: :song,
+            song: name,
+            album: album,
+            musician: musician,
+            url: "https://open.spotify.com/track/#{id}",
+            image: image,
+            audio_preview: audio_preview
+          })
 
-      {:ok, song}
-    else
-      {:error, error} -> {:error, error}
+        {:ok, song}
+
+      {:error, error} ->
+        {:error, error}
     end
   end
 

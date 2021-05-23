@@ -1,4 +1,5 @@
 defmodule RadiopushWeb.Pages.Explore do
+  @moduledoc false
   use RadiopushWeb, :surface_view_helpers
 
   alias Radiopush.Qry.{

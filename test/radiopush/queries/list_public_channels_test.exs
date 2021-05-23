@@ -42,7 +42,7 @@ defmodule Radiopush.Qry.ListPublicChannelsTest do
           %ListPublicChannels.Query{}
         )
 
-      assert Enum.count(list) == 0
+      assert list == []
     end
 
     test "should get only 50 first channels" do

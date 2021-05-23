@@ -11,10 +11,8 @@ defmodule Radiopush.Cmd.CreateUser do
   alias Radiopush.Accounts
 
   def run(%Context{} = _ctx, %Cmd{} = cmd) do
-    with {:ok, user} <-
-           Accounts.create_user(Map.from_struct(cmd)) do
-      {:ok, user}
-    else
+    case Accounts.create_user(Map.from_struct(cmd)) do
+      {:ok, user} -> {:ok, user}
       {:error, error} -> {:error, error}
     end
   end

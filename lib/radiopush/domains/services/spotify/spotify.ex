@@ -2,7 +2,7 @@ defmodule Radiopush.Spotify do
   @moduledoc """
   The Spotify context.
   """
-  @impl_module Application.get_env(
+  @impl_module Application.compile_env(
                  :radiopush,
                  :spotify_service,
                  Radiopush.Spotify.SpotifyClientImpl

@@ -57,6 +57,7 @@ defmodule Radiopush.DataCase do
 end
 
 defmodule DirectIteration do
+  @moduledoc false
   def list(from \\ "A", count) when is_binary(from) and is_integer(count) and count >= 0 do
     char = :binary.at(from, 0)
     len = byte_size(from)

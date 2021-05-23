@@ -5,7 +5,7 @@ defmodule Radiopush.Channels do
 
   @type permissions :: Radiopush.Channels.Impl.permissions()
 
-  @impl_module Application.get_env(
+  @impl_module Application.compile_env(
                  :radiopush,
                  :channels_aggregate_repository,
                  Radiopush.Channels.PostgresImpl

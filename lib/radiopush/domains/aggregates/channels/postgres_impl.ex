@@ -76,10 +76,10 @@ defmodule Radiopush.Channels.PostgresImpl do
       from c in Channel,
         where: c.id == ^channel_id
 
-    with {1, _} <-
-           Repo.delete_all(query) do
-      {:ok}
-    else
+    case Repo.delete_all(query) do
+      {1, _} ->
+        {:ok}
+
       nil ->
         {:error, "NotFound"}
 
@@ -250,14 +250,20 @@ defmodule Radiopush.Channels.PostgresImpl do
         where: cg.channel_id == ^channel_id and cg.user_id == ^user_id
 
     case Repo.delete_all(query) do
+      {1, _} ->
+        {:ok}
+
       nil ->
         {:error, "NotFound"}
 
       {0, _} ->
         {:error, "NotFound"}
 
-      {1, _} ->
-        {:ok}
+      {:error, error} ->
+        {:error, error}
+
+      {:error} ->
+        {:error}
     end
   end
 
@@ -304,14 +310,20 @@ defmodule Radiopush.Channels.PostgresImpl do
         where: p.id == ^post_id
 
     case Repo.delete_all(query) do
+      {1, _} ->
+        {:ok}
+
       nil ->
         {:error, "NotFound"}
 
       {0, _} ->
         {:error, "NotFound"}
 
-      {1, _} ->
-        {:ok}
+      {:error, error} ->
+        {:error, error}
+
+      {:error} ->
+        {:error}
     end
   end
 
@@ -493,14 +505,20 @@ defmodule Radiopush.Channels.PostgresImpl do
         where: pr.id == ^post_reaction_id
 
     case Repo.delete_all(query) do
+      {1, _} ->
+        {:ok}
+
       nil ->
         {:error, "NotFound"}
 
       {0, _} ->
         {:error, "NotFound"}
 
-      {1, _} ->
-        {:ok}
+      {:error, error} ->
+        {:error, error}
+
+      {:error} ->
+        {:error}
     end
   end
 end

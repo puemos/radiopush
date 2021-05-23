@@ -1,4 +1,5 @@
 defmodule RadiopushWeb.Pages.Home do
+  @moduledoc false
   use RadiopushWeb, :surface_view_helpers
 
   alias Radiopush.{

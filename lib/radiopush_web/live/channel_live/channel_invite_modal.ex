@@ -26,6 +26,7 @@ defmodule RadiopushWeb.Components.ChannelInviteModal do
   data users, :list, default: []
   data search, :string, default: ""
 
+  @impl true
   def render(assigns) do
     ~H"""
     <Modal title="Invite someone">
@@ -52,6 +53,7 @@ defmodule RadiopushWeb.Components.ChannelInviteModal do
     """
   end
 
+  @impl true
   def mount(socket) do
     {:ok, list, _} =
       ListUsersByNickname.run(%Context{}, %ListUsersByNickname.Query{

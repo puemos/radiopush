@@ -1,4 +1,5 @@
 defmodule RadiopushWeb.Pages.Channel do
+  @moduledoc false
   use RadiopushWeb, :surface_view_helpers
 
   alias Radiopush.Channels
@@ -222,7 +223,6 @@ defmodule RadiopushWeb.Pages.Channel do
 
   defp assign_channel_members(socket) do
     channel_id = socket.assigns.channel.id
-    IO.inspect(socket.assigns.members_cursor)
 
     case socket.assigns.members_cursor do
       nil ->

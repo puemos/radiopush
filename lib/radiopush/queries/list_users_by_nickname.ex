@@ -10,10 +10,10 @@ defmodule Radiopush.Qry.ListUsersByNickname do
   alias Radiopush.Accounts
 
   def run(%Context{} = _ctx, %Query{cursor: cursor, nickname: nickname}) do
-    with {:ok, users, metadata} <-
-           Accounts.list_users_by_nickname(nickname, cursor: cursor) do
-      {:ok, users, metadata}
-    else
+    case Accounts.list_users_by_nickname(nickname, cursor: cursor) do
+      {:ok, users, metadata} ->
+        {:ok, users, metadata}
+
       {:error, error} ->
         {:error, error}
 

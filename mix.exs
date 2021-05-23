@@ -58,7 +58,8 @@ defmodule Radiopush.MixProject do
       {:mox, "~> 1.0", only: :test},
       {:faker, "~> 0.16", only: [:test, :dev]},
       {:spotify_ex, "~> 2.2.0"},
-      {:mix_test_watch, "~> 1.0", only: :dev, runtime: false}
+      {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
+      {:credo, "~> 1.5", only: [:dev, :test], runtime: false}
     ]
   end
 
