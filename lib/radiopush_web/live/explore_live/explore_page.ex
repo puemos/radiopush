@@ -78,7 +78,7 @@ defmodule RadiopushWeb.Pages.Explore do
               name: socket.assigns.public_channels_search
             }
           )
-
+        IO.inspect(list)
         socket
         |> assign(public_channels: list)
         |> assign(public_channels_cursor: Map.get(metadata, :after, nil))

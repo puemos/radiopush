@@ -100,15 +100,17 @@ defmodule Radiopush.Channels.PostgresImpl do
 
     from c in Channel,
       left_join: p in Post,
+      as: :post,
       on: c.id == p.channel_id,
       join: cu in ChannelUser,
+      as: :member,
       on: cu.channel_id == c.id,
-      group_by: c.id,
       order_by: [desc: c.inserted_at],
       where: c.private == false and ilike(c.name, ^like_exp),
+      group_by: [c.id],
       select_merge: %{
-        total_posts: count(p.id),
-        total_users: count(cu)
+        total_posts: fragment("count(DISTINCT ?)", p.id),
+        total_users: fragment("count(DISTINCT ?)", cu.user_id)
       }
   end
 
@@ -204,10 +206,10 @@ defmodule Radiopush.Channels.PostgresImpl do
       order_by: [desc: c.inserted_at],
       where: cu.user_id == ^user_id,
       select: c,
-      group_by: c.id,
+      group_by: [c.id],
       select_merge: %{
-        total_posts: count(p.id),
-        total_users: count(cu)
+        total_posts: fragment("count(DISTINCT ?)", p.id),
+        total_users: fragment("count(DISTINCT ?)", cu.user_id)
       }
   end
 
