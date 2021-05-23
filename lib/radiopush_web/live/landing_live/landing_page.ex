@@ -41,11 +41,9 @@ defmodule RadiopushWeb.Pages.Landing do
                       </span>
                     </div>
                   </h1>
-                  <a target="_blank" rel="noopener" href={{"http://elixir-lang.org/"}}>
-                    <p class="sp-underline red mt-2">
-                      Made with Elixir
-                    </p>
-                  </a>
+                  <div class="mt-2">
+                    <a href="https://www.producthunt.com/posts/radiopush?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-radiopush" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=296978&theme=dark" alt="Radiopush - Share and discover songs with friends, colleagues and family | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
+                  </div>
                   <div class="mt-5 sm:mt-8 flex flex-col items-center justify-center lg:items-baseline lg:justify-start space-y-4">
                     <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                       <a href={{Routes.user_authorization_path(@socket, :authorize, "spotify")}}>
