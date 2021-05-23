@@ -4,7 +4,8 @@ defmodule RadiopushWeb.Pages.Landing do
   alias RadiopushWeb.Components.{
     Button,
     PostCard,
-    Page
+    Page,
+    ElixirLogo
   }
 
   data posts, :list
@@ -27,17 +28,25 @@ defmodule RadiopushWeb.Pages.Landing do
                     </div>
                     <div class="">
                       songs, with
-                      <span class="text-opacity-0 text-white bg-clip-text bg-gradient-to-br from-primary-600 to-secondary-600">friends</span>
+                      <span class="text-opacity-0 text-white bg-clip-text bg-gradient-to-tr from-yellow-300 to-spotify-600">
+                        friends
+                      </span>
                     </div>
                     <div class="">
-                      <span class="text-opacity-0 text-white bg-clip-text bg-gradient-to-br from-emerald-600 to-indigo-600">colleagues </span>
+                      <span class="text-opacity-0 text-white bg-clip-text bg-gradient-to-br from-emerald-300 to-indigo-500">
+                        colleagues
+                      </span>
                       and
-                      <span class="text-opacity-0 text-white bg-clip-text bg-gradient-to-br from-red-600 to-amber-600">family</span>
+                      <span class="text-opacity-0 text-white bg-clip-text bg-gradient-to-br from-pink-500 to-amber-300">
+                        family
+                      </span>
                     </div>
                   </h1>
-                  <p class="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-2xl lg:mx-0">
-                    Create private or public channels, share them with anyone
-                  </p>
+                  <a target="_blank" rel="noopener" href={{"http://elixir-lang.org/"}}>
+                    <p class="sp-underline red mt-2">
+                      Made with Elixir
+                    </p>
+                  </a>
                   <div class="mt-5 sm:mt-8 flex flex-col items-center justify-center lg:items-baseline lg:justify-start space-y-4">
                     <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                       <a href={{Routes.user_authorization_path(@socket, :authorize, "spotify")}}>
