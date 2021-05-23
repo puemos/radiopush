@@ -199,10 +199,16 @@ defmodule Radiopush.Channels.PostgresImpl do
     from c in Channel,
       join: cu in ChannelUser,
       on: c.id == cu.channel_id,
+      left_join: p in Post,
+      on: c.id == p.channel_id,
       order_by: [desc: c.inserted_at],
       where: cu.user_id == ^user_id,
       select: c,
-      group_by: c.id
+      group_by: c.id,
+      select_merge: %{
+        total_posts: count(p.id),
+        total_users: count(cu)
+      }
   end
 
   @impl true

@@ -13,15 +13,6 @@ defmodule Radiopush.Channels do
 
   @behaviour Radiopush.Channels.Impl
 
-  # Permissions
-
-  def make_permission_action(:read), do: "read"
-  def make_permission_action(:update), do: "update"
-  def make_permission_action(:delete), do: "delete"
-  def make_permission_action(:post), do: "post"
-  def make_permission_action(:manage), do: "manage"
-  def make_permission_action(_), do: raise("NotFound")
-
   # Channels
 
   defdelegate create_channel(attrs), to: @impl_module

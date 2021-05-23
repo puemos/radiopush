@@ -4,8 +4,7 @@ defmodule RadiopushWeb.Pages.Landing do
   alias RadiopushWeb.Components.{
     Button,
     PostCard,
-    Page,
-    ElixirLogo
+    Page
   }
 
   data posts, :list
