@@ -78,7 +78,7 @@ defmodule RadiopushWeb.Pages.Home do
               <div class="flex flex-col w-full">
                 <h3 class="text-lg font-bold mb-4">Latest public channels</h3>
                 <div id="channels" phx-update="prepend" class="top-6 sticky lg:flex flex-col space-y-4">
-                  <div :for={{channel <- Enum.take(@public_channels, 5)}} class="border rounded-xl border-gray-700 border-opacity-30"  id={{"s-#{channel.id}"}}>
+                  <div :for={{channel <- Enum.take(@public_channels, 4)}} class="border rounded-xl border-gray-700 border-opacity-30"  id={{"s-#{channel.id}"}}>
                     <ChannelRow id={{"channel-#{channel.id}"}} channel={{channel}} join_click="join_channel" leave_click="leave_channel"/>
                   </div>
                 </div>

@@ -54,10 +54,6 @@ defmodule RadiopushWeb.Components.ChannelCard do
           </div>
           <div class="flex flex-row items-center space-x-3">
             <div class="flex flex-row">
-              <Heroicons.Solid.UsersIcon class="h-5 w-5 mr-0.5"/>
-              <p class="text-sm">{{ @channel.total_users }}</p>
-            </div>
-            <div class="flex flex-row">
               <Heroicons.Solid.MusicNoteIcon class="h-5 w-5 mr-0.5"/>
               <p class="text-sm">{{ @channel.total_posts }}</p>
             </div>

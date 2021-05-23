@@ -208,8 +208,7 @@ defmodule Radiopush.Channels.PostgresImpl do
       select: c,
       group_by: [c.id],
       select_merge: %{
-        total_posts: fragment("count(DISTINCT ?)", p.id),
-        total_users: fragment("count(DISTINCT ?)", cu.user_id)
+        total_posts: fragment("count(DISTINCT ?)", p.id)
       }
   end
 

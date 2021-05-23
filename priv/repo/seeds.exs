@@ -8,7 +8,8 @@ alias Radiopush.Context
     %Context{},
     %CreateUser.Cmd{
       nickname: Faker.Internet.user_name(),
-      email: Faker.Internet.email()
+      email: Faker.Internet.email(),
+      spotify_id: Faker.Internet.user_name()
     }
   )
 
@@ -19,7 +20,7 @@ context =
   })
 
 _ =
-  1..30
+  1..10
   |> Enum.map(fn _ ->
     CreateChannel.run(
       context,
@@ -27,6 +28,19 @@ _ =
         name: Faker.Superhero.name() |> String.replace(" ", ""),
         private: false,
         description: Faker.Lorem.sentence(5..8)
+      }
+    )
+  end)
+
+_ =
+  1..10
+  |> Enum.map(fn _ ->
+    CreateUser.run(
+      %Context{},
+      %CreateUser.Cmd{
+        nickname: Faker.Internet.user_name(),
+        email: Faker.Internet.email(),
+        spotify_id: Faker.Internet.user_name()
       }
     )
   end)
