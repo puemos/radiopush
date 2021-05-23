@@ -23,20 +23,21 @@ defmodule RadiopushWeb.Components.ChannelRow do
     ~H"""
     <Card>
       <div id={{@id}} class={{"flex flex-row justify-between flex-initial w-full min-h-[4rem]"}}>
-          <div class="flex flex-col justify-start items-start pr-2 space-y-2">
+          <div class="flex flex-col justify-between items-start pr-2 space-y-2">
             <LiveRedirect class="text-sm font-bold text-gray-300 sp-underline primary hover:text-gray-100" to="/c/{{@channel.name}}">
               {{"#{@channel.name}"}}
             </LiveRedirect>
-
-            <div class={{"text-sm text-gray-400 line-clamp-2 overflow-ellipsis overflow-hidden"}}>
-              {{ @channel.description }}
-            </div>
-            <div class="flex flex-row space-x-2">
-              <div class={{"text-xs text-gray-200 bg-gray-600 rounded-lg px-2"}}>
-                Posts {{ @channel.total_posts }}
+            <div class="flex flex-col space-y-2">
+              <div class={{"text-sm text-gray-400 line-clamp-2 overflow-ellipsis overflow-hidden"}}>
+                {{ @channel.description }}
               </div>
-              <div class={{"text-xs text-gray-200 bg-gray-600 rounded-lg px-2"}}>
-                Members {{ @channel.total_users }}
+              <div class="flex flex-row space-x-2">
+                <div class={{"text-xs text-gray-200 bg-gray-600 rounded-lg px-2"}}>
+                  Posts {{ @channel.total_posts }}
+                </div>
+                <div class={{"text-xs text-gray-200 bg-gray-600 rounded-lg px-2"}}>
+                  Members {{ @channel.total_users }}
+                </div>
               </div>
             </div>
           </div>
