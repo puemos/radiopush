@@ -89,7 +89,7 @@ defmodule Radiopush.Accounts.PostgresImpl do
         after: cursor,
         sort_direction: :asc,
         cursor_fields: [:nickname],
-        limit: 50
+        limit: 100
       )
 
     metadata = Infra.PageMetadata.new(metadata)

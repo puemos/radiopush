@@ -222,6 +222,7 @@ defmodule RadiopushWeb.Pages.Channel do
 
   defp assign_channel_members(socket) do
     channel_id = socket.assigns.channel.id
+    IO.inspect(socket.assigns.members_cursor)
 
     case socket.assigns.members_cursor do
       nil ->
@@ -357,7 +358,7 @@ defmodule RadiopushWeb.Pages.Channel do
       {:ok} ->
         socket =
           socket
-          |> assign_open_invitation(false)
+          |> assign(members_cursor: :init)
           |> assign_channel_members()
           |> put_flash(:info, "You invited #{user_nickname}")
 

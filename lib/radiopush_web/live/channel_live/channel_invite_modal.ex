@@ -61,6 +61,8 @@ defmodule RadiopushWeb.Components.ChannelInviteModal do
     {:ok, assign(socket, users: list)}
   end
 
+  @impl true
+
   def handle_event("keyup", %{"value" => value}, socket) do
     {:ok, list, _} =
       ListUsersByNickname.run(%Context{}, %ListUsersByNickname.Query{
