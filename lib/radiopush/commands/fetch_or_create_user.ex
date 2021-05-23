@@ -8,6 +8,7 @@ defmodule Radiopush.Cmd.FetchOrCreateUser do
 
   alias Radiopush.Context
   alias Radiopush.Accounts
+  alias Radiopush.Channels
   alias Radiopush.Spotify
 
   defp get_user_by_profile(profile) do
@@ -36,16 +37,28 @@ defmodule Radiopush.Cmd.FetchOrCreateUser do
           })
 
         {:error, _} ->
-          Accounts.create_user(%{
-            email: profile.email,
-            nickname: profile.nickname,
-            image: profile.image,
-            spotify_id: profile.id
-          })
+          {:ok, user} =
+            Accounts.create_user(%{
+              email: profile.email,
+              nickname: profile.nickname,
+              image: profile.image,
+              spotify_id: profile.id
+            })
+
+          add_to_all(user)
       end
     else
       {:error, error} ->
         {:error, error}
+    end
+  end
+
+  defp add_to_all(user) do
+    with {:ok, channel} <- Channels.get_channel_by_name("All"),
+         {:ok} <- Channels.add_user_to_channel(channel.id, user.id) do
+      {:ok, user}
+    else
+      {:error, _error} -> {:ok, user}
     end
   end
 end
