@@ -41,10 +41,7 @@ defmodule RadiopushWeb.Pages.Landing do
                       </span>
                     </div>
                   </h1>
-                  <div class="mt-2">
-                    <a href="https://www.producthunt.com/posts/radiopush?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-radiopush" target="_blank"><img src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=296978&theme=dark" alt="Radiopush - Share and discover songs with friends, colleagues and family | Product Hunt" style="width: 250px; height: 54px;" width="250" height="54" /></a>
-                  </div>
-                  <div class="mt-5 sm:mt-8 flex flex-col items-center justify-center lg:items-baseline lg:justify-start space-y-4">
+                  <div class="mt-5 sm:mt-16 flex flex-col items-center justify-center lg:items-baseline lg:justify-start space-y-4">
                     <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                       <a href={{Routes.user_authorization_path(@socket, :authorize, "spotify")}}>
                         <Button class="px-6 bg-spotify-600">
@@ -63,7 +60,7 @@ defmodule RadiopushWeb.Pages.Landing do
                         </Button>
                       </a>
                     </div>
-                    <p>By continuing, you agree to Radiopush.app's <a class="underline hover:text-blue-400" href="/legal">Terms & Conditions</a> and <a class="underline hover:text-blue-400" href="/legal">Privacy Policy</a></p>
+                    <p class="w-full md:w-96">By continuing, you agree to Radiopush.app's <a class="underline hover:text-blue-400" href="/legal">Terms & Conditions</a> and <a class="underline hover:text-blue-400" href="/legal">Privacy Policy</a></p>
                   </div>
                 </div>
               </div>
