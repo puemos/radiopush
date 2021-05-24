@@ -1,4 +1,7 @@
 defmodule RadiopushWeb.Components.PostCard do
+  @moduledoc """
+  Post card
+  """
   use Surface.LiveComponent
 
   alias Surface.Components.{
@@ -18,7 +21,7 @@ defmodule RadiopushWeb.Components.PostCard do
   prop post, :map, required: true
 
   @doc "The channel of the post data"
-  prop channel, :map, required: true
+  prop channel, :map, default: nil
 
   data open_emoji, :boolean, default: false
   data play_status, :atom, values: [:idle, :playing], default: :idle
@@ -29,10 +32,10 @@ defmodule RadiopushWeb.Components.PostCard do
     <Card>
       <div id={{@id}} class="flex flex-col p-1 h-full w-full">
         <div class="flex flex-row flex-wrap items-center mb-2 justify-start">
-          <LiveRedirect class="text-sm font-bold text-gray-300 sp-underline primary hover:text-gray-100" to="/c/{{@channel.name}}">
+          <LiveRedirect :if={{@channel}} class="text-sm font-bold text-gray-300 sp-underline primary hover:text-gray-100" to="/c/{{@channel.name}}">
             {{"#{@channel.name}"}}
           </LiveRedirect>
-          <div class="text-gray-500 text-xs">&nbsp;•&nbsp;</div>
+          <div :if={{@channel}} class="text-gray-500 text-xs">&nbsp;•&nbsp;</div>
           <div class="text-gray-500 text-xs">Posted by @{{@nickname}}</div>
           <div class="text-gray-500 text-xs">&nbsp;•&nbsp;</div>
           <div  class="text-gray-600 text-xs font-semibold"

@@ -51,7 +51,7 @@ defmodule Radiopush.ListUsersByChannelTest do
           %CreateChannel.Cmd{name: "some_name"}
         )
 
-      letters_list("a", 60)
+      letters_list("a", 510)
       |> Enum.map(
         &CreateUser.run(
           %Context{},
@@ -80,7 +80,7 @@ defmodule Radiopush.ListUsersByChannelTest do
           }
         )
 
-      assert Enum.count(list) == 50
+      assert Enum.count(list) == 500
     end
 
     test "should get next 50 users" do
@@ -100,7 +100,7 @@ defmodule Radiopush.ListUsersByChannelTest do
           }
         )
 
-      letters_list("a", 60)
+      letters_list("a", 510)
       |> Enum.map(
         &CreateUser.run(
           %Context{},
@@ -138,7 +138,7 @@ defmodule Radiopush.ListUsersByChannelTest do
           }
         )
 
-      assert Enum.count(list_1) == 50
+      assert Enum.count(list_1) == 500
       assert Enum.count(list_2) == 11
     end
   end

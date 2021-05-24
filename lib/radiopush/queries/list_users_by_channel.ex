@@ -1,4 +1,7 @@
 defmodule Radiopush.Qry.ListUsersByChannel do
+  @moduledoc """
+  List all the user of a given channel
+  """
   use TypedStruct
 
   typedstruct module: Query do

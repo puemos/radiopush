@@ -102,11 +102,11 @@ defmodule RadiopushWeb.Pages.Channel do
             <div class="h-6"></div>
             <div :if={{ Enum.count(@new_posts) > 0 }} id="NewPosts" phx-update="prepend" class="grid grid-cols-1 md:grid-cols-1 gap-4 w-full mb-4">
               <PostCard :for={{ post <- @new_posts }} id={{"post-#{post.id}"}} nickname={{post.user.nickname}}
-                post={{post}} channel={{@channel}}/>
+                post={{post}}/>
             </div>
             <div id="OldPosts"  phx-update="append" class="grid grid-cols-1 md:grid-cols-1 gap-4 w-full mb-4">
               <PostCard :for={{ post <- @posts }} id={{"post-#{post.id}"}} nickname={{post.user.nickname}}
-                post={{post}} channel={{@channel}}/>
+                post={{post}}/>
             </div>
             <div class="h-20"></div>
           </div>

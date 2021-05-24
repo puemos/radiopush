@@ -189,7 +189,7 @@ defmodule Radiopush.Channels.PostgresImpl do
         after: cursor,
         sort_direction: :desc,
         cursor_fields: [:inserted_at],
-        limit: 50
+        limit: 500
       )
 
     metadata = Infra.PageMetadata.new(metadata)
