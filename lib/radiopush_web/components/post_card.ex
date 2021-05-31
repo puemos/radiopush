@@ -96,7 +96,7 @@ defmodule RadiopushWeb.Components.PostCard do
 
           <div class="flex flex-row flex-wrap items-center mt-2 space-x-1 space-y-1">
             <button :on-click="open_emoji" class="pointer h-8 w-8 p-1.5 text-sm bg-gray-700 relative rounded-full flex flex-row items-center justify-center shadow-xl focus:outline-none">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-full">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
             </button>
