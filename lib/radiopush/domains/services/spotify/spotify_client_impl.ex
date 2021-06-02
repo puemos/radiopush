@@ -92,6 +92,8 @@ defmodule Radiopush.Spotify.SpotifyClientImpl do
             ]
           },
           artists: [%{"name" => musician} | _],
+          duration_ms: duration_ms,
+          explicit: explicit,
           id: id,
           name: name,
           preview_url: audio_preview
@@ -105,7 +107,9 @@ defmodule Radiopush.Spotify.SpotifyClientImpl do
             musician: musician,
             url: "https://open.spotify.com/track/#{id}",
             image: image,
-            audio_preview: audio_preview
+            audio_preview: audio_preview,
+            duration_ms: duration_ms,
+            explicit: explicit
           })
 
         {:ok, song}
