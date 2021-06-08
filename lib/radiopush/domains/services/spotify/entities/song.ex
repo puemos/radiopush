@@ -11,7 +11,8 @@ defmodule Radiopush.Spotify.Song do
     field :image, String.t()
     field :audio_preview, String.t()
     field :explicit, boolean(), default: false
-    field :duration_ms, non_neg_integer(), default: 0
+    field :tempo, float(), default: 0.0
+    field :genres, [String.t()]
   end
 
   def new(item) do
@@ -24,7 +25,8 @@ defmodule Radiopush.Spotify.Song do
       image: item.image,
       audio_preview: item.audio_preview,
       explicit: item.explicit,
-      duration_ms: item.duration_ms
+      tempo: item.tempo,
+      genres: item.genres
     }
   end
 end

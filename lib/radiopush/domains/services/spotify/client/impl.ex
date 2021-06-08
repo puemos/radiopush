@@ -20,4 +20,7 @@ defmodule Radiopush.Spotify.Client.Impl do
 
   @callback get_song(credentials :: map(), song_id :: String.t()) ::
               {:ok, map()} | error()
+
+  @callback get_audio_features(credentials :: map(), song_id :: String.t()) ::
+              {:ok, map()} | error()
 end
