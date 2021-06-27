@@ -51,4 +51,8 @@ defmodule Radiopush.Spotify.Client.SpotifyExImpl do
   @impl true
   def get_song(credentials, song_id),
     do: run(&Spotify.Track.get_track/2, credentials, [song_id])
+
+  @impl true
+  def get_audio_features(credentials, song_id),
+    do: run(&Spotify.Track.audio_features/2, credentials, [song_id])
 end

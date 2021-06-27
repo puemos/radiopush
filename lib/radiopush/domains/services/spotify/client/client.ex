@@ -23,6 +23,9 @@ defmodule Radiopush.Spotify.Client do
   @impl true
   def get_song(credentials, song_id), do: client().get_song(credentials, song_id)
 
+  @impl true
+  def get_audio_features(credentials, song_id), do: client().get_audio_features(credentials, song_id)
+
   defp client() do
     Application.get_env(:radiopush, :spotify_client, Radiopush.Spotify.Client.SpotifyExImpl)
   end

@@ -17,7 +17,10 @@ defmodule Radiopush.Channels.Post do
           url: String.t(),
           image: String.t(),
           audio_preview: String.t(),
-          reactions: nil | list(PostReaction.t())
+          reactions: nil | list(PostReaction.t()),
+          explicit: boolean(),
+          tempo: float(),
+          genres: [String.t()]
         }
 
   schema "posts" do
@@ -32,12 +35,15 @@ defmodule Radiopush.Channels.Post do
     field :url, :string
     field :image, :string
     field :audio_preview, :string
+    field :explicit, :boolean, default: false
+    field :tempo, :float, default: 0.0
+    field :genres, {:array, :string}
 
     timestamps()
   end
 
   @required_fields [:type, :user_id, :channel_id, :url, :musician]
-  @optional_fields [:image, :audio_preview, :song, :album]
+  @optional_fields [:image, :audio_preview, :song, :album, :explicit, :tempo, :genres]
 
   @doc false
   def changeset(post, attrs) do
