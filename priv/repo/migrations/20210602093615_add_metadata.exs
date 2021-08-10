@@ -5,7 +5,7 @@ defmodule Radiopush.Repo.Migrations.AddMetadata do
     alter table(:posts) do
       add :explicit, :boolean, null: false, default: false
       add :tempo, :float, null: false, default: 0.0
-      add :genres, {:array, :string}
+      add :duration_ms, :float, null: false, default: 0.0
     end
   end
 
@@ -13,7 +13,7 @@ defmodule Radiopush.Repo.Migrations.AddMetadata do
     alter table(:posts) do
       remove :explicit
       remove :tempo
-      remove :genres
+      remove :duration_ms
     end
   end
 end

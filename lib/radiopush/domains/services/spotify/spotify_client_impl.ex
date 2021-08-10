@@ -95,7 +95,8 @@ defmodule Radiopush.Spotify.SpotifyClientImpl do
         explicit: explicit,
         id: id,
         name: name,
-        preview_url: audio_preview
+        preview_url: audio_preview,
+        duration_ms: duration_ms
       } = song
 
       %{tempo: tempo} = features
@@ -111,7 +112,7 @@ defmodule Radiopush.Spotify.SpotifyClientImpl do
           audio_preview: audio_preview,
           explicit: explicit,
           tempo: tempo,
-          genres: []
+          duration_ms: duration_ms
         })
 
       {:ok, song}
