@@ -59,6 +59,13 @@ defmodule RadiopushWeb.Components.PostCard do
                 </a>
                 <div class="font-normal"> by {{@post.musician}}</div>
                 <div class="text-gray-500">{{@post.album}}</div>
+                <div class="mt-auto">
+                  <span :if={{@post.explicit}} title="Explicit" class="inline-flex justify-center items-center bg-gray-500 rounded-sm">
+                    <span aria-label="Explicit" class="text-xs mx-1 text-black">E</span>
+                  </span>
+                  <span class="text-xs text-gray-400">{{format_duration(@post.duration_ms)}}</span>
+                  <span class="text-xs text-gray-200 bg-gray-600 rounded-lg px-2">{{format_tempo(@post.tempo)}}</span>
+                </div>
               </div>
               <div :if={{@post.type == :album}} class="flex-1 flex flex-col ml-3">
                 <a target="_blank" rel="noopener" href={{@post.url}} class="hover:text-primary-500 text-white font-semibold">
@@ -223,4 +230,18 @@ defmodule RadiopushWeb.Components.PostCard do
       true -> "#{floor(diff)}s"
     end
   end
+
+  defp format_duration(duration_ms) do
+    duration = trunc(duration_ms)
+
+    minutes = duration / 60_000
+    seconds = rem(duration, 60_000) / 1000
+
+    cond do
+      seconds < 10 ->  "#{floor(minutes)}:0#{floor(seconds)}"
+      true -> "#{floor(minutes)}:#{floor(seconds)}"
+    end
+  end
+
+  defp format_tempo(tempo), do: "#{floor(tempo)} bpm"
 end
