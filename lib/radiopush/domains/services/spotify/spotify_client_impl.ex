@@ -81,35 +81,42 @@ defmodule Radiopush.Spotify.SpotifyClientImpl do
   # Songs
 
   defp get_song(credentials, song_id) do
-    case Client.get_song(credentials, song_id) do
-      {:ok, details} ->
-        %{
-          album: %{
-            "name" => album,
-            "images" => [
-              %{"url" => image}
-              | _
-            ]
-          },
-          artists: [%{"name" => musician} | _],
-          id: id,
-          name: name,
-          preview_url: audio_preview
-        } = details
+    with {:ok, song} <- Client.get_song(credentials, song_id),
+         {:ok, features} <- Client.get_audio_features(credentials, song_id) do
+      %{
+        album: %{
+          "name" => album,
+          "images" => [
+            %{"url" => image}
+            | _
+          ]
+        },
+        artists: [%{"name" => musician} | _],
+        explicit: explicit,
+        id: id,
+        name: name,
+        preview_url: audio_preview,
+        duration_ms: duration_ms
+      } = song
 
-        song =
-          Song.new(%{
-            type: :song,
-            song: name,
-            album: album,
-            musician: musician,
-            url: "https://open.spotify.com/track/#{id}",
-            image: image,
-            audio_preview: audio_preview
-          })
+      %{tempo: tempo} = features
 
-        {:ok, song}
+      song =
+        Song.new(%{
+          type: :song,
+          song: name,
+          album: album,
+          musician: musician,
+          url: "https://open.spotify.com/track/#{id}",
+          image: image,
+          audio_preview: audio_preview,
+          explicit: explicit,
+          tempo: tempo,
+          duration_ms: duration_ms
+        })
 
+      {:ok, song}
+    else
       {:error, error} ->
         {:error, error}
     end

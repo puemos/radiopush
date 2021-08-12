@@ -199,6 +199,29 @@ defmodule Radiopush.SpotifyExFixtures do
     }
   end
 
+  def audio_features() do
+    %{
+      danceability: 0.709,
+      energy: 0.738,
+      key: 7,
+      loudness: -12.019,
+      mode: 1,
+      speechiness: 0.048,
+      acousticness: 0.00236,
+      instrumentalness: 0.795,
+      liveness: 0.073,
+      valence: 0.671,
+      type: "audio_features",
+      id: "2R6go62CuxqqX0w1TgXxes",
+      uri: "spotify:track:2R6go62CuxqqX0w1TgXxes",
+      tempo: 96.24,
+      track_href: "https://api.spotify.com/v1/tracks/2R6go62CuxqqX0w1TgXxes",
+      analysis_url: "https://api.spotify.com/v1/audio-analysis/2R6go62CuxqqX0w1TgXxes",
+      duration_ms: 216693,
+      time_signature: 4
+    }
+  end
+
   def album() do
     %{
       album_type: "album",

@@ -17,6 +17,10 @@ defmodule Radiopush.CreatePostTest do
         {:ok, SpotifyExFixtures.track()}
       end)
 
+      stub(Radiopush.Spotify.ClientMock, :get_audio_features, fn _, _ ->
+        {:ok, SpotifyExFixtures.audio_features()}
+      end)
+
       {:ok, creator} =
         CreateUser.run(
           %Context{},

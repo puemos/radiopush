@@ -116,6 +116,9 @@ defmodule RadiopushWeb.Pages.Landing do
         updated_at: ~N[2021-03-14 09:33:58],
         url: "https://open.spotify.com/track/6cBhKpoE1GNqEtwqGScyBy",
         user_id: 12,
+        explicit: false,
+        tempo: 109.0,
+        duration_ms: 251000.0,
         user: %{
           nickname: "Dwight Schrute"
         },
@@ -150,6 +153,9 @@ defmodule RadiopushWeb.Pages.Landing do
         updated_at: ~N[2021-03-14 09:33:37],
         url: "https://open.spotify.com/track/1rJaiv1oQkEL0DdBoKarPA",
         user_id: 12,
+        explicit: false,
+        tempo: 112.0,
+        duration_ms: 214000.0,
         user: %{
           nickname: "Erlich Bachman"
         },
@@ -181,6 +187,9 @@ defmodule RadiopushWeb.Pages.Landing do
         updated_at: ~N[2021-03-14 09:33:12],
         url: "https://open.spotify.com/track/0jE2HYDc22ujaaXeWfgRx3",
         user_id: 12,
+        explicit: false,
+        tempo: 121.0,
+        duration_ms: 286000.0,
         user: %{
           nickname: "Gob Bluth"
         },
@@ -210,6 +219,9 @@ defmodule RadiopushWeb.Pages.Landing do
         updated_at: ~N[2021-03-14 09:32:49],
         url: "https://open.spotify.com/track/4QbpagjMCqSECj6IimTL2n",
         user_id: 12,
+        explicit: false,
+        tempo: 80.0,
+        duration_ms: 365000.0,
         user: %{
           nickname: "Jimmy Conway"
         },
