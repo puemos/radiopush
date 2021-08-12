@@ -63,8 +63,8 @@ defmodule RadiopushWeb.Components.PostCard do
                   <span :if={{@post.explicit}} title="Explicit" class="inline-flex justify-center items-center bg-gray-500 rounded-sm">
                     <span aria-label="Explicit" class="text-xs mx-1 text-black">E</span>
                   </span>
-                  <span class="text-xs text-gray-400">{{format_duration(@post.duration_ms)}}</span>
-                  <span class="text-xs text-gray-200 bg-gray-600 rounded-lg px-2">{{format_tempo(@post.tempo)}}</span>
+                  <span :if={{@post.duration_ms}} class="text-xs text-gray-400">{{format_duration(@post.duration_ms)}}</span>
+                  <span :if={{@post.tempo}} class="text-xs text-gray-200 bg-gray-600 rounded-lg px-2">{{format_tempo(@post.tempo)}}</span>
                 </div>
               </div>
               <div :if={{@post.type == :album}} class="flex-1 flex flex-col ml-3">
