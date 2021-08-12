@@ -238,8 +238,8 @@ defmodule RadiopushWeb.Components.PostCard do
     seconds = rem(duration, 60_000) / 1000
 
     cond do
-      seconds < 10 ->  "#{floor(minutes)}:0#{floor(seconds)}"
-      true -> "#{floor(minutes)}:#{floor(seconds)}"
+      seconds < 10 ->  "#{floor(minutes)}:0#{floor(seconds)}m"
+      true -> "#{floor(minutes)}:#{floor(seconds)}m"
     end
   end
 
