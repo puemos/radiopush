@@ -19,6 +19,10 @@ defmodule Radiopush.GetFeedTest do
         {:ok, SpotifyExFixtures.track()}
       end)
 
+      stub(Radiopush.Spotify.ClientMock, :get_audio_features, fn _, _ ->
+        {:ok, SpotifyExFixtures.audio_features()}
+      end)
+
       {:ok, creator} =
         CreateUser.run(
           %Context{},
@@ -58,6 +62,10 @@ defmodule Radiopush.GetFeedTest do
     test "should get only 20 first posts" do
       stub(Radiopush.Spotify.ClientMock, :get_song, fn _, _ ->
         {:ok, SpotifyExFixtures.track()}
+      end)
+
+      stub(Radiopush.Spotify.ClientMock, :get_audio_features, fn _, _ ->
+        {:ok, SpotifyExFixtures.audio_features()}
       end)
 
       {:ok, creator} =
@@ -115,6 +123,10 @@ defmodule Radiopush.GetFeedTest do
     test "should get next 20 posts" do
       stub(Radiopush.Spotify.ClientMock, :get_song, fn _, _ ->
         {:ok, SpotifyExFixtures.track()}
+      end)
+
+      stub(Radiopush.Spotify.ClientMock, :get_audio_features, fn _, _ ->
+        {:ok, SpotifyExFixtures.audio_features()}
       end)
 
       {:ok, creator} =
@@ -181,6 +193,10 @@ defmodule Radiopush.GetFeedTest do
     test "should get only posts created after" do
       stub(Radiopush.Spotify.ClientMock, :get_song, fn _, _ ->
         {:ok, SpotifyExFixtures.track()}
+      end)
+
+      stub(Radiopush.Spotify.ClientMock, :get_audio_features, fn _, _ ->
+        {:ok, SpotifyExFixtures.audio_features()}
       end)
 
       {:ok, creator} =

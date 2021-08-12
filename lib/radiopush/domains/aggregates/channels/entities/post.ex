@@ -19,7 +19,8 @@ defmodule Radiopush.Channels.Post do
           audio_preview: String.t(),
           reactions: nil | list(PostReaction.t()),
           explicit: boolean(),
-          tempo: float()
+          tempo: float(),
+          duration_ms: float()
         }
 
   schema "posts" do
