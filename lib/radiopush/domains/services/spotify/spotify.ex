@@ -8,7 +8,6 @@ defmodule Radiopush.Spotify do
                  Radiopush.Spotify.SpotifyClientImpl
                )
 
-
   @behaviour Radiopush.Spotify.Impl
 
   defdelegate get_details_from_url(credentials, url), to: @impl_module

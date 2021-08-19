@@ -34,31 +34,40 @@ defmodule RadiopushWeb.Components.ChannelEditDetailsModal do
   data delete_verification, :string, default: ""
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <Modal title="Settings">
-      <Form for={{ @changeset }} submit={{@submit}} opts={{ class: "h-full" }}>
-       <div class="h-full flex flex-col">
-          <Field name={{:description}} class="w-full">
-            <TextArea rows="4" opts={{ placeholder: "Channel description", style: "resize: none" }}
-                class="input w-full my-1"/>
+      <Form for={@changeset} submit={@submit} opts={class: "h-full"}>
+        <div class="h-full flex flex-col">
+          <Field name={:description} class="w-full">
+            <TextArea
+              rows="4"
+              opts={placeholder: "Channel description", style: "resize: none"}
+              class="input w-full my-1"
+            />
           </Field>
           <div class="flex flex-row justify-between space-x-2">
-            <Field name={{:private}} class="flex items-center my-1 flex items-center justify-between py-2 w-full">
-                <span class="text-sm ml-1">Make private</span>
-                <Checkbox
-                class="h-5 w-5 text-primary-500 focus:ring-primary-500 border-gray-300 rounded" />
+            <Field
+              name={:private}
+              class="flex items-center my-1 flex items-center justify-between py-2 w-full"
+            >
+              <span class="text-sm ml-1">Make private</span>
+              <Checkbox class="h-5 w-5 text-primary-500 focus:ring-primary-500 border-gray-300 rounded" />
             </Field>
           </div>
-          <div class="flex-1"></div>
+          <div class="flex-1" />
           <div class="flex flex-row mb-2">
-            <TextInput value={{ @delete_verification }} keyup="keyup" opts={{ placeholder: "Type delete to verify", autocomplete: "off" }}
-            class="input border-2 ring-red-500 w-full mr-2 focus:ring-red-500" />
-            <Button disabled={{ @delete_verification != "Delete" }} click={{@delete}} color="danger">Delete</Button>
+            <TextInput
+              value={@delete_verification}
+              keyup="keyup"
+              opts={placeholder: "Type delete to verify", autocomplete: "off"}
+              class="input border-2 ring-red-500 w-full mr-2 focus:ring-red-500"
+            />
+            <Button disabled={@delete_verification != "Delete"} click={@delete} color="danger">Delete</Button>
           </div>
           <ModalActions>
             <div class="flex flex-row w-full space-x-2">
-              <Button click={{@close}} expand={{true}} color="secondary">Close</Button>
-              <Button type="submit" expand={{true}} color="primary">Update</Button>
+              <Button click={@close} expand color="secondary">Close</Button>
+              <Button type="submit" expand color="primary">Update</Button>
             </div>
           </ModalActions>
         </div>

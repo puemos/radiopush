@@ -9,14 +9,22 @@ defmodule RadiopushWeb.Components.EmojiPicker do
   data search, :string, default: ""
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="w-64 bg-gray-700 rounded-xl shadow-xl p-4">
-
-      <TextInput value={{ @search }} keyup="keyup" opts={{ placeholder: "Search...", "phx-debounce": "200" }}
-       class="flex-1 px-4 py-3 border-none text-sm font-medium placeholder-gray-400 text-white bg-gray-600 rounded-xl group outline-none focus:outline-none focus:ring-0 w-full" />
+      <TextInput
+        value={@search}
+        keyup="keyup"
+        opts={placeholder: "Search...", "phx-debounce": "200"}
+        class="flex-1 px-4 py-3 border-none text-sm font-medium placeholder-gray-400 text-white bg-gray-600 rounded-xl group outline-none focus:outline-none focus:ring-0 w-full"
+      />
       <div class="mt-2 max-h-48 overflow-y-scroll grid grid-cols-7 grid-rows-7">
-        <button :on-click={{@click}} phx-value-emoji={{name}} class="w-6 p-1 hover:bg-gray-800" :for={{ {name, img} <- @emojis}}>
-          <img title={{name}} src={{img}} />
+        <button
+          :on-click={@click}
+          phx-value-emoji={name}
+          class="w-6 p-1 hover:bg-gray-800"
+          :for={{name, img} <- @emojis}
+        >
+          <img title={name} src={img}>
         </button>
       </div>
     </div>

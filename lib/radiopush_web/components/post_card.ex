@@ -28,64 +28,91 @@ defmodule RadiopushWeb.Components.PostCard do
 
   @impl true
   def render(assigns) do
-    ~H"""
+    ~F"""
     <Card>
-      <div id={{@id}} class="flex flex-col p-1 h-full w-full">
+      <div id={@id} class="flex flex-col p-1 h-full w-full">
         <div class="flex flex-row flex-wrap items-center mb-2 justify-start">
-          <LiveRedirect :if={{@channel}} class="text-sm font-bold text-gray-300 sp-underline primary hover:text-gray-100" to="/c/{{@channel.name}}">
-            {{"#{@channel.name}"}}
+          <LiveRedirect
+            :if={@channel}
+            class="text-sm font-bold text-gray-300 sp-underline primary hover:text-gray-100"
+            to={"/c/#{@channel.name}"}
+          >
+            {"#{@channel.name}"}
           </LiveRedirect>
-          <div :if={{@channel}} class="text-gray-500 text-xs">&nbsp;•&nbsp;</div>
-          <div class="text-gray-500 text-xs">Posted by @{{@nickname}}</div>
+          <div :if={@channel} class="text-gray-500 text-xs">&nbsp;•&nbsp;</div>
+          <div class="text-gray-500 text-xs">Posted by @{@nickname}</div>
           <div class="text-gray-500 text-xs">&nbsp;•&nbsp;</div>
-          <div  class="text-gray-600 text-xs font-semibold"
-                style="line-height: 17px;">
-                {{format_time(@post.inserted_at)}}
+          <div class="text-gray-600 text-xs font-semibold" style="line-height: 17px;">
+            {format_time(@post.inserted_at)}
           </div>
         </div>
 
         <div class="flex flex-col justify-between w-full">
           <div class="flex flex-row w-full">
             <div class="w-20 h-20 md:w-32 md:h-32">
-              <img src="{{@post.image}}"/>
+              <img src={@post.image}>
             </div>
             <div class="flex-1 flex flex-row justify-between">
-              <div :if={{@post.type == :song}} class="flex-1 flex flex-col ml-3">
-                <a target="_blank" rel="noopener" href={{@post.url}} class="hover:text-primary-500 text-white font-semibold">
+              <div :if={@post.type == :song} class="flex-1 flex flex-col ml-3">
+                <a
+                  target="_blank"
+                  rel="noopener"
+                  href={@post.url}
+                  class="hover:text-primary-500 text-white font-semibold"
+                >
                   <div class="flex flex-row space-x-2 items-start">
-                    <img class="w-4 h-4 mt-1" src="/images/Spotify_Icon_CMYK_White.png"/>
-                    <div>{{@post.song}}</div>
+                    <img class="w-4 h-4 mt-1" src="/images/Spotify_Icon_CMYK_White.png">
+                    <div>{@post.song}</div>
                   </div>
                 </a>
-                <div class="font-normal"> by {{@post.musician}}</div>
-                <div class="text-gray-500">{{@post.album}}</div>
+                <div class="font-normal">
+                  by {@post.musician}</div>
+                <div class="text-gray-500">{@post.album}</div>
                 <div class="mt-auto">
-                  <span :if={{@post.explicit}} title="Explicit" class="inline-flex justify-center items-center bg-gray-500 rounded-sm">
+                  <span
+                    :if={@post.explicit}
+                    title="Explicit"
+                    class="inline-flex justify-center items-center bg-gray-500 rounded-sm"
+                  >
                     <span aria-label="Explicit" class="text-xs mx-1 text-black">E</span>
                   </span>
-                  <span :if={{@post.duration_ms != 0.0}} class="text-xs text-gray-400">{{format_duration(@post.duration_ms)}}</span>
-                  <span :if={{@post.tempo != 0.0}} class="text-xs text-gray-200 bg-gray-600 rounded-lg px-2">{{format_tempo(@post.tempo)}}</span>
+                  <span :if={@post.duration_ms != 0.0} class="text-xs text-gray-400">{format_duration(@post.duration_ms)}</span>
+                  <span :if={@post.tempo != 0.0} class="text-xs text-gray-200 bg-gray-600 rounded-lg px-2">{format_tempo(@post.tempo)}</span>
                 </div>
               </div>
               <div class="flex flex-col ml-3">
-                <button :if={{@post.audio_preview}}
-                        :on-click="play"
-                        phx-hook="Play"
-                        id={{"play-#{@id}"}}
-                        data-play_status={{@play_status}}
-                        data-post_id={{@id}}
-                        data-title={{@post.song}}
-                        data-artist={{@post.musician}}
-                        data-album={{@post.album}}
-                        data-artwork={{@post.image}}
-                        data-audio_preview={{@post.audio_preview}}
-                        class="transition duration-400 ease-in-out shadow-xl transform hover:scale-110 w-12 h-12 flex justify-center items-center bg-gradient-to-br from-primary-600 to-secondary-600 text-white rounded-full focus:ring-0 focus:outline-none">
-                  <svg :if={{@play_status == :idle}} class="w-10 h-10 ml-1" width="512" height="512" viewBox="0 0 512 512">
-                    <path d="M152.443 136.417l207.114 119.573-207.114 119.593z" fill="currentColor"/>
+                <button
+                  :if={@post.audio_preview}
+                  :on-click="play"
+                  phx-hook="Play"
+                  id={"play-#{@id}"}
+                  data-play_status={@play_status}
+                  data-post_id={@id}
+                  data-title={@post.song}
+                  data-artist={@post.musician}
+                  data-album={@post.album}
+                  data-artwork={@post.image}
+                  data-audio_preview={@post.audio_preview}
+                  class="transition duration-400 ease-in-out shadow-xl transform hover:scale-110 w-12 h-12 flex justify-center items-center bg-gradient-to-br from-primary-600 to-secondary-600 text-white rounded-full focus:ring-0 focus:outline-none"
+                >
+                  <svg
+                    :if={@play_status == :idle}
+                    class="w-10 h-10 ml-1"
+                    width="512"
+                    height="512"
+                    viewBox="0 0 512 512"
+                  >
+                    <path d="M152.443 136.417l207.114 119.573-207.114 119.593z" fill="currentColor" />
                   </svg>
-                  <svg :if={{@play_status == :playing}} class="w-10 h-10" width="512" height="512" viewBox="0 0 512 512">
-                    <path d="M162.642 148.337h56.034v215.317h-56.034v-215.316z" fill="currentColor"/>
-                    <path d="M293.356 148.337h56.002v215.317h-56.002v-215.316z" fill="currentColor"/>
+                  <svg
+                    :if={@play_status == :playing}
+                    class="w-10 h-10"
+                    width="512"
+                    height="512"
+                    viewBox="0 0 512 512"
+                  >
+                    <path d="M162.642 148.337h56.034v215.317h-56.034v-215.316z" fill="currentColor" />
+                    <path d="M293.356 148.337h56.002v215.317h-56.002v-215.316z" fill="currentColor" />
                   </svg>
                 </button>
               </div>
@@ -93,16 +120,41 @@ defmodule RadiopushWeb.Components.PostCard do
           </div>
 
           <div class="flex flex-row flex-wrap items-center mt-2 space-x-1 space-y-1">
-            <button :on-click="open_emoji" class="pointer h-8 w-8 p-1.5 text-sm bg-gray-700 relative rounded-full flex flex-row items-center justify-center shadow-xl focus:outline-none">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-full">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <button
+              :on-click="open_emoji"
+              class="pointer h-8 w-8 p-1.5 text-sm bg-gray-700 relative rounded-full flex flex-row items-center justify-center shadow-xl focus:outline-none"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                class="h-full"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
             </button>
-            <Reaction :for={{ {emoji, count} <- reaction_group(@post.reactions)}} click="reaction_click" emoji={{emoji}} count={{count}} />
+            <Reaction
+              :for={{emoji, count} <- reaction_group(@post.reactions)}
+              click="reaction_click"
+              emoji={emoji}
+              count={count}
+            />
           </div>
-          <div :if={{@open_emoji}} class="relative">
-            <div class="absolute top-2 left-0 z-10" id={{"emoji-picker-#{@id}"}} phx-hook="ClickOutside" data-id={{@id}} data-event="click-outside-picker">
-              <EmojiPicker click="emoji_click" id={{ "picker-#{@id}"}}  />
+          <div :if={@open_emoji} class="relative">
+            <div
+              class="absolute top-2 left-0 z-10"
+              id={"emoji-picker-#{@id}"}
+              phx-hook="ClickOutside"
+              data-id={@id}
+              data-event="click-outside-picker"
+            >
+              <EmojiPicker click="emoji_click" id={"picker-#{@id}"} />
             </div>
           </div>
         </div>
@@ -229,7 +281,7 @@ defmodule RadiopushWeb.Components.PostCard do
     seconds = rem(duration, 60_000) / 1000
 
     cond do
-      seconds < 10 ->  "#{floor(minutes)}:0#{floor(seconds)}m"
+      seconds < 10 -> "#{floor(minutes)}:0#{floor(seconds)}m"
       true -> "#{floor(minutes)}:#{floor(seconds)}m"
     end
   end

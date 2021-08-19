@@ -5,10 +5,10 @@ defmodule RadiopushWeb.Components.NewChannelCard do
   prop click, :event, required: true
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <button
-      :on-click={{@click}}
-      class={{"group
+      :on-click={@click}
+      class="group
       hover:shadow-md hover:filter hover:brightness-125
       duration-400
       transition-all
@@ -22,15 +22,16 @@ defmodule RadiopushWeb.Components.NewChannelCard do
       flex-initial
       p-4
       rounded-3xl
-      overflow-hidden"}}>
+      overflow-hidden"
+    >
       <div class="transition-all text-white font-bold text-xl md:text-2xl lg:text-3xl text-left flex flex-col justify-between">
-        <div class={{"w-full pr-1 line-clamp-2 overflow-ellipsis overflow-hidden"}}>
+        <div class="w-full pr-1 line-clamp-2 overflow-ellipsis overflow-hidden">
           + Create
         </div>
-        <div class={{"w-full pr-1 line-clamp-2 overflow-ellipsis overflow-hidden"}}>
+        <div class="w-full pr-1 line-clamp-2 overflow-ellipsis overflow-hidden">
           a new
         </div>
-        <div class={{"w-full pr-1 line-clamp-2 overflow-ellipsis overflow-hidden"}}>
+        <div class="w-full pr-1 line-clamp-2 overflow-ellipsis overflow-hidden">
           channel
         </div>
       </div>

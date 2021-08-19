@@ -18,13 +18,13 @@ defmodule RadiopushWeb.Components.Page do
 
   @impl true
   def render(assigns) do
-    ~H"""
+    ~F"""
     <div class="px-4 xl:px-24 mb-6 xl:m-auto max-w-screen-2xl">
-      <Header id="Header" current_user={{@current_user}} />
+      <Header id="Header" current_user={@current_user} />
       <div class="w-full flex flex-row items-start">
-        <Navbar :if={{@path != "/"}} path={{@path}} />
+        <Navbar :if={@path != "/"} path={@path} />
         <div class="flex-1">
-          <slot />
+          <#slot />
           <Footer />
         </div>
       </div>

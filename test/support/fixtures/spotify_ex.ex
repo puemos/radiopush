@@ -217,7 +217,7 @@ defmodule Radiopush.SpotifyExFixtures do
       tempo: 96.24,
       track_href: "https://api.spotify.com/v1/tracks/2R6go62CuxqqX0w1TgXxes",
       analysis_url: "https://api.spotify.com/v1/audio-analysis/2R6go62CuxqqX0w1TgXxes",
-      duration_ms: 216693,
+      duration_ms: 216_693,
       time_signature: 4
     }
   end

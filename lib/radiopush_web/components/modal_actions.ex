@@ -5,9 +5,9 @@ defmodule RadiopushWeb.Components.ModalActions do
   slot default
 
   def render(assigns) do
-    ~H"""
-    <div class={{"flex flex-row space-x-2 bottom-0 ring-2 ring-gray-800 left-0 w-full py-4 sticky bg-gray-800"}}>
-      <slot/>
+    ~F"""
+    <div class="flex flex-row space-x-2 bottom-0 ring-2 ring-gray-800 left-0 w-full py-4 sticky bg-gray-800">
+      <#slot />
     </div>
     """
   end

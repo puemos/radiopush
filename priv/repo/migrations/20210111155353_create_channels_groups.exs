@@ -9,6 +9,5 @@ defmodule Radiopush.Repo.Migrations.CreateChannelsGroups do
     end
 
     create unique_index(:channels_groups, [:channel_id, :group_id])
-
   end
 end

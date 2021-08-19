@@ -70,7 +70,6 @@ defmodule DirectIteration do
     [String.duplicate(<<?z>>, len) | build_list(?a, len + 1, count - 1)]
   end
 
-
   defp build_list(?Z, len, count) do
     [String.duplicate(<<?Z>>, len) | build_list(?A, len + 1, count - 1)]
   end

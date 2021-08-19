@@ -13,22 +13,36 @@ defmodule RadiopushWeb.Pages.Legal do
 
   @impl true
   def render(assigns) do
-    ~H"""
-      <Page current_user={{nil}} path={{@path}}>
-        <div>
-          <nav class="flex flex-row mb-4 border-b border-gray-700 pb-2">
-            <button :on-click="set_active_tab" phx-value-tab="terms_and_conditions" class={{"outline-none focus:outline-none text-white font-semibold", "text-primary-400": @active_tab == "terms_and_conditions"}}>
-              Terms and conditions
-            </button>
-            <div class="mx-2"><span>•</span></div>
-            <button :on-click="set_active_tab" phx-value-tab="privacy_policy" class={{"outline-none focus:outline-none text-white font-semibold", "text-primary-400": @active_tab == "privacy_policy"}}>
-              Privacy Policy
-            </button>
-          </nav>
-          <PrivacyPolicy :if={{@active_tab == "privacy_policy"}} />
-          <TermsAndConditions :if={{@active_tab == "terms_and_conditions"}} />
-        </div>
-      </Page>
+    ~F"""
+    <Page current_user={nil} path={@path}>
+      <div>
+        <nav class="flex flex-row mb-4 border-b border-gray-700 pb-2">
+          <button
+            :on-click="set_active_tab"
+            phx-value-tab="terms_and_conditions"
+            class={
+              "outline-none focus:outline-none text-white font-semibold",
+              "text-primary-400": @active_tab == "terms_and_conditions"
+            }
+          >
+            Terms and conditions
+          </button>
+          <div class="mx-2"><span>•</span></div>
+          <button
+            :on-click="set_active_tab"
+            phx-value-tab="privacy_policy"
+            class={
+              "outline-none focus:outline-none text-white font-semibold",
+              "text-primary-400": @active_tab == "privacy_policy"
+            }
+          >
+            Privacy Policy
+          </button>
+        </nav>
+        <PrivacyPolicy :if={@active_tab == "privacy_policy"} />
+        <TermsAndConditions :if={@active_tab == "terms_and_conditions"} />
+      </div>
+    </Page>
     """
   end
 

@@ -28,25 +28,38 @@ defmodule RadiopushWeb.Components.ChannelInviteModal do
 
   @impl true
   def render(assigns) do
-    ~H"""
+    ~F"""
     <Modal title="Invite someone">
       <div class="h-full flex flex-col">
-        <TextInput value={{ @search }} keyup="keyup" opts={{ placeholder: "Search...", autocomplete: "off" }}
-          class="w-full px-4 py-3 border-none text-sm font-medium placeholder-gray-400 text-white bg-gray-600 rounded-xl group outline-none focus:outline-none focus:ring-0 w-full" />
+        <TextInput
+          value={@search}
+          keyup="keyup"
+          opts={placeholder: "Search...", autocomplete: "off"}
+          class="w-full px-4 py-3 border-none text-sm font-medium placeholder-gray-400 text-white bg-gray-600 rounded-xl group outline-none focus:outline-none focus:ring-0 w-full"
+        />
         <div class="grid grid-cols-1 gap-2 mt-6">
-          <div class="w-full" :for={{ user <- @users }}>
-            <button :if={{!in_channel(@members, user)}} :on-click="invite" phx-value-user_id={{user.id}} phx-value-user_nickname={{user.nickname}} class="flex flex-row w-full justify-between p-3 bg-gray-700 bg-opacity-40 rounded-xl hover:bg-opacity-80">
-              <div class="text-gray-300 text-sm">{{ user.nickname }}</div>
+          <div class="w-full" :for={user <- @users}>
+            <button
+              :if={!in_channel(@members, user)}
+              :on-click="invite"
+              phx-value-user_id={user.id}
+              phx-value-user_nickname={user.nickname}
+              class="flex flex-row w-full justify-between p-3 bg-gray-700 bg-opacity-40 rounded-xl hover:bg-opacity-80"
+            >
+              <div class="text-gray-300 text-sm">{user.nickname}</div>
             </button>
-            <div :if={{in_channel(@members, user)}}  class="flex flex-row w-full justify-between p-3 bg-gray-700 bg-opacity-40 rounded-xl">
-              <div class="text-gray-300 text-sm">{{ user.nickname }}</div>
+            <div
+              :if={in_channel(@members, user)}
+              class="flex flex-row w-full justify-between p-3 bg-gray-700 bg-opacity-40 rounded-xl"
+            >
+              <div class="text-gray-300 text-sm">{user.nickname}</div>
               <div class="text-primary-300 text-sm">in channel</div>
             </div>
           </div>
         </div>
-        <div class="flex-1"></div>
+        <div class="flex-1" />
         <ModalActions>
-          <Button click={{@close}} expand={{true}} color="secondary">Close</Button>
+          <Button click={@close} expand color="secondary">Close</Button>
         </ModalActions>
       </div>
     </Modal>

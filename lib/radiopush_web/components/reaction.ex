@@ -11,10 +11,14 @@ defmodule RadiopushWeb.Components.Reaction do
   prop click, :event, required: true
 
   def render(assigns) do
-    ~H"""
-    <button :on-click={{@click}} phx-value-emoji={{@emoji}} class={{"h-8 px-2.5 text-sm bg-gray-700 relative rounded-full flex flex-row items-center justify-center shadow-xl focus:outline-none"}}>
-      <img class="w-4" title={{@emoji}} src={{get_emoji_img(@emoji)}} />
-      <span class={{"text-xs font-bold ml-2"}}>{{@count}}</span>
+    ~F"""
+    <button
+      :on-click={@click}
+      phx-value-emoji={@emoji}
+      class="h-8 px-2.5 text-sm bg-gray-700 relative rounded-full flex flex-row items-center justify-center shadow-xl focus:outline-none"
+    >
+      <img class="w-4" title={@emoji} src={get_emoji_img(@emoji)}>
+      <span class="text-xs font-bold ml-2">{@count}</span>
     </button>
     """
   end

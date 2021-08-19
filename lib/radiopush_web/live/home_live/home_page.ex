@@ -46,8 +46,8 @@ defmodule RadiopushWeb.Pages.Home do
 
   @impl true
   def render(assigns) do
-    ~H"""
-    <Page current_user={{@context.user}} path={{@path}}>
+    ~F"""
+    <Page current_user={@context.user} path={@path}>
       <div class="flex flex-row">
         <div phx-hook="InfiniteScroll" id="Home" class="flex-1">
           <div class="flex flex-col justify-between items-start">
@@ -60,18 +60,33 @@ defmodule RadiopushWeb.Pages.Home do
           </div>
 
           <div class="py-6">
-            <NewPostForm id="new-post-form" channels={{@user_channels}} submit="post_submit" post={{@post}} />
+            <NewPostForm id="new-post-form" channels={@user_channels} submit="post_submit" post={@post} />
           </div>
 
-          <div :if={{ Enum.count(@new_feed) > 0 }} id="OldPosts" phx-update="prepend" class="grid grid-cols-1 md:grid-cols-1 gap-4 w-full mb-4">
-            <PostCard :for={{ post <- @new_feed }} id={{"post-#{post.id}"}} nickname={{post.user.nickname}}
-                post={{post}} channel={{post.channel}}/>
+          <div
+            :if={Enum.count(@new_feed) > 0}
+            id="OldPosts"
+            phx-update="prepend"
+            class="grid grid-cols-1 md:grid-cols-1 gap-4 w-full mb-4"
+          >
+            <PostCard
+              :for={post <- @new_feed}
+              id={"post-#{post.id}"}
+              nickname={post.user.nickname}
+              post={post}
+              channel={post.channel}
+            />
           </div>
           <div id="NewPosts" phx-update="append" class="grid grid-cols-1 md:grid-cols-1 gap-4 w-full mb-4">
-            <PostCard :for={{ post <- @feed }} id={{"post-#{post.id}"}} nickname={{post.user.nickname}}
-                post={{post}} channel={{post.channel}}/>
+            <PostCard
+              :for={post <- @feed}
+              id={"post-#{post.id}"}
+              nickname={post.user.nickname}
+              post={post}
+              channel={post.channel}
+            />
           </div>
-          <div class="h-6"></div>
+          <div class="h-6" />
         </div>
         <div class="hidden pt-20 px-4 relative lg:block lg:w-72 xl:w-5/12">
           <div class="top-6 sticky lg:flex flex-col space-y-4 w-full">
@@ -79,8 +94,17 @@ defmodule RadiopushWeb.Pages.Home do
               <div class="flex flex-col w-full">
                 <h3 class="text-lg font-bold mb-4">Latest public channels</h3>
                 <div id="channels" phx-update="prepend" class="top-6 sticky lg:flex flex-col space-y-4">
-                  <div :for={{channel <- Enum.take(@public_channels, 4)}} class="border rounded-xl border-gray-700 border-opacity-30"  id={{"s-#{channel.id}"}}>
-                    <ChannelRow id={{"channel-#{channel.id}"}} channel={{channel}} join_click="join_channel" leave_click="leave_channel"/>
+                  <div
+                    :for={channel <- Enum.take(@public_channels, 4)}
+                    class="border rounded-xl border-gray-700 border-opacity-30"
+                    id={"s-#{channel.id}"}
+                  >
+                    <ChannelRow
+                      id={"channel-#{channel.id}"}
+                      channel={channel}
+                      join_click="join_channel"
+                      leave_click="leave_channel"
+                    />
                   </div>
                 </div>
               </div>
