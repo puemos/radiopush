@@ -67,15 +67,6 @@ defmodule RadiopushWeb.Components.PostCard do
                   <span :if={{@post.tempo != 0.0}} class="text-xs text-gray-200 bg-gray-600 rounded-lg px-2">{{format_tempo(@post.tempo)}}</span>
                 </div>
               </div>
-              <div :if={{@post.type == :album}} class="flex-1 flex flex-col ml-3">
-                <a target="_blank" rel="noopener" href={{@post.url}} class="hover:text-primary-500 text-white font-semibold">
-                  <div class="flex flex-row space-x-2 items-start">
-                    <img class="w-4 h-4 mt-1" src="/images/Spotify_Icon_CMYK_White.png"/>
-                    <div>{{@post.album}}</div>
-                  </div>
-                </a>
-                <div class="text-gray-500"> by {{@post.musician}}</div>
-              </div>
               <div class="flex flex-col ml-3">
                 <button :if={{@post.audio_preview}}
                         :on-click="play"

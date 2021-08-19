@@ -13,11 +13,6 @@ defmodule Radiopush.Spotify.Client do
   @impl true
   def list_user_playlists(credentials), do: client().list_user_playlists(credentials)
 
-  # Albums
-
-  @impl true
-  def get_album(credentials, album_id), do: client().get_album(credentials, album_id)
-
   # Songs
 
   @impl true

@@ -556,7 +556,6 @@ defmodule RadiopushWeb.Pages.Channel do
     body =
       case post.type do
         "song" -> "#{post.song} by #{post.musician}"
-        "album" -> "#{post.album} by #{post.musician}"
       end
 
     title = "New post on #{channel.name}"
