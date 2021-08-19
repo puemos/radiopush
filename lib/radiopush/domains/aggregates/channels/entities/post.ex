@@ -10,7 +10,7 @@ defmodule Radiopush.Channels.Post do
           id: id(),
           user_id: String.t(),
           channel_id: String.t(),
-          type: :song | :album,
+          type: :song,
           song: String.t(),
           album: String.t(),
           musician: String.t(),
@@ -28,7 +28,7 @@ defmodule Radiopush.Channels.Post do
     belongs_to :channel, Channel
     has_many :reactions, PostReaction
 
-    field :type, Ecto.Enum, values: [:song, :album]
+    field :type, Ecto.Enum, values: [:song]
     field :song, :string
     field :album, :string
     field :musician, :string

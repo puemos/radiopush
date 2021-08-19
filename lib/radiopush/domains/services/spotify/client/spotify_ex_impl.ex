@@ -40,12 +40,6 @@ defmodule Radiopush.Spotify.Client.SpotifyExImpl do
   def list_user_playlists(credentials),
     do: run(&Spotify.Playlist.get_current_user_playlists/1, credentials)
 
-  # Albums
-
-  @impl true
-  def get_album(credentials, album_id),
-    do: run(&Spotify.Album.get_album/2, credentials, [album_id])
-
   # Songs
 
   @impl true

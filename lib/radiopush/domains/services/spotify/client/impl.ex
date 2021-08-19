@@ -11,11 +11,6 @@ defmodule Radiopush.Spotify.Client.Impl do
   @callback list_user_playlists(credentials :: map()) ::
               {:ok, list(map())} | error()
 
-  # Albums
-
-  @callback get_album(credentials :: map(), album_id :: String.t()) ::
-              {:ok, map()} | error()
-
   # Songs
 
   @callback get_song(credentials :: map(), song_id :: String.t()) ::

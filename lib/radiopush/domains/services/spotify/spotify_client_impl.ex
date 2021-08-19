@@ -1,7 +1,7 @@
 defmodule Radiopush.Spotify.SpotifyClientImpl do
   @moduledoc false
 
-  alias Radiopush.Spotify.{Album, Song, Client, Credentials, Profile}
+  alias Radiopush.Spotify.{Song, Client, Credentials, Profile}
 
   @behaviour Radiopush.Spotify.Impl
 
@@ -45,36 +45,6 @@ defmodule Radiopush.Spotify.SpotifyClientImpl do
     case get_id_from_url(url) do
       {:track, track_id} -> get_song(credentials, track_id)
       nil -> {:error, "InvalidURL"}
-    end
-  end
-
-  # Albums
-
-  defp get_album(credentials, album_id) do
-    case Client.get_album(credentials, album_id) do
-      {:ok, details} ->
-        %{
-          artists: [%{"name" => musician} | _],
-          external_urls: %{"spotify" => url},
-          images: [%{"url" => image} | _],
-          name: name,
-          tracks: %{items: [%{preview_url: audio_preview} | _]}
-        } = details
-
-        album =
-          Album.new(%{
-            type: :album,
-            album: name,
-            musician: musician,
-            url: url,
-            image: image,
-            audio_preview: audio_preview
-          })
-
-        {:ok, album}
-
-      {:error, error} ->
-        {:error, error}
     end
   end
 
@@ -123,11 +93,10 @@ defmodule Radiopush.Spotify.SpotifyClientImpl do
   end
 
   defp get_id_from_url(url) do
-    case Regex.named_captures(~r/(.*)((album\/)(?<album>\w*)|(track\/)(?<track>\w*))/, url) do
+    case Regex.named_captures(~r/(.*)(track\/)(?<track>\w*)/, url) do
       nil -> nil
-      %{"album" => "", "track" => ""} -> nil
-      %{"album" => album, "track" => ""} -> {:album, album}
-      %{"album" => "", "track" => track} -> {:track, track}
+      %{"track" => ""} -> nil
+      %{"track" => track} -> {:track, track}
     end
   end
 end
