@@ -22,12 +22,12 @@ defmodule RadiopushWeb.Components.NavbarLink do
 
   @impl true
   def render(assigns) do
-    ~H"""
-    <LiveRedirect to={{@to}}>
-      <div class={{link_class(@to, @path)}}>
-        <slot :if={{@to == @path}} name="icon_solid" />
-        <slot :if={{@to != @path}} name="icon_outline" />
-        <span>{{@label}}</span>
+    ~F"""
+    <LiveRedirect to={@to}>
+      <div class={link_class(@to, @path)}>
+        <#slot :if={@to == @path} name="icon_solid" />
+        <#slot :if={@to != @path} name="icon_outline" />
+        <span>{@label}</span>
       </div>
     </LiveRedirect>
     """

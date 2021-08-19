@@ -21,19 +21,19 @@ defmodule RadiopushWeb.Components.AddToPlaylistModal do
 
   @impl true
   def render(assigns) do
-    ~H"""
+    ~F"""
     <Modal title="Add to playlist">
-        <div class="flex flex-col w-full">
-          <div class="flex flex-col">
-            <div :for={{playlist <- @playlists}} class="flex flex-row justify-between">
-              <div>{{playlist.name}}</div>
-              <Button click={{@click_playlist}} color="secondary" value={{playlist.id}}>Close</Button>
-            </div>
+      <div class="flex flex-col w-full">
+        <div class="flex flex-col">
+          <div :for={playlist <- @playlists} class="flex flex-row justify-between">
+            <div>{playlist.name}</div>
+            <Button click={@click_playlist} color="secondary" value={playlist.id}>Close</Button>
           </div>
         </div>
-        <ModalActions>
+      </div>
+      <ModalActions>
         <div class="flex flex-row w-full space-x-2">
-          <Button click={{@close}} expand={{true}} color="secondary">Close</Button>
+          <Button click={@close} expand color="secondary">Close</Button>
         </div>
       </ModalActions>
     </Modal>

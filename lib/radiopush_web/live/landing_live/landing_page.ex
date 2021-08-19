@@ -12,13 +12,13 @@ defmodule RadiopushWeb.Pages.Landing do
 
   @impl true
   def render(assigns) do
-    ~H"""
-    <Page current_user={{nil}} path={{@path}}>
+    ~F"""
+    <Page current_user={nil} path={@path}>
       <div class="flex flex-row justify-center">
         <div class="flex flex-col lg:flex-row py-4 max-w-7xl">
           <div class="mx-auto flex-1 lg:mr-4">
             <div class="relative z-10 lg:max-w-2xl lg:w-full">
-              <div class=" mx-auto sm:mt-12 sm:px-6 md:px-0">
+              <div class="mx-auto sm:mt-12 sm:px-6 md:px-0">
                 <div class="text-center lg:text-left">
                   <p class="block md:hidden text-4xl font-bold sp-underline primary text-white mb-4">Radiopush</p>
                   <h1 class="text-3xl text-gray-100 font-bold sm:text-5xl" style="line-height: 1.2">
@@ -43,18 +43,21 @@ defmodule RadiopushWeb.Pages.Landing do
                   </h1>
                   <div class="mt-5 sm:mt-16 flex flex-col items-center justify-center lg:items-baseline lg:justify-start space-y-4">
                     <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
-                      <a href={{Routes.user_authorization_path(@socket, :authorize, "spotify")}}>
+                      <a href={Routes.user_authorization_path(@socket, :authorize, "spotify")}>
                         <Button class="px-6 bg-spotify-600">
                           <div class="flex flex-row items-center">
-                            <img class="w-4 mr-2" src="{{Routes.static_path(@socket, "/images/Spotify_Icon_CMYK_White.png")}}"/>
+                            <img class="w-4 mr-2" src={Routes.static_path(@socket, "/images/Spotify_Icon_CMYK_White.png")}>
                             <span>Continue with Spotify</span>
                           </div>
                         </Button>
                       </a>
-                      <a target="_blank" rel="noopener" href={{"https://github.com/puemos/radiopush"}}>
+                      <a target="_blank" rel="noopener" href="https://github.com/puemos/radiopush">
                         <Button class="px-6 bg-gray-600">
                           <div class="flex flex-row items-center">
-                            <img class="w-4 mr-2" src="{{Routes.static_path(@socket, "/images/GitHub-Mark-Light-120px-plus.png")}}"/>
+                            <img
+                              class="w-4 mr-2"
+                              src={Routes.static_path(@socket, "/images/GitHub-Mark-Light-120px-plus.png")}
+                            />
                             <span>It's open-source!</span>
                           </div>
                         </Button>
@@ -67,11 +70,20 @@ defmodule RadiopushWeb.Pages.Landing do
             </div>
           </div>
           <div class="grid grid-cols-1 gap-2 pt-6">
-            <div :for.with_index={{ {post, i} <- @posts }} class={{ "opacity-#{max(100 - i*25, 0)} pointer-events-none" }} style="touch-action: none;">
-              <PostCard id={{"post-#{post.id}"}} nickname={{ post.user.nickname }} post={{ post }} channel={{post.channel}} />
+            <div
+              :for.with_index={{post, i} <- @posts}
+              class={"opacity-#{max(100 - i * 25, 0)} pointer-events-none"}
+              style="touch-action: none;"
+            >
+              <PostCard
+                id={"post-#{post.id}"}
+                nickname={post.user.nickname}
+                post={post}
+                channel={post.channel}
+              />
             </div>
           </div>
-          <div class="opacity-100 opacity-75 opacity-50 opacity-25 opacity-0"></div>
+          <div class="opacity-100 opacity-75 opacity-50 opacity-25 opacity-0" />
         </div>
       </div>
     </Page>
@@ -118,7 +130,7 @@ defmodule RadiopushWeb.Pages.Landing do
         user_id: 12,
         explicit: false,
         tempo: 109.0,
-        duration_ms: 251000.0,
+        duration_ms: 251_000.0,
         user: %{
           nickname: "Dwight Schrute"
         },
@@ -155,7 +167,7 @@ defmodule RadiopushWeb.Pages.Landing do
         user_id: 12,
         explicit: false,
         tempo: 112.0,
-        duration_ms: 214000.0,
+        duration_ms: 214_000.0,
         user: %{
           nickname: "Erlich Bachman"
         },
@@ -189,7 +201,7 @@ defmodule RadiopushWeb.Pages.Landing do
         user_id: 12,
         explicit: false,
         tempo: 121.0,
-        duration_ms: 286000.0,
+        duration_ms: 286_000.0,
         user: %{
           nickname: "Gob Bluth"
         },
@@ -221,7 +233,7 @@ defmodule RadiopushWeb.Pages.Landing do
         user_id: 12,
         explicit: false,
         tempo: 80.0,
-        duration_ms: 365000.0,
+        duration_ms: 365_000.0,
         user: %{
           nickname: "Jimmy Conway"
         },

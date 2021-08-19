@@ -3,7 +3,7 @@ defmodule RadiopushWeb.Components.PrivacyPolicy do
 
   @impl true
   def render(assigns) do
-    ~H"""
+    ~F"""
     <p>Effective date: 2021-02-20</p>
     <br>
     <p>1. <strong>Introduction</strong></p>
@@ -165,7 +165,6 @@ defmodule RadiopushWeb.Components.PrivacyPolicy do
     <p>20. <strong>Contact Us</strong></p>
     <p>If you have any questions about this Privacy Policy, please contact us by email: <strong>radiopush.app@gmail.com</strong>.</p>
     <p style="margin-top: 5em; font-size: 0.7em;">This <a href="https://policymaker.io/privacy-policy/">Privacy Policy</a> was created for <strong>radiopush.app</strong> by <a href="https://policymaker.io">PolicyMaker.io</a> on 2021-02-20.</p>
-
     """
   end
 end

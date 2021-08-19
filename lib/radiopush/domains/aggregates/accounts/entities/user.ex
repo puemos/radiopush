@@ -8,7 +8,7 @@ defmodule Radiopush.Accounts.User do
           email: String.t(),
           nickname: String.t(),
           image: String.t(),
-          spotify_id: String.t(),
+          spotify_id: String.t()
         }
 
   schema "users" do

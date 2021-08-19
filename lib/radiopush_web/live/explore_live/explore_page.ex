@@ -27,8 +27,8 @@ defmodule RadiopushWeb.Pages.Explore do
 
   @impl true
   def render(assigns) do
-    ~H"""
-    <Page current_user={{@context.user}} path={{@path}}>
+    ~F"""
+    <Page current_user={@context.user} path={@path}>
       <div>
         <div class="flex flex-col justify-between items-start">
           <h1 class="text-2xl md:text-3xl font-bold overflow-ellipsis overflow-hidden text-white-300">
@@ -38,19 +38,27 @@ defmodule RadiopushWeb.Pages.Explore do
             Find new channels, search among all the avalible public channels
           </div>
         </div>
-        <div class="h-6"></div>
+        <div class="h-6" />
 
-        <TextInput value={{ @public_channels_search }} keyup="public_channels_search_keyup" opts={{ placeholder: "Search...", autocomplete: "off" }}
-          class="flex-1 px-4 py-3 border-none text-sm font-medium placeholder-gray-400 text-white bg-gray-600 rounded-xl group outline-none focus:outline-none focus:ring-0 w-full" />
+        <TextInput
+          value={@public_channels_search}
+          keyup="public_channels_search_keyup"
+          opts={placeholder: "Search...", autocomplete: "off"}
+          class="flex-1 px-4 py-3 border-none text-sm font-medium placeholder-gray-400 text-white bg-gray-600 rounded-xl group outline-none focus:outline-none focus:ring-0 w-full"
+        />
 
-        <div class="h-6"></div>
+        <div class="h-6" />
 
-        <div
-          id="channels"
-          class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 xl:grid-cols-2 gap-4">
-            <ChannelRow :for={{channel <- @public_channels}} id={{"channel-#{channel.name}"}} channel={{channel}} join_click="join_channel" leave_click="leave_channel"/>
+        <div id="channels" class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 xl:grid-cols-2 gap-4">
+          <ChannelRow
+            :for={channel <- @public_channels}
+            id={"channel-#{channel.name}"}
+            channel={channel}
+            join_click="join_channel"
+            leave_click="leave_channel"
+          />
         </div>
-        <div class="h-6"></div>
+        <div class="h-6" />
       </div>
     </Page>
     """

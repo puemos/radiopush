@@ -3,7 +3,7 @@ defmodule RadiopushWeb.Components.TermsAndConditions do
 
   @impl true
   def render(assigns) do
-    ~H"""
+    ~F"""
     <p>Last updated: 2021-02-20</p>
     <br>
     <p>1. <b>Introduction</b></p>

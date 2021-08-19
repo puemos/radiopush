@@ -29,10 +29,15 @@ defmodule RadiopushWeb.Pages.Channels do
 
   @impl true
   def render(assigns) do
-    ~H"""
-    <Page current_user={{@context.user}} path={{@path}}>
+    ~F"""
+    <Page current_user={@context.user} path={@path}>
       <div>
-        <NewChannelModal :if={{ @open_create_channel }} close="close-create-channel"  submit="channel" changeset={{@channel_changeset}} />
+        <NewChannelModal
+          :if={@open_create_channel}
+          close="close-create-channel"
+          submit="channel"
+          changeset={@channel_changeset}
+        />
 
         <div class="flex flex-col justify-between items-start">
           <h1 class="text-2xl md:text-3xl font-bold overflow-ellipsis overflow-hidden text-white-300">
@@ -42,12 +47,11 @@ defmodule RadiopushWeb.Pages.Channels do
             Here you can find your subscribed channels
           </div>
         </div>
-        <div class="h-12"></div>
+        <div class="h-12" />
         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
           <NewChannelCard click="open-create-channel" />
-          <ChannelCard :for={{channel <- @user_channels}} channel={{channel}} card_click="card_click"/>
+          <ChannelCard :for={channel <- @user_channels} channel={channel} card_click="card_click" />
         </div>
-
       </div>
     </Page>
     """

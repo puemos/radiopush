@@ -46,6 +46,8 @@ jobs:
       - run: mix deps.get
       - run: npm install --prefix assets
       - run: npm run deploy --prefix assets
+      - run: mix format --check-formatted
+      - run: mix surface.format --check-formatted
       - run: mix test
   deploy:
     environment: production

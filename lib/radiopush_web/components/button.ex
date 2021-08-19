@@ -78,22 +78,23 @@ defmodule RadiopushWeb.Components.Button do
   end
 
   def render(assigns) do
-    ~H"""
+    ~F"""
     <button
-      type={{@type}}
-      aria-label={{@aria_label}}
-      :on-click={{@click}}
-      disabled={{@disabled}}
-      value={{@value}}
-      class={{[
+      type={@type}
+      aria-label={@aria_label}
+      :on-click={@click}
+      disabled={@disabled}
+      value={@value}
+      class={[
         base_style(),
         "bg-primary-500": @color == "primary",
         "bg-rose-500": @color == "danger",
         "bg-gray-600": @color == "secondary",
         "w-full": @expand,
         "cursor-not-allowed opacity-50": @disabled
-      ] ++ @class}}>
-      <slot>{{ @label }}</slot>
+      ] ++ @class}
+    >
+      <#slot>{@label}</#slot>
     </button>
     """
   end
