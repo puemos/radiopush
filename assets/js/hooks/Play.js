@@ -17,25 +17,32 @@ export const Play = {
     return this.el.dataset.play_status;
   },
   play() {
-    if ("mediaSession" in navigator) {
-      navigator.mediaSession.metadata = new MediaMetadata({
-        title: this.metadata().title,
-        artist: this.metadata().artist,
-        album: this.metadata().album,
-        artwork: [
-          {
-            src: this.metadata().artwork,
-            type: "image/png",
-            sizes: "635x635",
-          },
-        ],
-      });
-    }
-    this.audio.play();
+    this.pushEventTo(`#${this.post_id()}`, "play", {});
+
+    this.audio.play().then(function () {
+      if ("mediaSession" in navigator) {
+        navigator.mediaSession.metadata = new MediaMetadata({
+          title: this.metadata().title,
+          artist: this.metadata().artist,
+          album: this.metadata().album,
+          artwork: [
+            {
+              src: this.metadata().artwork,
+              type: "image/png",
+              sizes: "635x635",
+            },
+          ],
+        });
+      }
+    })
   },
   pause() {
     this.audio.pause();
   },
+  /*
+  This function is called each time a component is added/updated.
+  Meaning, there is n HTML audio, where n is the number of component
+  */
   mounted() {
     this.audio = new Audio(this.audio_preview());
     this.handleEvent("play", ({ id }) => {
@@ -43,12 +50,14 @@ export const Play = {
         if (this.play_status() === "playing") {
           this.pause();
         }
-        if (this.play_status() === "idle") {
-          this.play();
-        }
       } else {
         this.pause();
       }
+    });
+
+    // the play must be done inside a user interaction
+    this.el.addEventListener("click", () => {
+      this.play();
     });
 
     this.audio.addEventListener("ended", () => {
