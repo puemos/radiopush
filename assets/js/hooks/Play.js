@@ -19,7 +19,9 @@ export const Play = {
   play() {
     this.pushEventTo(`#${this.post_id()}`, "play", {});
 
-    this.audio.play().then(function () {
+    var playPromise = this.audio.play();
+
+    playPromise.then(function () {
       if ("mediaSession" in navigator) {
         navigator.mediaSession.metadata = new MediaMetadata({
           title: this.metadata().title,
