@@ -17,8 +17,6 @@ export const Play = {
     return this.el.dataset.play_status;
   },
   play() {
-    this.audio.play();
-
     if ("mediaSession" in navigator) {
       navigator.mediaSession.metadata = new MediaMetadata({
         title: this.metadata().title,
@@ -32,7 +30,8 @@ export const Play = {
           },
         ],
       });
-    }
+     this.audio.play();
+  }
   },
   pause() {
     this.audio.pause();
