@@ -83,7 +83,6 @@ defmodule RadiopushWeb.Components.PostCard do
               <div class="flex flex-col ml-3">
                 <button
                   :if={@post.audio_preview}
-                  :on-click="play"
                   phx-hook="Play"
                   id={"play-#{@id}"}
                   data-play_status={@play_status}

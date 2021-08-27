@@ -36,6 +36,10 @@ export const Play = {
   pause() {
     this.audio.pause();
   },
+  /*
+  This function is called each time a component is added/updated.
+  Meaning, there is n HTML audio, where n is the number of component
+  */
   mounted() {
     this.audio = new Audio(this.audio_preview());
     this.handleEvent("play", ({ id }) => {
@@ -43,12 +47,19 @@ export const Play = {
         if (this.play_status() === "playing") {
           this.pause();
         }
-        if (this.play_status() === "idle") {
-          this.play();
-        }
       } else {
         this.pause();
       }
+    });
+
+    // 1. for iOS the play must be done inside a user interaction
+    // 2. To avoid multiple play call, we check the play_status on click
+    // 3. To stop other audio, we send to the server a play event 
+    this.el.addEventListener("click", () => {
+      if (this.play_status() === "idle") {
+        this.play();
+      }
+      this.pushEventTo(`#${this.post_id()}`, "play", {});
     });
 
     this.audio.addEventListener("ended", () => {
