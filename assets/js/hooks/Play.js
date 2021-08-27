@@ -17,26 +17,22 @@ export const Play = {
     return this.el.dataset.play_status;
   },
   play() {
-    this.pushEventTo(`#${this.post_id()}`, "play", {});
+    this.audio.play();
 
-    var playPromise = this.audio.play();
-
-    playPromise.then(function () {
-      if ("mediaSession" in navigator) {
-        navigator.mediaSession.metadata = new MediaMetadata({
-          title: this.metadata().title,
-          artist: this.metadata().artist,
-          album: this.metadata().album,
-          artwork: [
-            {
-              src: this.metadata().artwork,
-              type: "image/png",
-              sizes: "635x635",
-            },
-          ],
-        });
-      }
-    })
+    if ("mediaSession" in navigator) {
+      navigator.mediaSession.metadata = new MediaMetadata({
+        title: this.metadata().title,
+        artist: this.metadata().artist,
+        album: this.metadata().album,
+        artwork: [
+          {
+            src: this.metadata().artwork,
+            type: "image/png",
+            sizes: "635x635",
+          },
+        ],
+      });
+    }
   },
   pause() {
     this.audio.pause();
@@ -57,9 +53,14 @@ export const Play = {
       }
     });
 
-    // the play must be done inside a user interaction
+    // 1. for iOS the play must be done inside a user interaction
+    // 2. To avoid multiple play call, we check the play_status on click
+    // 3. To stop other audio, we send to the server a play event 
     this.el.addEventListener("click", () => {
-      this.play();
+      if (this.play_status() === "idle") {
+        this.play();
+      }
+      this.pushEventTo(`#${this.post_id()}`, "play", {});
     });
 
     this.audio.addEventListener("ended", () => {
