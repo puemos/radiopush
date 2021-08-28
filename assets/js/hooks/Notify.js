@@ -22,7 +22,9 @@ function notifyMe(notification) {
 
 export const Notify = {
     mounted() {
-        Notification.requestPermission()
+        if ("Notification" in window) {
+            Notification.requestPermission()
+        }
 
         this.handleEvent("notify", ({ notification }) => {
             notifyMe(notification)
