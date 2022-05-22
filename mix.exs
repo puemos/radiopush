@@ -33,34 +33,36 @@ defmodule Radiopush.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:bcrypt_elixir, "~> 2.0"},
+      {:bcrypt_elixir, "~> 3.0"},
       {:credo, "~> 1.5", only: [:dev, :test], runtime: false},
+      {:dart_sass, "~> 0.5", runtime: Mix.env() == :dev},
       {:ecto_sql, "~> 3.4"},
+      {:esbuild, "~> 0.4", runtime: Mix.env() == :dev},
       {:faker, "~> 0.16", only: [:test, :dev]},
       {:floki, ">= 0.27.0"},
       {:gettext, "~> 0.11"},
-      {:httpoison, "~> 1.0.0"},
+      {:httpoison, "~> 1.8"},
       {:jason, "~> 1.0"},
       {:mix_test_watch, "~> 1.0", only: :dev, runtime: false},
       {:mox, "~> 1.0", only: :test},
-      {:paginator, "~> 1.0.3"},
+      {:paginator, "~> 1.1"},
+      {:phoenix, "~> 1.6.9"},
       {:phoenix_ecto, "~> 4.1"},
-      {:phoenix_html, "~> 2.11"},
-      {:phoenix_live_dashboard, "~> 0.4"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 0.15.4"},
-      {:phoenix, "~> 1.5.7"},
-      {:phx_gen_auth, "~> 0.6"},
+      {:phoenix_html, "~> 3.2"},
+      {:phoenix_live_dashboard, "~> 0.6"},
+      {:phoenix_live_reload, "~> 1.3", only: :dev},
+      {:phoenix_live_view, "~> 0.17"},
       {:plug_cowboy, "~> 2.0"},
       {:poison, "~> 3.1"},
       {:postgrex, ">= 0.0.0"},
-      {:spotify_ex, "~> 2.2.0"},
-      {:surface_heroicons, "~> 0.5.2"},
-      {:surface_formatter, "~> 0.5.1"},
-      {:surface, "~> 0.5.2"},
+      {:spotify_ex, "~> 2.3.0"},
+      {:surface, "~> 0.7"},
+      {:surface_formatter, "~> 0.7"},
+      {:surface_heroicons, "~> 0.6"},
+      {:tailwind, "~> 0.1", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 0.4"},
-      {:telemetry_poller, "~> 0.4"},
-      {:typed_struct, "~> 0.2.1"}
+      {:telemetry_poller, "~> 1.0"},
+      {:typed_struct, "~> 0.3"}
     ]
   end
 
@@ -72,10 +74,21 @@ defmodule Radiopush.MixProject do
   # See the documentation for `Mix` for more info on aliases.
   defp aliases do
     [
-      setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets"],
+      setup: ["deps.get", "ecto.setup", "cmd npm install --prefix assets", "assets.build"],
+      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
+      "assets.build": [
+        "esbuild default",
+        "sass default",
+        "tailwind default"
+      ],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"]
+      "assets.deploy": [
+        "esbuild default --minify",
+        "sass default",
+        "tailwind default --minify",
+        "phx.digest"
+      ]
     ]
   end
 end

@@ -5,12 +5,38 @@
 # is restricted to this project.
 
 # General application configuration
-use Mix.Config
+import Config
 
 config :radiopush,
   ecto_repos: [Radiopush.Repo]
 
 config :radiopush, Radiopush.Repo, migration_primary_key: [type: :uuid]
+
+config :esbuild,
+  version: "0.14.39",
+  default: [
+    args: ~w(js/app.js --bundle --target=es2016 --outdir=../priv/static/assets),
+    cd: Path.expand("../assets", __DIR__),
+    env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
+  ]
+
+config :tailwind,
+  version: "3.0.24",
+  default: [
+    args: ~w(
+      --config=tailwind.config.js
+      --input=../priv/static/assets/app.tailwind.css
+      --output=../priv/static/assets/app.css
+    ),
+    cd: Path.expand("../assets", __DIR__)
+  ]
+
+config :dart_sass,
+  version: "1.49.11",
+  default: [
+    args: ~w(css/app.scss ../priv/static/assets/app.tailwind.css),
+    cd: Path.expand("../assets", __DIR__)
+  ]
 
 # Configures the endpoint
 config :radiopush, RadiopushWeb.Endpoint,

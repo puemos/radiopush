@@ -28,11 +28,11 @@ config :radiopush, RadiopushWeb.Endpoint,
     port: String.to_integer(System.get_env("PORT") || "4000"),
     transport_options: [socket_opts: [:inet6]]
   ],
-  url: [host: System.get_env("APP_NAME") <> ".gigalixirapp.com", port: 443],
+  url: [host: System.get_env("APP_NAME") <> ".fly.io", port: 443],
   secret_key_base: secret_key_base,
   check_origin: [
     "https://radiopush.app",
-    "https://radiopush.gigalixirapp.com/"
+    "https://radiopush.fly.io/"
   ]
 
 config :radiopush, RadiopushWeb.Endpoint, server: true

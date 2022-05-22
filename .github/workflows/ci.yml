@@ -22,8 +22,8 @@ jobs:
       - uses: actions/checkout@v2
       - uses: erlef/setup-elixir@v1
         with:
-          otp-version: "22.2.x"
-          elixir-version: "1.11.x"
+          otp-version: "24.1.x"
+          elixir-version: "1.13.x"
       - uses: actions/cache@v1
         with:
           path: deps
@@ -49,26 +49,3 @@ jobs:
       - run: mix format --check-formatted
       - run: mix surface.format --check-formatted
       - run: mix test
-  deploy:
-    environment: production
-    needs: test # Will only run if the test job succeeds
-    if: github.ref == 'refs/heads/main' # Only run this job if it is on the main branch
-
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          ref: main # Check out main instead of the latest commit
-          fetch-depth: 0 # Checkout the whole branch
-
-      - uses: actions/setup-python@v2
-        with:
-          python-version: 3.8.1
-
-      - uses: mhanberg/gigalixir-action@v0.4.3
-        with:
-          GIGALIXIR_USERNAME: ${{ secrets.GIGALIXIR_USERNAME }}
-          GIGALIXIR_PASSWORD: ${{ secrets.GIGALIXIR_PASSWORD }}
-          GIGALIXIR_APP: ${{ secrets.GIGALIXIR_APP }}
-          SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}

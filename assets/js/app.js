@@ -1,13 +1,11 @@
 import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
 import topbar from "topbar";
-import "../css/app.scss";
 import { ClickOutside } from "./hooks/ClickOutside";
 import { InfiniteScroll } from "./hooks/InfiniteScroll";
 import { Notify } from "./hooks/Notify";
 import { Play } from "./hooks/Play";
 import { ScrollLock } from "./hooks/ScrollLock";
-
 
 let csrfToken = document
   .querySelector("meta[name='csrf-token']")

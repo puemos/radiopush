@@ -332,14 +332,14 @@ defmodule RadiopushWeb.Pages.Channel do
   defp update_post(socket, post) do
     initial_time = socket.assigns.initial_time
 
-    case post.inserted_at > initial_time do
-      false ->
-        socket
-        |> update(:posts, fn posts -> [post | posts] end)
-
-      true ->
+    case DateTime.compare(post.inserted_at, initial_time) do
+      :gt ->
         socket
         |> update(:new_posts, fn new_posts -> [post | new_posts] end)
+
+      _ ->
+        socket
+        |> update(:posts, fn posts -> [post | posts] end)
     end
   end
 
