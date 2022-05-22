@@ -4,8 +4,8 @@ defmodule Radiopush.MixProject do
   def project do
     [
       app: :radiopush,
-      version: "0.2.1",
-      elixir: "~> 1.11",
+      version: "0.2.2",
+      elixir: "~> 1.13",
       elixirc_paths: elixirc_paths(Mix.env()),
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
@@ -57,7 +57,6 @@ defmodule Radiopush.MixProject do
       {:postgrex, ">= 0.0.0"},
       {:spotify_ex, "~> 2.3.0"},
       {:surface, "~> 0.7"},
-      {:surface_formatter, "~> 0.7"},
       {:surface_heroicons, "~> 0.6"},
       {:tailwind, "~> 0.1", runtime: Mix.env() == :dev},
       {:telemetry_metrics, "~> 0.4"},

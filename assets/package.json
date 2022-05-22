@@ -10,8 +10,7 @@
     "date-fns": "^2.28.0",
     "phoenix": "file:../deps/phoenix",
     "phoenix_html": "file:../deps/phoenix_html",
-    "phoenix_live_view": "file:../deps/phoenix_live_view",
-    "topbar": "^1.0.1"
+    "phoenix_live_view": "file:../deps/phoenix_live_view"
   },
   "devDependencies": {
     "@tailwindcss/forms": "^0.5.2",
