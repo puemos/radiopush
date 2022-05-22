@@ -1,15 +1,17 @@
-# fly.toml file generated for radiopush on 2022-05-22T17:36:52+02:00
+# fly.toml file generated for radiopush on 2022-05-22T18:38:41+02:00
 
 app = "radiopush"
 
-kill_signal = "SIGINT"
+kill_signal = "SIGTERM"
 kill_timeout = 5
 processes = []
 
-[env]
-
 [deploy]
-  release_command = "eval Radiopush.Release.migrate"
+  release_command = "/app/bin/migrate"
+
+[env]
+  PHX_HOST = "radiopush.fly.dev"
+  PORT = "8080"
 
 [experimental]
   allowed_public_ports = []
