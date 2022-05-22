@@ -8,6 +8,9 @@ processes = []
 
 [env]
 
+[deploy]
+  release_command = "eval Radiopush.Release.migrate"
+
 [experimental]
   allowed_public_ports = []
   auto_rollback = true
