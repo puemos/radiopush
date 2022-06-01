@@ -10,9 +10,13 @@ import Config
 # which you should run after static files are built and
 # before starting your production server.
 config :radiopush, RadiopushWeb.Endpoint,
-  url: [host: "localhost", port: 80],
+  url: [host: "radiopush.app", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json",
-  force_ssl: [rewrite_on: [:x_forwarded_proto]]
+  force_ssl: [
+    host: nil,
+    rewrite_on: [:x_forwarded_port, :x_forwarded_proto],
+    hsts: false
+  ]
 
 # Do not print debug messages in production
 config :logger, level: :info
