@@ -7,7 +7,7 @@ Radiopush is a new way of music discovery. It helps you find new songs by sharin
 
 [https://radiopush.app](https://radiopush.app)
 
-<img src="./assets/static/images/og_image.png" alt="preview" width="600"/>
+<img src="./priv/static/images/og_image.png" alt="preview" width="600"/>
 
 ## Principles:
 1. Focus on Music
