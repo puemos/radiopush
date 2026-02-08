@@ -13,6 +13,27 @@ Radiopush is a new way of music discovery. It helps you find new songs by sharin
 2. Minimal
 3. Open
 
+## Local Development
+
+### Start Postgres with Docker Compose
+
+```sh
+docker compose up -d db
+```
+
+### Setup the app database
+
+```sh
+mix ecto.create
+mix ecto.migrate
+```
+
+### Start Phoenix
+
+```sh
+mix phx.server
+```
+
 ## Contributing
 
 TL;DR
@@ -22,4 +43,3 @@ TL;DR
 3. Commit your changes: git commit -am 'Add some feature'
 4. Push to the branch: git push origin my-new-feature
 5. Submit a pull request :D
-
