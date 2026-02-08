@@ -1,5 +1,5 @@
 defmodule RadiopushWeb.Pages.Landing do
-  use RadiopushWeb, :surface_view_helpers
+  use RadiopushWeb, :live_view
 
   alias RadiopushWeb.Components.{
     Button,
@@ -7,13 +7,10 @@ defmodule RadiopushWeb.Pages.Landing do
     Page
   }
 
-  data posts, :list
-  data channel, :map
-
   @impl true
   def render(assigns) do
-    ~F"""
-    <Page current_user={nil} path={@path}>
+    ~H"""
+    <Page.render current_user={nil} path={@path}>
       <div class="flex flex-row justify-center">
         <div class="flex flex-col lg:flex-row py-4 max-w-7xl">
           <div class="mx-auto flex-1 lg:mr-4">
@@ -44,15 +41,15 @@ defmodule RadiopushWeb.Pages.Landing do
                   <div class="mt-5 sm:mt-16 flex flex-col items-center justify-center lg:items-baseline lg:justify-start space-y-4">
                     <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
                       <a href={Routes.user_authorization_path(@socket, :authorize, "spotify")}>
-                        <Button class="px-6 bg-spotify-600">
+                        <Button.render class="px-6 bg-spotify-600">
                           <div class="flex flex-row items-center">
                             <img class="w-4 mr-2" src={Routes.static_path(@socket, "/images/Spotify_Icon_CMYK_White.png")}>
                             <span>Continue with Spotify</span>
                           </div>
-                        </Button>
+                        </Button.render>
                       </a>
                       <a target="_blank" rel="noopener" href="https://github.com/puemos/radiopush">
-                        <Button class="px-6 bg-gray-600">
+                        <Button.render class="px-6 bg-gray-600">
                           <div class="flex flex-row items-center">
                             <img
                               class="w-4 mr-2"
@@ -60,7 +57,7 @@ defmodule RadiopushWeb.Pages.Landing do
                             />
                             <span>It's open-source!</span>
                           </div>
-                        </Button>
+                        </Button.render>
                       </a>
                     </div>
                     <p class="w-full md:w-96">By continuing, you agree to Radiopush.app's <a class="underline hover:text-blue-400" href="/legal">Terms & Conditions</a> and <a class="underline hover:text-blue-400" href="/legal">Privacy Policy</a></p>
@@ -71,11 +68,12 @@ defmodule RadiopushWeb.Pages.Landing do
           </div>
           <div class="grid grid-cols-1 gap-2 pt-6">
             <div
-              :for.with_index={{post, i} <- @posts}
+              :for={{post, i} <- Enum.with_index(@posts)}
               class={"opacity-#{max(100 - i * 25, 0)} pointer-events-none"}
               style="touch-action: none;"
             >
-              <PostCard
+              <.live_component
+                module={PostCard}
                 id={"post-#{post.id}"}
                 nickname={post.user.nickname}
                 post={post}
@@ -86,7 +84,7 @@ defmodule RadiopushWeb.Pages.Landing do
           <div class="opacity-100 opacity-75 opacity-50 opacity-25 opacity-0" />
         </div>
       </div>
-    </Page>
+    </Page.render>
     """
   end
 
@@ -94,6 +92,7 @@ defmodule RadiopushWeb.Pages.Landing do
   def mount(_params, _session, socket) do
     socket =
       socket
+      |> assign(path: "/")
       |> assign(posts: post_list())
 
     {:ok, socket}

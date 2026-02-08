@@ -19,7 +19,9 @@ defmodule RadiopushWeb do
 
   def controller do
     quote do
-      use Phoenix.Controller, namespace: RadiopushWeb
+      use Phoenix.Controller,
+        formats: [:html, :json],
+        layouts: [html: RadiopushWeb.LayoutView]
 
       import Plug.Conn
       import RadiopushWeb.Gettext
@@ -37,28 +39,25 @@ defmodule RadiopushWeb do
       import Phoenix.Controller,
         only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
 
-      import Surface
-
       # Include shared imports and aliases for views
-      unquote(view_helpers())
+      unquote(html_helpers())
+    end
+  end
+
+  def component do
+    quote do
+      use Phoenix.Component
+
+      unquote(html_helpers())
     end
   end
 
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {RadiopushWeb.LayoutView, "live.html"}
+        layout: {RadiopushWeb.LayoutView, :live}
 
-      unquote(view_helpers())
-    end
-  end
-
-  def surface_view_helpers do
-    quote do
-      use Surface.LiveView,
-        layout: {RadiopushWeb.LayoutView, "live.html"}
-
-      unquote(view_helpers())
+      unquote(html_helpers())
     end
   end
 
@@ -66,7 +65,7 @@ defmodule RadiopushWeb do
     quote do
       use Phoenix.LiveComponent
 
-      unquote(view_helpers())
+      unquote(html_helpers())
     end
   end
 
@@ -87,10 +86,13 @@ defmodule RadiopushWeb do
     end
   end
 
-  defp view_helpers do
+  defp html_helpers do
     quote do
       # Use all HTML functionality (forms, tags, etc)
-      use Phoenix.HTML
+      import Phoenix.HTML
+      import Phoenix.HTML.Form
+
+      import Phoenix.Component
 
       # Import LiveView helpers (live_render, live_component, live_patch, etc)
       import Phoenix.LiveView.Helpers

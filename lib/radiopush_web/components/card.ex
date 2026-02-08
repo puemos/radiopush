@@ -1,13 +1,12 @@
 defmodule RadiopushWeb.Components.Card do
-  use Surface.Component
+  use RadiopushWeb, :component
 
-  @doc "The main content"
-  slot default
+  slot :inner_block, required: true
 
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div class="p-3 bg-gray-800 bg-opacity-40 relative flex flex-row items-start rounded-xl">
-      <#slot />
+      <%= render_slot(@inner_block) %>
     </div>
     """
   end

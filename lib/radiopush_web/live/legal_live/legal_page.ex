@@ -1,5 +1,5 @@
 defmodule RadiopushWeb.Pages.Legal do
-  use RadiopushWeb, :surface_view_helpers
+  use RadiopushWeb, :live_view
 
   alias RadiopushWeb.Components.{
     PrivacyPolicy,
@@ -7,42 +7,43 @@ defmodule RadiopushWeb.Pages.Legal do
     Page
   }
 
-  data active_tab, :string,
-    default: "terms_and_conditions",
-    values: ["terms_and_conditions", "privacy_policy"]
+  @impl true
+  def mount(_params, _session, socket) do
+    {:ok, assign(socket, :active_tab, "terms_and_conditions")}
+  end
 
   @impl true
   def render(assigns) do
-    ~F"""
-    <Page current_user={nil} path={@path}>
+    ~H"""
+    <Page.render current_user={nil} path={@path}>
       <div>
         <nav class="flex flex-row mb-4 border-b border-gray-700 pb-2">
           <button
-            :on-click="set_active_tab"
+            phx-click="set_active_tab"
             phx-value-tab="terms_and_conditions"
-            class={
+            class={[
               "outline-none focus:outline-none text-white font-semibold",
-              "text-primary-400": @active_tab == "terms_and_conditions"
-            }
+              @active_tab == "terms_and_conditions" && "text-primary-400"
+            ]}
           >
             Terms and conditions
           </button>
           <div class="mx-2"><span>•</span></div>
           <button
-            :on-click="set_active_tab"
+            phx-click="set_active_tab"
             phx-value-tab="privacy_policy"
-            class={
+            class={[
               "outline-none focus:outline-none text-white font-semibold",
-              "text-primary-400": @active_tab == "privacy_policy"
-            }
+              @active_tab == "privacy_policy" && "text-primary-400"
+            ]}
           >
             Privacy Policy
           </button>
         </nav>
-        <PrivacyPolicy :if={@active_tab == "privacy_policy"} />
-        <TermsAndConditions :if={@active_tab == "terms_and_conditions"} />
+        <PrivacyPolicy.render :if={@active_tab == "privacy_policy"} />
+        <TermsAndConditions.render :if={@active_tab == "terms_and_conditions"} />
       </div>
-    </Page>
+    </Page.render>
     """
   end
 

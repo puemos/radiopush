@@ -1,18 +1,17 @@
 defmodule RadiopushWeb.Components.PrivacyPolicy do
-  use Surface.Component
+  use RadiopushWeb, :component
 
-  @impl true
   def render(assigns) do
-    ~F"""
+    ~H"""
     <p>Effective date: 2021-02-20</p>
-    <br>
+    <br />
     <p>1. <strong>Introduction</strong></p>
     <p>Welcome to <strong>radiopush.app</strong>.</p>
     <p><strong>radiopush.app</strong> (“us”, “we”, or “our”) operates <strong>radiopush.app</strong> (hereinafter referred to as <strong>“Service”</strong>).</p>
     <p>Our Privacy Policy governs your visit to <strong>radiopush.app</strong>, and explains how we collect, safeguard and disclose information that results from your use of our Service.</p>
     <p>We use your data to provide and improve Service. By using Service, you agree to the collection and use of information in accordance with this policy. Unless otherwise defined in this Privacy Policy, the terms used in this Privacy Policy have the same meanings as in our Terms and Conditions.</p>
     <p>Our Terms and Conditions (<strong>“Terms”</strong>) govern all use of our Service and together with the Privacy Policy constitutes your agreement with us (<strong>“agreement”</strong>).</p>
-    <br>
+    <br />
     <p>2. <strong>Definitions</strong></p>
     <p><strong>SERVICE</strong> means the radiopush.app website operated by radiopush.app.</p>
     <p><strong>PERSONAL DATA</strong> means data about a living individual who can be identified from those data (or from those and other information either in our possession or likely to come into our possession).</p>
@@ -22,10 +21,10 @@ defmodule RadiopushWeb.Components.PrivacyPolicy do
     <p><strong>DATA PROCESSORS (OR SERVICE PROVIDERS)</strong> means any natural or legal person who processes the data on behalf of the Data Controller. We may use the services of various Service Providers in order to process your data more effectively.</p>
     <p><strong>DATA SUBJECT</strong> is any living individual who is the subject of Personal Data.</p>
     <p><strong>THE USER</strong> is the individual using our Service. The User corresponds to the Data Subject, who is the subject of Personal Data.</p>
-    <br>
+    <br />
     <p>3. <strong>Information Collection and Use</strong></p>
     <p>We collect several different types of information for various purposes to provide and improve our Service to you.</p>
-    <br>
+    <br />
     <p>4. <strong>Types of Data Collected</strong></p>
     <p><strong>Personal Data</strong></p>
     <p>While using our Service, we may ask you to provide us with certain personally identifiable information that can be used to contact or identify you (<strong>“Personal Data”</strong>). Personally identifiable information may include, but is not limited to:</p>
@@ -50,7 +49,7 @@ defmodule RadiopushWeb.Components.PrivacyPolicy do
     <p>4.9. <strong>Advertising Cookies:</strong> Advertising Cookies are used to serve you with advertisements that may be relevant to you and your interests.</p>
     <p><strong>Other Data</strong></p>
     <p>While using our Service, we may also collect the following information: sex, age, date of birth, place of birth, passport details, citizenship, registration at place of residence and actual address, telephone number (work, mobile), details of documents on education, qualification, professional training, employment agreements, <a href="https://policymaker.io/non-disclosure-agreement/">NDA agreements</a>, information on bonuses and compensation, information on marital status, family members, social security (or other taxpayer identification) number, office location and other data.</p>
-    <br>
+    <br />
     <p>5. <strong>Use of Data</strong></p>
     <p>radiopush.app uses the collected data for various purposes:</p>
     <p>5.1. to provide and maintain our Service;</p>
@@ -66,7 +65,7 @@ defmodule RadiopushWeb.Components.PrivacyPolicy do
     <p>5.11. to provide you with news, special offers and general information about other goods, services and events which we offer that are similar to those that you have already purchased or enquired about unless you have opted not to receive such information;</p>
     <p>5.12. in any other way we may describe when you provide the information;</p>
     <p>5.13. for any other purpose with your consent.</p>
-    <br>
+    <br />
     <p>6. <strong>Retention of Data</strong></p>
     <p>We will retain your Personal Data only for as long as is necessary for the purposes set out in this Privacy Policy. We will retain and use your Personal Data to the extent necessary to comply with our legal obligations (for example, if we are required to retain your data to comply with applicable laws), resolve disputes, and enforce our legal agreements and policies.</p>
     <p>We will also retain Usage Data for internal analysis purposes. Usage Data is generally retained for a shorter period, except when this data is used to strengthen the security or to improve the functionality of our Service, or we are legally obligated to retain this data for longer time periods.</p>
@@ -75,7 +74,7 @@ defmodule RadiopushWeb.Components.PrivacyPolicy do
     <p>If you are located outside USA and choose to provide information to us, please note that we transfer the data, including Personal Data, to USA and process it there.</p>
     <p>Your consent to this Privacy Policy followed by your submission of such information represents your agreement to that transfer.</p>
     <p>radiopush.app will take all the steps reasonably necessary to ensure that your data is treated securely and in accordance with this Privacy Policy and no transfer of your Personal Data will take place to an organisation or a country unless there are adequate controls in place including the security of your data and other personal information.</p>
-    <br>
+    <br />
     <p>8. <strong>Disclosure of Data</strong></p>
     <p>We may disclose personal information that we collect, or you provide:</p>
     <p>8.1. <strong>Business Transaction.</strong></p>
@@ -88,10 +87,10 @@ defmodule RadiopushWeb.Components.PrivacyPolicy do
     <p>8.2.5. for any other purpose disclosed by us when you provide the information;</p>
     <p>8.2.6. with your consent in any other cases;</p>
     <p>8.2.7. if we believe disclosure is necessary or appropriate to protect the rights, property, or safety of the Company, our customers, or others.</p>
-    <br>
+    <br />
     <p>9. <strong>Security of Data</strong></p>
     <p>The security of your data is important to us but remember that no method of transmission over the Internet or method of electronic storage is 100% secure. While we strive to use commercially acceptable means to protect your Personal Data, we cannot guarantee its absolute security.</p>
-    <br>
+    <br />
     <p>10. <strong>Your Data Protection Rights Under General Data Protection Regulation (GDPR)</strong></p>
     <p>If you are a resident of the European Union (EU) and European Economic Area (EEA), you have certain data protection rights, covered by GDPR.</p>
     <p>We aim to take reasonable steps to allow you to correct, amend, delete, or limit the use of your Personal Data.</p>
@@ -105,7 +104,7 @@ defmodule RadiopushWeb.Components.PrivacyPolicy do
     <p>10.6. the right to withdraw consent. You also have the right to withdraw your consent at any time where we rely on your consent to process your personal information;</p>
     <p>Please note that we may ask you to verify your identity before responding to such requests. Please note, we may not able to provide Service without some necessary data.</p>
     <p>You have the right to complain to a Data Protection Authority about our collection and use of your Personal Data. For more information, please contact your local data protection authority in the European Economic Area (EEA).</p>
-    <br>
+    <br />
     <p>11. <strong>Your Data Protection Rights under the California Privacy Protection Act (CalOPPA)</strong></p>
     <p>CalOPPA is the first state law in the nation to require commercial websites and online services to post a privacy policy. The law’s reach stretches well beyond California to require a person or company in the United States (and conceivable the world) that operates websites collecting personally identifiable information from California consumers to post a conspicuous privacy policy on its website stating exactly the information being collected and those individuals with whom it is being shared, and to comply with this policy.</p>
     <p>According to CalOPPA we agree to the following:</p>
@@ -116,7 +115,7 @@ defmodule RadiopushWeb.Components.PrivacyPolicy do
     <p>Our Policy on “Do Not Track” Signals:</p>
     <p>We honor Do Not Track signals and do not track, plant cookies, or use advertising when a Do Not Track browser mechanism is in place. Do Not Track is a preference you can set in your web browser to inform websites that you do not want to be tracked.</p>
     <p>You can enable or disable Do Not Track by visiting the Preferences or Settings page of your web browser.</p>
-    <br>
+    <br />
     <p>12. <strong>Your Data Protection Rights under the California Consumer Privacy Act (CCPA)</strong></p>
     <p>If you are a California resident, you are entitled to learn what data we collect about you, ask to delete your data and not to sell (share) it. To exercise your data protection rights, you can make certain requests and ask us:</p>
     <p><strong>12.1. What personal information we have about you. If you make this request, we will return to you:</strong></p>
@@ -134,34 +133,34 @@ defmodule RadiopushWeb.Components.PrivacyPolicy do
     <p>Please note, if you ask us to delete or stop selling your data, it may impact your experience with us, and you may not be able to participate in certain programs or membership services which require the usage of your personal information to function. But in no circumstances, we will discriminate against you for exercising your rights.</p>
     <p>To exercise your California data protection rights described above, please send your request(s) by email: <strong>radiopush.app@gmail.com</strong>.</p>
     <p>Your data protection rights, described above, are covered by the CCPA, short for the California Consumer Privacy Act. To find out more, visit the official California Legislative Information website. The CCPA took effect on 01/01/2020.</p>
-    <br>
+    <br />
     <p>13. <strong>Service Providers</strong></p>
     <p>We may employ third party companies and individuals to facilitate our Service (<strong>“Service Providers”</strong>), provide Service on our behalf, perform Service-related services or assist us in analysing how our Service is used.</p>
     <p>These third parties have access to your Personal Data only to perform these tasks on our behalf and are obligated not to disclose or use it for any other purpose.</p>
-    <br>
+    <br />
     <p>14. <strong>Analytics</strong></p>
     <p>We may use third-party Service Providers to monitor and analyze the use of our Service.</p>
-    <br>
+    <br />
     <p>15. <strong>CI/CD tools</strong></p>
     <p>We may use third-party Service Providers to automate the development process of our Service.</p>
-    <br>
+    <br />
     <p>16. <strong>Behavioral Remarketing</strong></p>
     <p>We may use remarketing services to advertise on third party websites to you after you visited our Service. We and our third-party vendors use cookies to inform, optimise and serve ads based on your past visits to our Service.</p>
-    <br>
+    <br />
     <p>17. <strong>Links to Other Sites</strong></p>
     <p>Our Service may contain links to other sites that are not operated by us. If you click a third party link, you will be directed to that third party’s site. We strongly advise you to review the Privacy Policy of every site you visit.</p>
     <p>We have no control over and assume no responsibility for the content, privacy policies or practices of any third party sites or services.</p>
     <p>For example, the outlined <a href="https://policymaker.io/privacy-policy/">privacy policy</a> has been made using <a href="https://policymaker.io/">PolicyMaker.io</a>, a free tool that helps create high-quality legal documents. PolicyMaker’s <a href="https://policymaker.io/privacy-policy/">privacy policy generator</a> is an easy-to-use tool for creating a <a href="https://policymaker.io/blog-privacy-policy/">privacy policy for blog</a>, website, e-commerce store or mobile app.</p>
-    <br>
+    <br />
     <p>18. <strong><strong>Children’s Privacy</strong></strong></p>
     <p>Our Services are not intended for use by children under the age of 18 (<strong>“Child”</strong> or <strong>“Children”</strong>).</p>
     <p>We do not knowingly collect personally identifiable information from Children under 18. If you become aware that a Child has provided us with Personal Data, please contact us. If we become aware that we have collected Personal Data from Children without verification of parental consent, we take steps to remove that information from our servers.</p>
-    <br>
+    <br />
     <p>19. <strong>Changes to This Privacy Policy</strong></p>
     <p>We may update our Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page.</p>
     <p>We will let you know via email and/or a prominent notice on our Service, prior to the change becoming effective and update “effective date” at the top of this Privacy Policy.</p>
     <p>You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.</p>
-    <br>
+    <br />
     <p>20. <strong>Contact Us</strong></p>
     <p>If you have any questions about this Privacy Policy, please contact us by email: <strong>radiopush.app@gmail.com</strong>.</p>
     <p style="margin-top: 5em; font-size: 0.7em;">This <a href="https://policymaker.io/privacy-policy/">Privacy Policy</a> was created for <strong>radiopush.app</strong> by <a href="https://policymaker.io">PolicyMaker.io</a> on 2021-02-20.</p>

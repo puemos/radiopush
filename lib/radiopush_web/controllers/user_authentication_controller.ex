@@ -2,12 +2,13 @@ defmodule RadiopushWeb.UserAuthenticationController do
   use RadiopushWeb, :controller
   alias Radiopush.Cmd.FetchOrCreateUser
   alias Radiopush.Context
+  alias Radiopush.Spotify.Auth
   alias RadiopushWeb.UserAuth
 
   def authenticate(conn, params) do
-    case Spotify.Authentication.authenticate(conn, params) do
+    case Auth.authenticate(conn, params) do
       {:ok, conn} ->
-        credentials = Spotify.Credentials.new(conn)
+        credentials = Auth.credentials_from_conn(conn)
 
         case FetchOrCreateUser.run(
                %Context{},

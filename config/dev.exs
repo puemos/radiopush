@@ -71,7 +71,7 @@ config :phoenix, :stacktrace_depth, 20
 # Initialize plugs at runtime for faster development compilation
 config :phoenix, :plug_init_mode, :runtime
 
-config :spotify_ex,
+config :radiopush, :spotify,
   client_id: System.get_env("SPOTIFY_CLIENT_ID"),
   secret_key: System.get_env("SPOTIFY_CLIENT_SECRET"),
   scopes: ["user-read-email", "playlist-read-private", "playlist-read-collaborative"],

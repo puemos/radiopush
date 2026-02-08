@@ -1,34 +1,15 @@
 defmodule RadiopushWeb.Pages.Explore do
   @moduledoc false
-  use RadiopushWeb, :surface_view_helpers
+  use RadiopushWeb, :live_view
 
-  alias Radiopush.Qry.{
-    ListPublicChannels,
-    GetChannel
-  }
-
-  alias Radiopush.Cmd.{
-    AddUserToChannel,
-    RemoveUserFromChannel
-  }
-
-  alias RadiopushWeb.Components.{
-    ChannelRow,
-    Page
-  }
-
-  alias Surface.Components.Form.{
-    TextInput
-  }
-
-  data public_channels_search, :string, default: ""
-  data public_channels_cursor, :string, default: :init
-  data public_channels, :list
+  alias Radiopush.Cmd.{AddUserToChannel, RemoveUserFromChannel}
+  alias Radiopush.Qry.{GetChannel, ListPublicChannels}
+  alias RadiopushWeb.Components.{ChannelRow, Page}
 
   @impl true
   def render(assigns) do
-    ~F"""
-    <Page current_user={@context.user} path={@path}>
+    ~H"""
+    <Page.render current_user={@context.user} path={@path}>
       <div>
         <div class="flex flex-col justify-between items-start">
           <h1 class="text-2xl md:text-3xl font-bold overflow-ellipsis overflow-hidden text-white-300">
@@ -40,18 +21,21 @@ defmodule RadiopushWeb.Pages.Explore do
         </div>
         <div class="h-6" />
 
-        <TextInput
+        <input
+          type="text"
           value={@public_channels_search}
-          keyup="public_channels_search_keyup"
-          opts={placeholder: "Search...", autocomplete: "off"}
+          phx-keyup="public_channels_search_keyup"
+          placeholder="Search..."
+          autocomplete="off"
           class="flex-1 px-4 py-3 border-none text-sm font-medium placeholder-gray-400 text-white bg-gray-600 rounded-xl group outline-none focus:outline-none focus:ring-0 w-full"
         />
 
         <div class="h-6" />
 
         <div id="channels" class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 xl:grid-cols-2 gap-4">
-          <ChannelRow
+          <.live_component
             :for={channel <- @public_channels}
+            module={ChannelRow}
             id={"channel-#{channel.name}"}
             channel={channel}
             join_click="join_channel"
@@ -60,7 +44,7 @@ defmodule RadiopushWeb.Pages.Explore do
         </div>
         <div class="h-6" />
       </div>
-    </Page>
+    </Page.render>
     """
   end
 
@@ -69,6 +53,7 @@ defmodule RadiopushWeb.Pages.Explore do
     socket =
       socket
       |> assign_defaults(session)
+      |> assign(public_channels_search: "", public_channels_cursor: :init, public_channels: [])
       |> assign_public_channels()
 
     {:ok, socket}
@@ -81,12 +66,9 @@ defmodule RadiopushWeb.Pages.Explore do
 
       :init ->
         {:ok, list, metadata} =
-          ListPublicChannels.run(
-            socket.assigns.context,
-            %ListPublicChannels.Query{
-              name: socket.assigns.public_channels_search
-            }
-          )
+          ListPublicChannels.run(socket.assigns.context, %ListPublicChannels.Query{
+            name: socket.assigns.public_channels_search
+          })
 
         socket
         |> assign(public_channels: list)
@@ -94,13 +76,10 @@ defmodule RadiopushWeb.Pages.Explore do
 
       cursor ->
         {:ok, list, metadata} =
-          ListPublicChannels.run(
-            socket.assigns.context,
-            %ListPublicChannels.Query{
-              cursor: cursor,
-              name: socket.assigns.public_channels_search
-            }
-          )
+          ListPublicChannels.run(socket.assigns.context, %ListPublicChannels.Query{
+            cursor: cursor,
+            name: socket.assigns.public_channels_search
+          })
 
         socket
         |> assign(public_channels: list)
@@ -110,15 +89,9 @@ defmodule RadiopushWeb.Pages.Explore do
 
   @impl true
   def handle_params(_, uri, socket) do
-    %URI{
-      path: path
-    } = URI.parse(uri)
+    %URI{path: path} = URI.parse(uri)
 
-    socket =
-      socket
-      |> assign(path: path)
-
-    {:noreply, socket}
+    {:noreply, assign(socket, path: path)}
   end
 
   @impl true
@@ -132,19 +105,15 @@ defmodule RadiopushWeb.Pages.Explore do
     {:noreply, socket}
   end
 
+  @impl true
   def handle_event("join_channel", %{"value" => channel_id}, socket) do
     with {:ok} <-
-           AddUserToChannel.run(
-             socket.assigns.context,
-             %AddUserToChannel.Cmd{
-               channel_id: channel_id,
-               user_id: socket.assigns.context.user.id
-             }
-           ),
+           AddUserToChannel.run(socket.assigns.context, %AddUserToChannel.Cmd{
+             channel_id: channel_id,
+             user_id: socket.assigns.context.user.id
+           }),
          {:ok, channel} <-
-           GetChannel.run(socket.assigns.context, %GetChannel.Query{
-             channel_id: channel_id
-           }) do
+           GetChannel.run(socket.assigns.context, %GetChannel.Query{channel_id: channel_id}) do
       channel = Map.merge(channel, %{joined: true})
 
       socket =
@@ -159,19 +128,15 @@ defmodule RadiopushWeb.Pages.Explore do
     end
   end
 
+  @impl true
   def handle_event("leave_channel", %{"value" => channel_id}, socket) do
     with {:ok, channel} <-
-           GetChannel.run(socket.assigns.context, %GetChannel.Query{
-             channel_id: channel_id
-           }),
+           GetChannel.run(socket.assigns.context, %GetChannel.Query{channel_id: channel_id}),
          {:ok} <-
-           RemoveUserFromChannel.run(
-             socket.assigns.context,
-             %RemoveUserFromChannel.Cmd{
-               channel_id: channel_id,
-               user_id: socket.assigns.context.user.id
-             }
-           ) do
+           RemoveUserFromChannel.run(socket.assigns.context, %RemoveUserFromChannel.Cmd{
+             channel_id: channel_id,
+             user_id: socket.assigns.context.user.id
+           }) do
       channel = Map.merge(channel, %{joined: false})
 
       socket =
@@ -186,11 +151,8 @@ defmodule RadiopushWeb.Pages.Explore do
     end
   end
 
+  @impl true
   def handle_event("load-more", _params, socket) do
-    socket =
-      socket
-      |> assign_public_channels()
-
-    {:noreply, socket}
+    {:noreply, assign_public_channels(socket)}
   end
 end

@@ -120,6 +120,7 @@ defmodule Radiopush.Accounts.PostgresImpl do
       )
 
     metadata = Infra.PageMetadata.new(metadata)
+    entries = Enum.sort_by(entries, &String.downcase(&1.nickname))
 
     {:ok, entries, metadata}
   end

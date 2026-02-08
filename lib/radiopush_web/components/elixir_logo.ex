@@ -1,9 +1,8 @@
 defmodule RadiopushWeb.Components.ElixirLogo do
-  use Surface.Component
+  use RadiopushWeb, :component
 
-  @impl true
   def render(assigns) do
-    ~F"""
+    ~H"""
     <svg
       xmlns="http://www.w3.org/2000/svg"
       xmlns:xlink="http://www.w3.org/1999/xlink"

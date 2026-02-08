@@ -4,6 +4,7 @@ defmodule RadiopushWeb.UserAuth do
 
   alias Radiopush.Cmd.FetchOrCreateUser
   alias Radiopush.Context
+  alias Radiopush.Spotify.Auth
   alias RadiopushWeb.Router.Helpers, as: Routes
 
   @doc """
@@ -17,8 +18,7 @@ defmodule RadiopushWeb.UserAuth do
   if you are not using LiveView.
   """
   def log_in_user(conn, _user, _params \\ %{}) do
-    Spotify.Authentication.refresh(conn)
-    spotify_credentials = Spotify.Credentials.new(conn)
+    spotify_credentials = Auth.credentials_from_conn(conn)
     token = spotify_credentials.access_token
     user_return_to = get_session(conn, :user_return_to)
 

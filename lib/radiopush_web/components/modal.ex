@@ -1,14 +1,11 @@
 defmodule RadiopushWeb.Components.Modal do
-  use Surface.Component
+  use RadiopushWeb, :component
 
-  @doc "The title of the modal"
-  prop title, :string, required: true
-
-  @doc "The main content"
-  slot default
+  attr :title, :string, required: true
+  slot :inner_block, required: true
 
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div
       id={"modal-#{@title}"}
       phx-hook="ScrollLock"
@@ -16,10 +13,10 @@ defmodule RadiopushWeb.Components.Modal do
     >
       <div class="relative overflow-y-auto h-full w-full bg-gray-800 w-full max-w-2xl lg:w-9/12 md:px-10 md:rounded-xl">
         <h1 class="text-2xl md:text-3xl font-bold pt-4 md:pt-10 px-4 overflow-ellipsis overflow-hidden text-white-300 mb-4">
-          {@title}
+          <%= @title %>
         </h1>
         <div style="height: calc(100% - 6rem)" class="p-4">
-          <#slot />
+          <%= render_slot(@inner_block) %>
         </div>
       </div>
     </div>

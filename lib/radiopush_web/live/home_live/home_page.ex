@@ -1,6 +1,6 @@
 defmodule RadiopushWeb.Pages.Home do
   @moduledoc false
-  use RadiopushWeb, :surface_view_helpers
+  use RadiopushWeb, :live_view
 
   alias Radiopush.{
     Channels
@@ -28,26 +28,10 @@ defmodule RadiopushWeb.Pages.Home do
     NewPostForm
   }
 
-  data playlists, :list, default: []
-
-  data post, :map, default: %{"url" => ""}
-
-  data public_channels, :list, default: []
-  data user_channels, :list, default: []
-
-  data feed_last_fetch, :string, default: :init
-  data feed_cursor, :string, default: :init
-  data new_feed, :list, default: []
-  data feed, :list
-
-  data channel_changeset, :changeset
-  data open_create_channel, :boolean, default: false
-  data open_add_to_playlist, :boolean, default: false
-
   @impl true
   def render(assigns) do
-    ~F"""
-    <Page current_user={@context.user} path={@path}>
+    ~H"""
+    <Page.render current_user={@context.user} path={@path}>
       <div class="flex flex-row">
         <div phx-hook="InfiniteScroll" id="Home" class="flex-1">
           <div class="flex flex-col justify-between items-start">
@@ -60,26 +44,27 @@ defmodule RadiopushWeb.Pages.Home do
           </div>
 
           <div class="py-6">
-            <NewPostForm id="new-post-form" channels={@user_channels} submit="post_submit" post={@post} />
+            <NewPostForm.render channels={@user_channels} submit="post_submit" post={@post} />
           </div>
 
           <div
             :if={Enum.count(@new_feed) > 0}
             id="OldPosts"
-            phx-update="prepend"
             class="grid grid-cols-1 md:grid-cols-1 gap-4 w-full mb-4"
           >
-            <PostCard
+            <.live_component
               :for={post <- @new_feed}
+              module={PostCard}
               id={"post-#{post.id}"}
               nickname={post.user.nickname}
               post={post}
               channel={post.channel}
             />
           </div>
-          <div id="NewPosts" phx-update="append" class="grid grid-cols-1 md:grid-cols-1 gap-4 w-full mb-4">
-            <PostCard
+          <div id="NewPosts" class="grid grid-cols-1 md:grid-cols-1 gap-4 w-full mb-4">
+            <.live_component
               :for={post <- @feed}
+              module={PostCard}
               id={"post-#{post.id}"}
               nickname={post.user.nickname}
               post={post}
@@ -93,13 +78,14 @@ defmodule RadiopushWeb.Pages.Home do
             <div class="p-3  relative flex flex-row items-start rounded-xl">
               <div class="flex flex-col w-full">
                 <h3 class="text-lg font-bold mb-4">Latest public channels</h3>
-                <div id="channels" phx-update="prepend" class="top-6 sticky lg:flex flex-col space-y-4">
+                <div id="channels" class="top-6 sticky lg:flex flex-col space-y-4">
                   <div
                     :for={channel <- Enum.take(@public_channels, 4)}
                     class="border rounded-xl border-gray-700 border-opacity-30"
                     id={"s-#{channel.id}"}
                   >
-                    <ChannelRow
+                    <.live_component
+                      module={ChannelRow}
                       id={"channel-#{channel.id}"}
                       channel={channel}
                       join_click="join_channel"
@@ -112,7 +98,7 @@ defmodule RadiopushWeb.Pages.Home do
           </div>
         </div>
       </div>
-    </Page>
+    </Page.render>
     """
   end
 
@@ -121,6 +107,18 @@ defmodule RadiopushWeb.Pages.Home do
     socket =
       socket
       |> assign_defaults(session)
+      |> assign(
+        playlists: [],
+        post: %{"url" => ""},
+        public_channels: [],
+        user_channels: [],
+        feed_last_fetch: :init,
+        feed_cursor: :init,
+        new_feed: [],
+        feed: [],
+        open_create_channel: false,
+        open_add_to_playlist: false
+      )
       |> assign_feed()
       |> assign_public_channels()
       |> assign_user_channels()
@@ -265,7 +263,7 @@ defmodule RadiopushWeb.Pages.Home do
          ) do
       {:ok, channel} ->
         {:noreply,
-         push_redirect(socket,
+         push_navigate(socket,
            to: Routes.live_path(socket, RadiopushWeb.Pages.Channel, channel.id)
          )}
 

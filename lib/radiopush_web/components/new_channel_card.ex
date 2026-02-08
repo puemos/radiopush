@@ -1,13 +1,12 @@
 defmodule RadiopushWeb.Components.NewChannelCard do
-  use Surface.Component
+  use RadiopushWeb, :component
 
-  @doc "on click"
-  prop click, :event, required: true
+  attr :click, :string, required: true
 
   def render(assigns) do
-    ~F"""
+    ~H"""
     <button
-      :on-click={@click}
+      phx-click={@click}
       class="group
       hover:shadow-md hover:filter hover:brightness-125
       duration-400

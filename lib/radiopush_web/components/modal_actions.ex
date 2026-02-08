@@ -1,13 +1,12 @@
 defmodule RadiopushWeb.Components.ModalActions do
-  use Surface.Component
+  use RadiopushWeb, :component
 
-  @doc "The main content"
-  slot default
+  slot :inner_block, required: true
 
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div class="flex flex-row space-x-2 bottom-0 ring-2 ring-gray-800 left-0 w-full py-4 sticky bg-gray-800">
-      <#slot />
+      <%= render_slot(@inner_block) %>
     </div>
     """
   end

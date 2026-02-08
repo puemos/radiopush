@@ -13,15 +13,16 @@ config :radiopush,
 config :radiopush, Radiopush.Repo, migration_primary_key: [type: :uuid]
 
 config :esbuild,
-  version: "0.14.39",
+  version: "0.25.4",
   default: [
-    args: ~w(js/app.js --bundle --target=es2016 --outdir=../priv/static/assets),
+    args: ~w(js/app.js --bundle --target=es2022 --outdir=../priv/static/assets),
     cd: Path.expand("../assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
 
 config :tailwind,
-  version: "3.0.24",
+  # The project uses a Tailwind v3-style JS config and content scanning.
+  version: "3.4.17",
   default: [
     args: ~w(
       --config=tailwind.config.js
@@ -32,7 +33,7 @@ config :tailwind,
   ]
 
 config :dart_sass,
-  version: "1.49.11",
+  version: "1.93.2",
   default: [
     args: ~w(css/app.scss ../priv/static/assets/app.tailwind.css),
     cd: Path.expand("../assets", __DIR__)
@@ -41,6 +42,7 @@ config :dart_sass,
 # Configures the endpoint
 config :radiopush, RadiopushWeb.Endpoint,
   url: [host: "localhost"],
+  adapter: Bandit.PhoenixAdapter,
   secret_key_base: "daeieHyyVE5xD0ZxvC+k1RMWKtsd01yOWK/k0lO/PMH2Y35lw/ZV9NLtjVf9Rkg0",
   render_errors: [view: RadiopushWeb.ErrorView, accepts: ~w(html json), layout: false],
   pubsub_server: Radiopush.PubSub,

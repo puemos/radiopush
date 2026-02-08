@@ -82,8 +82,13 @@ if config_env() == :dev do
   end
 end
 
-config :spotify_ex,
+config :radiopush, :spotify,
   client_id: System.get_env("SPOTIFY_CLIENT_ID"),
   secret_key: System.get_env("SPOTIFY_CLIENT_SECRET"),
   scopes: ["user-read-email", "playlist-read-private", "playlist-read-collaborative"],
-  callback_url: "https://radiopush.app/auth/spotify/callback"
+  callback_url:
+    System.get_env("SPOTIFY_CALLBACK_URL") ||
+      if(config_env() == :dev,
+        do: "http://localhost:4000/auth/spotify/callback",
+        else: "https://radiopush.app/auth/spotify/callback"
+      )

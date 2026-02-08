@@ -1,38 +1,18 @@
 defmodule RadiopushWeb.Pages.Channels do
   @moduledoc false
-  use RadiopushWeb, :surface_view_helpers
+  use RadiopushWeb, :live_view
 
-  alias Radiopush.{
-    Channels
-  }
-
-  alias Radiopush.Cmd.{
-    CreateChannel
-  }
-
-  alias Radiopush.Qry.{
-    ListChannelsByCurrentUser
-  }
-
-  alias RadiopushWeb.Components.{
-    ChannelCard,
-    NewChannelModal,
-    NewChannelCard,
-    Page
-  }
-
-  data user_channels_cursor, :string, default: :init
-  data user_channels, :list
-
-  data channel_changeset, :changeset
-  data open_create_channel, :boolean, default: false
+  alias Radiopush.Channels
+  alias Radiopush.Cmd.CreateChannel
+  alias Radiopush.Qry.ListChannelsByCurrentUser
+  alias RadiopushWeb.Components.{ChannelCard, NewChannelCard, NewChannelModal, Page}
 
   @impl true
   def render(assigns) do
-    ~F"""
-    <Page current_user={@context.user} path={@path}>
+    ~H"""
+    <Page.render current_user={@context.user} path={@path}>
       <div>
-        <NewChannelModal
+        <NewChannelModal.render
           :if={@open_create_channel}
           close="close-create-channel"
           submit="channel"
@@ -49,11 +29,11 @@ defmodule RadiopushWeb.Pages.Channels do
         </div>
         <div class="h-12" />
         <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
-          <NewChannelCard click="open-create-channel" />
-          <ChannelCard :for={channel <- @user_channels} channel={channel} card_click="card_click" />
+          <NewChannelCard.render click="open-create-channel" />
+          <ChannelCard.render :for={channel <- @user_channels} channel={channel} card_click="card_click" />
         </div>
       </div>
-    </Page>
+    </Page.render>
     """
   end
 
@@ -62,6 +42,7 @@ defmodule RadiopushWeb.Pages.Channels do
     socket =
       socket
       |> assign_defaults(session)
+      |> assign(user_channels_cursor: :init, user_channels: [], open_create_channel: false)
       |> assign_user_channels()
       |> assign_channel_changeset(Channels.change_channel())
 
@@ -86,12 +67,9 @@ defmodule RadiopushWeb.Pages.Channels do
 
       cursor ->
         {:ok, list, metadata} =
-          ListChannelsByCurrentUser.run(
-            socket.assigns.context,
-            %ListChannelsByCurrentUser.Query{
-              cursor: cursor
-            }
-          )
+          ListChannelsByCurrentUser.run(socket.assigns.context, %ListChannelsByCurrentUser.Query{
+            cursor: cursor
+          })
 
         socket
         |> assign(user_channels: list)
@@ -109,52 +87,34 @@ defmodule RadiopushWeb.Pages.Channels do
 
   @impl true
   def handle_params(_, uri, socket) do
-    %URI{
-      path: path
-    } = URI.parse(uri)
-
-    socket =
-      socket
-      |> assign(path: path)
-
-    {:noreply, socket}
+    %URI{path: path} = URI.parse(uri)
+    {:noreply, assign(socket, path: path)}
   end
 
   @impl true
   def handle_event("channel", %{"channel" => channel_params}, socket) do
-    %{
-      "description" => description,
-      "name" => name,
-      "private" => private
-    } = channel_params
+    %{"description" => description, "name" => name, "private" => private} = channel_params
 
-    case CreateChannel.run(
-           socket.assigns.context,
-           %CreateChannel.Cmd{
-             description: description,
-             name: name,
-             private: private
-           }
-         ) do
+    case CreateChannel.run(socket.assigns.context, %CreateChannel.Cmd{
+           description: description,
+           name: name,
+           private: private
+         }) do
       {:ok, channel} ->
         {:noreply,
-         push_redirect(socket,
+         push_navigate(socket,
            to: Routes.live_path(socket, RadiopushWeb.Pages.Channel, channel.name)
          )}
 
       {:error, %Ecto.Changeset{} = changeset} ->
-        socket =
-          socket
-          |> assign_channel_changeset(changeset)
-
-        {:noreply, socket}
+        {:noreply, assign_channel_changeset(socket, changeset)}
     end
   end
 
   @impl true
   def handle_event("card_click", %{"name" => name}, socket) do
     {:noreply,
-     push_redirect(socket,
+     push_navigate(socket,
        to: Routes.live_path(socket, RadiopushWeb.Pages.Channel, name)
      )}
   end

@@ -1,6 +1,6 @@
 defmodule RadiopushWeb.Pages.Channel do
   @moduledoc false
-  use RadiopushWeb, :surface_view_helpers
+  use RadiopushWeb, :live_view
 
   alias Radiopush.Channels
 
@@ -30,29 +30,10 @@ defmodule RadiopushWeb.Pages.Channel do
     Page
   }
 
-  data initial_time, :any, default: DateTime.utc_now()
-
-  data channel, :map
-  data channel_changeset, :changeset
-
-  data post, :map, default: %{"url" => ""}
-
-  data new_posts, :list
-
-  data posts, :list
-  data posts_cursor, :string, default: :init
-
-  data members, :list
-  data members_cursor, :string, default: :init
-
-  data open_members, :boolean, default: false
-  data open_settings, :boolean, default: false
-  data open_invitation, :boolean, default: false
-
   @impl true
   def render(assigns) do
-    ~F"""
-    <Page current_user={@context.user} path={@path}>
+    ~H"""
+    <Page.render current_user={@context.user} path={@path}>
       <div
         phx-hook="InfiniteScroll"
         id="channel-page"
@@ -70,7 +51,7 @@ defmodule RadiopushWeb.Pages.Channel do
             </div>
             <div class="flex flex-row">
               <button
-                :on-click="leave_channel"
+                phx-click="leave_channel"
                 title="Leave channel"
                 class="ml-3 text-gray-100 hover:text-gray-300 text-red-500"
               >
@@ -90,7 +71,7 @@ defmodule RadiopushWeb.Pages.Channel do
                 </svg>
               </button>
               <button
-                :on-click="open_settings"
+                phx-click="open_settings"
                 :if={@channel.owner_id == @context.user.id}
                 class="ml-3 text-gray-100 hover:text-gray-300"
               >
@@ -116,7 +97,7 @@ defmodule RadiopushWeb.Pages.Channel do
                 </svg>
               </button>
               <button
-                :on-click="open_invitation"
+                phx-click="open_invitation"
                 :if={@channel.owner_id == @context.user.id}
                 class="ml-3 text-gray-100 hover:text-gray-300"
               >
@@ -135,7 +116,7 @@ defmodule RadiopushWeb.Pages.Channel do
                   />
                 </svg>
               </button>
-              <button :on-click="open_members" class="ml-3 text-gray-100 hover:text-gray-300">
+              <button phx-click="open_members" class="ml-3 text-gray-100 hover:text-gray-300">
                 <svg
                   class="w-6 h-6"
                   xmlns="http://www.w3.org/2000/svg"
@@ -155,24 +136,25 @@ defmodule RadiopushWeb.Pages.Channel do
           </div>
           <div class="h-12" />
           <div>
-            <NewPostForm id="new-post-form" submit="post_submit" post={@post} />
+            <NewPostForm.render submit="post_submit" post={@post} />
             <div class="h-6" />
             <div
               :if={Enum.count(@new_posts) > 0}
               id="NewPosts"
-              phx-update="prepend"
               class="grid grid-cols-1 md:grid-cols-1 gap-4 w-full mb-4"
             >
-              <PostCard
+              <.live_component
                 :for={post <- @new_posts}
+                module={PostCard}
                 id={"post-#{post.id}"}
                 nickname={post.user.nickname}
                 post={post}
               />
             </div>
-            <div id="OldPosts" phx-update="append" class="grid grid-cols-1 md:grid-cols-1 gap-4 w-full mb-4">
-              <PostCard
+            <div id="OldPosts" class="grid grid-cols-1 md:grid-cols-1 gap-4 w-full mb-4">
+              <.live_component
                 :for={post <- @posts}
+                module={PostCard}
                 id={"post-#{post.id}"}
                 nickname={post.user.nickname}
                 post={post}
@@ -182,13 +164,14 @@ defmodule RadiopushWeb.Pages.Channel do
           </div>
         </div>
         <div style="z-index: 60" :if={@channel.owner_id == @context.user.id and @open_invitation}>
-          <ChannelInviteModal id="invite-modal" close="close_invitation" members={@members} />
+          <.live_component module={ChannelInviteModal} id="invite-modal" close="close_invitation" members={@members} />
         </div>
         <div :if={@open_members}>
-          <ChannelMembersModal close="close_members" members={@members} />
+          <ChannelMembersModal.render close="close_members" members={@members} />
         </div>
-        <ChannelEditDetailsModal
+        <.live_component
           :if={@channel.owner_id == @context.user.id and @open_settings}
+          module={ChannelEditDetailsModal}
           id="channel_edit_details_modal"
           close="close_settings"
           submit="channel_details_submit"
@@ -197,7 +180,7 @@ defmodule RadiopushWeb.Pages.Channel do
           changeset={@channel_changeset}
         />
       </div>
-    </Page>
+    </Page.render>
     """
   end
 
@@ -205,7 +188,21 @@ defmodule RadiopushWeb.Pages.Channel do
 
   @impl true
   def mount(%{"name" => name}, session, socket) do
-    socket = assign_defaults(socket, session)
+    socket =
+      socket
+      |> assign_defaults(session)
+      |> assign(
+        initial_time: DateTime.utc_now(),
+        post: %{"url" => ""},
+        new_posts: [],
+        posts: [],
+        posts_cursor: :init,
+        members: [],
+        members_cursor: :init,
+        open_members: false,
+        open_settings: false,
+        open_invitation: false
+      )
 
     case GetChannel.run(socket.assigns.context, %GetChannel.Query{
            name: name
@@ -231,7 +228,7 @@ defmodule RadiopushWeb.Pages.Channel do
 
       {:error, _} ->
         {:ok,
-         push_redirect(
+         push_navigate(
            socket,
            to: Routes.live_path(socket, RadiopushWeb.Pages.Home)
          )}
@@ -585,7 +582,7 @@ defmodule RadiopushWeb.Pages.Channel do
          ) do
       {:ok} ->
         {:noreply,
-         push_redirect(socket,
+         push_navigate(socket,
            to: Routes.live_path(socket, RadiopushWeb.Pages.Home)
          )}
 

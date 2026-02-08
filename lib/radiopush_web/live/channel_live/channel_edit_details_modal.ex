@@ -1,81 +1,83 @@
 defmodule RadiopushWeb.Components.ChannelEditDetailsModal do
-  use Surface.LiveComponent
+  use RadiopushWeb, :live_component
 
-  alias RadiopushWeb.Components.{
-    Button,
-    Modal,
-    ModalActions
-  }
+  alias RadiopushWeb.Components.{Button, Modal, ModalActions}
 
-  alias Surface.Components.Form
+  attr :changeset, :any, required: true
+  attr :submit, :string, required: true
+  attr :delete, :string, required: true
+  attr :change, :string, default: nil
+  attr :close, :string, required: true
 
-  alias Surface.Components.Form.{
-    Field,
-    TextInput,
-    TextArea,
-    Checkbox
-  }
+  @impl true
+  def mount(socket) do
+    {:ok, assign(socket, delete_verification: "")}
+  end
 
-  @doc "Post data"
-  prop changeset, :changeset, required: true
-
-  @doc "On form submit event"
-  prop submit, :event, required: true
-
-  @doc "On form delete event"
-  prop delete, :event, required: true
-
-  @doc "On url input change"
-  prop change, :event, required: true
-
-  @doc "Event to close the modal"
-  prop close, :event, required: true
-
-  data delete_verification, :string, default: ""
-
+  @impl true
   def render(assigns) do
-    ~F"""
-    <Modal title="Settings">
-      <Form for={@changeset} submit={@submit} opts={class: "h-full"}>
+    assigns = assign(assigns, :form, to_form(assigns.changeset))
+
+    ~H"""
+    <Modal.render title="Settings">
+      <form phx-submit={@submit} class="h-full">
         <div class="h-full flex flex-col">
-          <Field name={:description} class="w-full">
-            <TextArea
-              rows="4"
-              opts={placeholder: "Channel description", style: "resize: none"}
-              class="input w-full my-1"
-            />
-          </Field>
+          <textarea
+            name={@form[:description].name}
+            rows="4"
+            placeholder="Channel description"
+            style="resize: none"
+            class="input w-full my-1"
+          ><%= @form[:description].value %></textarea>
+
           <div class="flex flex-row justify-between space-x-2">
-            <Field
-              name={:private}
-              class="flex items-center my-1 flex items-center justify-between py-2 w-full"
-            >
+            <div class="flex items-center my-1 justify-between py-2 w-full">
               <span class="text-sm ml-1">Make private</span>
-              <Checkbox class="h-5 w-5 text-primary-500 focus:ring-primary-500 border-gray-300 rounded" />
-            </Field>
+              <input type="hidden" name={@form[:private].name} value="false" />
+              <input
+                type="checkbox"
+                name={@form[:private].name}
+                value="true"
+                checked={@form[:private].value}
+                class="h-5 w-5 text-primary-500 focus:ring-primary-500 border-gray-300 rounded"
+              />
+            </div>
           </div>
+
           <div class="flex-1" />
+
           <div class="flex flex-row mb-2">
-            <TextInput
+            <input
+              type="text"
               value={@delete_verification}
-              keyup="keyup"
-              opts={placeholder: "Type delete to verify", autocomplete: "off"}
+              phx-keyup="keyup"
+              phx-target={@myself}
+              placeholder="Type delete to verify"
+              autocomplete="off"
               class="input border-2 ring-red-500 w-full mr-2 focus:ring-red-500"
             />
-            <Button disabled={@delete_verification != "Delete"} click={@delete} color="danger">Delete</Button>
+            <Button.render
+              disabled={@delete_verification != "Delete"}
+              click={@delete}
+              color="danger"
+            >
+              Delete
+            </Button.render>
           </div>
-          <ModalActions>
+
+          <ModalActions.render>
             <div class="flex flex-row w-full space-x-2">
-              <Button click={@close} expand color="secondary">Close</Button>
-              <Button type="submit" expand color="primary">Update</Button>
+              <Button.render click={@close} expand color="secondary">Close</Button.render>
+              <Button.render type="submit" expand color="primary">Update</Button.render>
             </div>
-          </ModalActions>
+          </ModalActions.render>
         </div>
-      </Form>
-    </Modal>
+      </form>
+    </Modal.render>
     """
   end
 
+  @impl true
   def handle_event("keyup", %{"value" => value}, socket) do
     {:noreply, assign(socket, delete_verification: value)}
   end

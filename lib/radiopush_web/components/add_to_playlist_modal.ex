@@ -1,42 +1,30 @@
 defmodule RadiopushWeb.Components.AddToPlaylistModal do
-  use Surface.Component
+  use RadiopushWeb, :component
 
-  alias RadiopushWeb.Components.{
-    Modal,
-    ModalActions,
-    Button
-  }
+  alias RadiopushWeb.Components.{Button, Modal, ModalActions}
 
-  @doc "The post data"
-  prop post, :map, required: true
+  attr :post, :map, required: true
+  attr :playlists, :list, default: []
+  attr :close, :string, required: true
+  attr :click_playlist, :string, required: true
 
-  @doc "User's playlists"
-  prop playlists, :list, default: []
-
-  @doc "Event to close the modal"
-  prop close, :event, required: true
-
-  @doc "On playlist click"
-  prop click_playlist, :event, required: true
-
-  @impl true
   def render(assigns) do
-    ~F"""
-    <Modal title="Add to playlist">
+    ~H"""
+    <Modal.render title="Add to playlist">
       <div class="flex flex-col w-full">
         <div class="flex flex-col">
           <div :for={playlist <- @playlists} class="flex flex-row justify-between">
-            <div>{playlist.name}</div>
-            <Button click={@click_playlist} color="secondary" value={playlist.id}>Close</Button>
+            <div><%= playlist.name %></div>
+            <Button.render click={@click_playlist} color="secondary" value={playlist.id}>Add</Button.render>
           </div>
         </div>
       </div>
-      <ModalActions>
+      <ModalActions.render>
         <div class="flex flex-row w-full space-x-2">
-          <Button click={@close} expand color="secondary">Close</Button>
+          <Button.render click={@close} expand color="secondary">Close</Button.render>
         </div>
-      </ModalActions>
-    </Modal>
+      </ModalActions.render>
+    </Modal.render>
     """
   end
 end

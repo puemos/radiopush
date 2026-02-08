@@ -1,12 +1,12 @@
 defmodule RadiopushWeb.LiveHelpers do
   import Phoenix.LiveView
+  import Phoenix.Component, only: [assign_new: 3]
 
   alias Radiopush.Cmd.FetchOrCreateUser
   alias Radiopush.Context
   alias RadiopushWeb.Router.Helpers, as: Routes
 
   def assign_defaults(socket, session) do
-    socket = Surface.init(socket)
     user = find_current_user(session)
 
     socket =

@@ -32,6 +32,13 @@ iframe {
 
 @layer components {
   .input {
-    @apply rounded-md bg-gray-700 border-none focus:outline-none focus:ring-2 focus:ring-primary-300;
+    border: none;
+    border-radius: 0.375rem;
+    background-color: rgb(64 64 64);
+  }
+
+  .input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgb(196 181 253);
   }
 }

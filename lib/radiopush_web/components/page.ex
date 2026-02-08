@@ -1,31 +1,21 @@
 defmodule RadiopushWeb.Components.Page do
-  use Surface.Component
+  use RadiopushWeb, :component
 
-  alias RadiopushWeb.Components.{
-    Navbar,
-    Footer,
-    Header
-  }
+  alias RadiopushWeb.Components.{Footer, Header, Navbar}
 
-  @doc "The current path"
-  prop path, :string
+  attr :path, :string, default: nil
+  attr :current_user, :any, default: nil
+  slot :inner_block, required: true
 
-  @doc "The current logged in user"
-  prop current_user, :any, default: nil
-
-  @doc "The main content"
-  slot default
-
-  @impl true
   def render(assigns) do
-    ~F"""
+    ~H"""
     <div class="px-4 xl:px-24 mb-6 xl:m-auto max-w-screen-2xl">
-      <Header id="Header" current_user={@current_user} />
+      <.live_component module={Header} id="Header" current_user={@current_user} />
       <div class="w-full flex flex-row items-start">
-        <Navbar :if={@path != "/"} path={@path} />
+        <Navbar.render :if={@path != "/"} path={@path} />
         <div class="flex-1">
-          <#slot />
-          <Footer />
+          <%= render_slot(@inner_block) %>
+          <Footer.render />
         </div>
       </div>
     </div>

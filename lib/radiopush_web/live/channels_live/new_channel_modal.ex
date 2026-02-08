@@ -1,38 +1,21 @@
 defmodule RadiopushWeb.Components.NewChannelModal do
-  use Surface.Component
+  use RadiopushWeb, :component
 
-  alias RadiopushWeb.Components.{
-    Button,
-    Modal,
-    ModalActions
-  }
+  alias RadiopushWeb.Components.{Button, Modal, ModalActions}
 
-  alias Surface.Components.Form
-
-  alias Surface.Components.Form.{
-    Field,
-    TextInput,
-    TextArea,
-    Checkbox,
-    ErrorTag
-  }
-
-  @doc "Post data"
-  prop changeset, :changeset, required: true
-
-  @doc "On form submit event"
-  prop submit, :event, required: true
-
-  @doc "Event to close the modal"
-  prop close, :event, required: true
+  attr :changeset, :any, required: true
+  attr :submit, :string, required: true
+  attr :close, :string, required: true
 
   def render(assigns) do
-    ~F"""
-    <Modal title="New channel">
-      <Form for={@changeset} submit={@submit} opts={class: "h-full"}>
+    assigns = assign(assigns, :form, to_form(assigns.changeset))
+
+    ~H"""
+    <Modal.render title="New channel">
+      <form phx-submit={@submit} class="h-full">
         <div class="h-full flex flex-col">
           <div class="flex flex-row justify-between space-x-2">
-            <Field name={:name} class="w-full">
+            <div class="w-full">
               <div class="flex flex-row space-x-1 py-1">
                 <div class="text-sm text-gray-300">
                   Note that this cannot be changed later, including capitalisation.
@@ -47,36 +30,50 @@ defmodule RadiopushWeb.Components.NewChannelModal do
                   </svg>
                 </div>
               </div>
-              <TextInput opts={placeholder: "Channel name"} class="input w-full my-1" />
-              <ErrorTag class="text-sm text-red-500" />
-            </Field>
+              <input
+                type="text"
+                name={@form[:name].name}
+                value={@form[:name].value}
+                placeholder="Channel name"
+                class="input w-full my-1"
+              />
+              <p :for={error <- @form[:name].errors} class="text-sm text-red-500">
+                <%= flatten_error_message(error) %>
+              </p>
+            </div>
           </div>
-          <Field name={:description} class="w-full">
-            <TextArea
-              rows="4"
-              opts={placeholder: "Channel description", style: "resize: none"}
-              class="input w-full my-1"
-            />
-          </Field>
+
+          <textarea
+            name={@form[:description].name}
+            rows="4"
+            placeholder="Channel description"
+            style="resize: none"
+            class="input w-full my-1"
+          ><%= @form[:description].value %></textarea>
+
           <div class="flex flex-row justify-between space-x-2">
-            <Field
-              name={:private}
-              class="flex items-center my-1 flex items-center justify-between py-2 w-full"
-            >
+            <div class="flex items-center my-1 justify-between py-2 w-full">
               <span class="text-sm ml-1">Make private</span>
-              <Checkbox class="h-5 w-5 text-primary-500 focus:ring-primary-500 border-gray-300 rounded" />
-            </Field>
+              <input type="hidden" name={@form[:private].name} value="false" />
+              <input
+                type="checkbox"
+                name={@form[:private].name}
+                value="true"
+                checked={@form[:private].value}
+                class="h-5 w-5 text-primary-500 focus:ring-primary-500 border-gray-300 rounded"
+              />
+            </div>
           </div>
           <div class="flex-1" />
-          <ModalActions>
+          <ModalActions.render>
             <div class="flex flex-row w-full space-x-2">
-              <Button click={@close} expand color="secondary">Close</Button>
-              <Button type="submit" expand color="primary">Create</Button>
+              <Button.render click={@close} expand color="secondary">Close</Button.render>
+              <Button.render type="submit" expand color="primary">Create</Button.render>
             </div>
-          </ModalActions>
+          </ModalActions.render>
         </div>
-      </Form>
-    </Modal>
+      </form>
+    </Modal.render>
     """
   end
 end
